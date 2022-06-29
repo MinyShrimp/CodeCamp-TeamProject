@@ -1,0 +1,10 @@
+node_modules
+file
+db
+copy
+coverage
+dist
+.env
+.env.prod
+.env.stage
+.env.dev
