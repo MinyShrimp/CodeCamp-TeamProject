@@ -6,7 +6,7 @@ yarn add -D core-js css-loader css-minimizer-webpack-plugin html-webpack-plugin 
 yarn add -D @types/react @types/react-dom typescript
 
 yarn add bcryptjs crypto-browserify stream-browserify
-yarn add -D @types/bcryptjs
+yarn add -D @types/bcryptjs buffer
 
 yarn add bootstrap react-bootstrap styled-components
 yarn add -D @types/styled-components

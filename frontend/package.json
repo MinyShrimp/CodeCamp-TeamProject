@@ -36,6 +36,7 @@
         "@types/styled-components": "^5.1.25",
         "@types/uuid": "^8.3.4",
         "babel-loader": "^8.2.5",
+        "buffer": "^6.0.3",
         "core-js": "^3.23.1",
         "css-loader": "^6.7.1",
         "css-minimizer-webpack-plugin": "^4.0.0",
