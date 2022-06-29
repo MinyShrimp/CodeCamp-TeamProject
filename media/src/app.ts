@@ -26,11 +26,27 @@ app.get('/video/:name', (req: Request, res: Response) => {
     const { size } = fileStat;
     const { range } = req.headers;
 
-    res.writeHead(200, {
-        'Content-Length': size,
-        'Content-Type': 'video/mp4',
-    });
-    fs.createReadStream(fullPath).pipe(res);
+    if (range) {
+        const parts = range.replace(/bytes=/, '').split('-');
+        const start = parseInt(parts[0]);
+        const end = parts[1] ? parseInt(parts[1]) : size - 1;
+        const chunk = end - start + 1;
+        const stream = fs.createReadStream(fullPath, { start, end });
+
+        res.writeHead(206, {
+            'Content-Range': `bytes ${start}-${end}/${size}`,
+            'Accept-Ranges': 'bytes',
+            'Content-Length': chunk,
+            'Content-Type': 'video/mp4',
+        });
+        stream.pipe(res);
+    } else {
+        res.writeHead(200, {
+            'Content-Length': size,
+            'Content-Type': 'video/mp4',
+        });
+        fs.createReadStream(fullPath).pipe(res);
+    }
 });
 
 app.listen(8500, '0.0.0.0', () => {
