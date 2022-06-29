@@ -1,0 +1,92 @@
+version: '3.7'
+
+services:
+    # MySQL
+    db-mysql:
+        platform: linux/x86_64
+        image: mysql:5.7
+        container_name: codecamp-teamproject-db
+        env_file: ./backend/.env.dev
+        volumes:
+            - ./db/conf.d:/etc/mysql/conf.d
+        ports:
+            - 3306:3306
+        restart: always
+
+    # Redis
+    db-redis:
+        image: redis:latest
+        container_name: codecamp-teamproject-redis
+        ports:
+            - 6379:6379
+        restart: always
+
+    # Elastic Search
+    elasticsearch:
+        image: elasticsearch:7.17.0
+        container_name: codecamp-teamproject-elastic
+        environment:
+            discovery.type: single-node
+        ports:
+            - 9200:9200
+
+    # NestJS
+    backend:
+        # Dockerfile 설정
+        build:
+            # Dockerfile의 위치
+            context: ./backend
+
+        container_name: codecamp-teamproject-backend
+
+        # Container Port 연결
+        #   - host:container
+        ports:
+            - 3000:3000
+
+        # 환경 변수 설정
+        env_file: ./backend/.env.dev
+
+        volumes:
+            - ./backend/.env.dev:/app/.env
+
+        # 재시작 설정
+        restart: always
+
+    # Frontend
+    frontend:
+        # Dockerfile 설정
+        build:
+            # Dockerfile의 위치
+            context: ./frontend
+            dockerfile: Dockerfile
+
+        container_name: codecamp-teamproject-api-frontend
+
+        # Container Port 연결
+        #   - host:container
+        ports:
+            - 8080:8080
+
+        # Volume Mount
+        #   - host:container
+        volumes:
+            - ./frontend/src:/app/src
+            - ./frontend/test:/app/test
+            - ./frontend/build:/app/build
+
+            - ./frontend/package.json:/app/package.json
+            - ./frontend/yarn.lock:/app/yarn.lock
+            - ./frontend/tsconfig.build.json:/app/tsconfig.build.json
+            - ./frontend/tsconfig.json:/app/tsconfig.json
+            - ./frontend/.babelrc:/app/.babelrc
+            - ./frontend/webpack.config.js:/app/webpack.config.js
+            - ./frontend/.env.dev:/app/.env
+
+            - ./frontend/node_modules:/app/node_modules
+
+        # 환경 변수 설정
+        env_file: ./frontend/.env.dev
+
+        # 재시작 설정
+        restart: always

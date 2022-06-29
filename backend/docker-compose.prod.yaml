@@ -1,0 +1,27 @@
+version: '3.7'
+
+services:
+    # NestJS
+    api:
+        image: asia.gcr.io/emerald-diagram-352601/teamproject/api:0.0.1
+        platform: linux/x86_64
+        # Dockerfile 설정
+        build:
+            # Dockerfile의 위치
+            context: .
+
+        container_name: codecamp-teamproject-api
+
+        # Container Port 연결
+        #   - host:container
+        ports:
+            - 80:3000
+
+        # 환경 변수 설정
+        env_file: .env.prod
+
+        volumes:
+            - ./.env.prod:/app/.env
+
+        # 재시작 설정
+        restart: always

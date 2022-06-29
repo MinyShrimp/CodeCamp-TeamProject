@@ -1,0 +1,107 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+"""유저 Entity"""
+type UserEntity {
+  id: ID!
+
+  """이름"""
+  name: String!
+
+  """이메일"""
+  email: String!
+
+  """핸드폰 번호"""
+  phone: String
+
+  """포인트"""
+  point: Int!
+}
+
+"""결과 메세지"""
+type ResultMessage {
+  """대상 ID"""
+  id: String
+
+  """상태 코드"""
+  status: Int!
+
+  """Message"""
+  msg: String!
+
+  """성공 여부"""
+  isSuccess: Boolean!
+}
+
+type Query {
+  """회원 단일 조회, Bearer JWT"""
+  fetchLoginUser: UserEntity
+
+  """핸드폰 인증"""
+  SendPhone(phone: String!): String!
+
+  """핸드폰 인증 확인"""
+  AuthPhoneOK(phoneInput: PhoneInput!): String!
+}
+
+input PhoneInput {
+  phone: String
+  token: String
+}
+
+type Mutation {
+  """AccessToken 재발급"""
+  restoreToken: String!
+
+  """OAuth 로그인"""
+  LoginOAuth: String!
+
+  """로그인, Get AccessToken"""
+  Login(loginInput: LoginInput!): String!
+
+  """로그아웃, Bearer JWT"""
+  Logout: ResultMessage!
+
+  """회원가입"""
+  createUser(createUserInput: CreateUserInput!): UserEntity!
+
+  """비밀번호 변경, Bearer JWT"""
+  updateUserPwd(pwd: String!): ResultMessage!
+
+  """회원 정보 수정, Bearer JWT"""
+  updateLoginUser(updateInput: UpdateUserInput!): UserEntity!
+
+  """회원 탈퇴 ( Soft ), Bearer JWT"""
+  deleteLoginUser: ResultMessage!
+}
+
+input LoginInput {
+  """이메일"""
+  email: String!
+
+  """비밀번호"""
+  pwd: String!
+}
+
+input CreateUserInput {
+  """이름"""
+  name: String!
+
+  """이메일"""
+  email: String!
+
+  """핸드폰 번호"""
+  phone: String
+
+  """비밀번호"""
+  pwd: String!
+}
+
+input UpdateUserInput {
+  """이름"""
+  name: String
+
+  """이메일"""
+  email: String
+}

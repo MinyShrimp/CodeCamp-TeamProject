@@ -1,0 +1,9 @@
+node_modules
+file
+db
+copy
+coverage
+.env
+.env.prod
+.env.stage
+.env.dev
