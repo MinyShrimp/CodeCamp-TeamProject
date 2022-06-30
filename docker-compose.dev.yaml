@@ -48,6 +48,16 @@ services:
         env_file: ./backend/.env.dev
 
         volumes:
+            - ./backend/src:/app/src
+            - ./backend/dist:/app/dist
+            - ./backend/test:/app/test
+            - ./backend/key:/app/key
+
+            - ./backend/package.json:/app/package.json
+            - ./backend/yarn.lock:/app/yarn.lock
+            - ./backend/tsconfig.build.json:/app/tsconfig.build.json
+            - ./backend/tsconfig.json:/app/tsconfig.json
+
             - ./backend/.env.dev:/app/.env
 
         # 재시작 설정

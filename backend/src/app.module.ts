@@ -15,6 +15,7 @@ import * as redisStore from 'cache-manager-redis-store';
 
 // Config //
 import { ConfigModule } from '@nestjs/config';
+import { AppController } from './app.controller';
 
 // Modules //
 import { AuthModule } from './apis/auth/auth.module';
@@ -82,7 +83,7 @@ import { PhoneModule } from './apis/phone/phone.module';
         PhoneModule,
         EmailModule,
     ],
-    controllers: [],
+    controllers: [AppController],
     providers: [],
 })
 export class AppModule {}

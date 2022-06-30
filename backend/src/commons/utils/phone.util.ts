@@ -36,12 +36,18 @@ export class PhoneUtil {
                     token: token,
                 };
             } else {
+                console.log(
+                    process.env.SMS_SENDER,
+                    process.env.PROJECT_NAME,
+                    token,
+                );
                 const res = await msgService.sendOne({
                     to: phone,
-                    from: process.env.SNS_SENDER,
+                    from: process.env.SMS_SENDER,
                     text: `[${process.env.PROJECT_NAME}] 인증번호 : ${token}`,
                     autoTypeDetect: true,
                 });
+                console.log(res);
                 return {
                     isOK: res.statusCode === '2000',
                     token: token,
