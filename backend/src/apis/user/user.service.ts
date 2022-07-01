@@ -1,14 +1,10 @@
 import * as bcrypt from 'bcryptjs';
-import {
-    CACHE_MANAGER,
-    ConflictException,
-    Inject,
-    Injectable,
-} from '@nestjs/common';
-import { Cache } from 'cache-manager';
+import { Injectable } from '@nestjs/common';
+import { randomUUID } from 'crypto';
 
 import { ResultMessage } from '../../commons/message/ResultMessage.dto';
 import { MESSAGES } from '../../commons/message/Message.enum';
+import { IUser } from '../../commons/interfaces/User.interface';
 
 import { PhoneService } from '../phone/phone.service';
 import { EmailService } from '../email/email.service';
@@ -19,14 +15,10 @@ import { UpdateUserInput } from './dto/updateUser.input';
 import { UserEntity } from './entities/user.entity';
 import { UserRepository } from './entities/user.repository';
 import { UserCheckService } from './userCheck.service';
-import { IUser } from 'src/commons/interfaces/User.interface';
-import { randomUUID } from 'crypto';
 
 @Injectable()
 export class UserService {
     constructor(
-        @Inject(CACHE_MANAGER)
-        private readonly cacheManage: Cache,
         private readonly userRepository: UserRepository, //
         private readonly userCheckService: UserCheckService,
         private readonly phoneService: PhoneService,

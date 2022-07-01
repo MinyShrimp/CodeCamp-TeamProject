@@ -14,7 +14,6 @@ import {
     DeleteDateColumn,
     PrimaryGeneratedColumn,
     OneToOne,
-    JoinColumn,
 } from 'typeorm';
 
 @Entity({ name: 'user' })
