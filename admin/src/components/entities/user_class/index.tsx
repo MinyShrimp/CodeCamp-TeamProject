@@ -3,20 +3,20 @@ import { IUserClassColumn, DummyUserClassColumn } from './interface';
 
 // prettier-ignore
 export const UserClassIndex = EntityFactory.getEntity<IUserClassColumn>({
-    name: "회원 등급",
+    name: '회원 등급',
     dummyData: DummyUserClassColumn,
     baseURL: '/admin/entity/userClass',
     list: {
         column: [
             'id', 'description',
         ],
-        url: "/admin/user-classes"
+        url: '/admin/user-classes'
     },
     show: {
         column: [
             'id', 'description',
         ],
-        url: "/admin/user-class"
+        url: '/admin/user-class'
     },
     edit: {
         column: [
@@ -24,7 +24,7 @@ export const UserClassIndex = EntityFactory.getEntity<IUserClassColumn>({
         ],
         url: { 'default': '/admin/user-class' },
         default: {
-            id: "", description: ""
+            id: '', description: ''
         }
     },
     update: {
@@ -33,7 +33,7 @@ export const UserClassIndex = EntityFactory.getEntity<IUserClassColumn>({
         ],
         url: { 'default': '/admin/user-class' },
         default: {
-            id: "", description: ""
+            id: '', description: ''
         }
     }
 });

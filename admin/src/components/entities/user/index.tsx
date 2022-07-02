@@ -3,7 +3,7 @@ import { IUserColumn, DummyUserColumn } from './interface';
 
 // prettier-ignore
 export const UserIndex = EntityFactory.getEntity<IUserColumn>({
-    name: "회원",
+    name: '회원',
     dummyData: DummyUserColumn,
     baseURL: '/admin/entity/user',
     list: {
@@ -16,7 +16,7 @@ export const UserIndex = EntityFactory.getEntity<IUserColumn>({
         option: {
             userClass: 'id'
         },
-        url: "/admin/users"
+        url: '/admin/users'
     },
     show: {
         column: [
@@ -25,26 +25,20 @@ export const UserIndex = EntityFactory.getEntity<IUserColumn>({
             'loginAt', 'logoutAt', 'isLogin',
             'createAt', 'updateAt', 'deleteAt',
         ],
-        url: "/admin/user"
-    },
-    edit: {
-        column: [
-            'name', 'email', 'pwd'
-        ],
-        url: { 'default': '/admin/user' },
-        default: {
-            name: "", email: "", pwd: ""
-        }
+        url: '/admin/user'
     },
     update: {
         column: [
-            'name', 'email', 'pwd', 'point', 
-            'isLogin'
+            'name', 'email',
+            'point', 'isLogin', 'userClassID'
         ],
-        url: { 'default': '/admin/user' },
+        url: { 
+            'default': '/admin/user',
+            'userClassID': '/admin/user-class/names'
+        },
         default: {
-            name: "", email: "", pwd: "", 
-            point: 0, isLogin: false
+            name: '', email: '', 
+            point: 0, isLogin: false, userClassID: ''
         }
     }
 });

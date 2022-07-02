@@ -1,15 +1,25 @@
 import { v4 } from 'uuid';
 import axios, { AxiosResponse } from 'axios';
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import {
+    Dispatch,
+    MutableRefObject,
+    SetStateAction,
+    useCallback,
+    useEffect,
+    useState,
+} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getLastPath } from '../../functions/functions';
 import { IEntityConfig } from './types';
 
 export function EntityShowIndex(props: {
     url: string;
+    baseURL: string;
     columns: Array<IEntityConfig>;
-    setReload: Dispatch<SetStateAction<() => Promise<void>>>;
-    setDeleted: Dispatch<SetStateAction<() => Promise<void>>>;
+    updateInput: MutableRefObject<any>;
+    setEditHandler: Dispatch<SetStateAction<() => Promise<void>>>;
+    setReloadHandler: Dispatch<SetStateAction<() => Promise<void>>>;
+    setDeleteHandler: Dispatch<SetStateAction<() => Promise<void>>>;
     deleteRows: Array<string>;
     setDeleteRows: Dispatch<SetStateAction<string[]>>;
 }) {
@@ -21,7 +31,7 @@ export function EntityShowIndex(props: {
 
     const navi = useNavigate();
 
-    const _reload = async () => {
+    const _reload = useCallback(async () => {
         setPending(true);
 
         setData(undefined);
@@ -38,9 +48,9 @@ export function EntityShowIndex(props: {
                 console.log(error);
                 setPending(false);
             });
-    };
+    }, []);
 
-    const _delete = async () => {
+    const _delete = useCallback(async () => {
         axios
             .delete(`${process.env.BE_URL}${props.url}s`, {
                 data: props.deleteRows,
@@ -51,21 +61,33 @@ export function EntityShowIndex(props: {
             .catch((error) => {
                 console.log(error);
             });
+    }, []);
+
+    const _edit = async () => {
+        Object.keys(props.updateInput.current).forEach((k) => {
+            props.updateInput.current[k] = data[k];
+        });
+
+        navi(`${props.baseURL}/edit/${entityID}`);
     };
 
     useEffect(() => {
-        props.setReload(() => _reload);
-        props.setDeleteRows([entityID]);
-
         (async () => {
             await _reload();
         })();
+
+        props.setReloadHandler(() => _reload);
+        props.setDeleteRows([entityID]);
 
         return () => {};
     }, []);
 
     useEffect(() => {
-        props.setDeleted(() => _delete);
+        props.setEditHandler(() => _edit);
+    }, [data]);
+
+    useEffect(() => {
+        props.setDeleteHandler(() => _delete);
         return () => {};
     }, [props.deleteRows]);
 

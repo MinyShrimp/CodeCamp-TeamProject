@@ -1,10 +1,12 @@
-import { v4 } from 'uuid';
+import { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
+
 import axios from 'axios';
-import React, { useEffect, useRef, useState } from 'react';
+import { v4 } from 'uuid';
 import { Switch, TextareaAutosize, TextField } from '@material-ui/core';
 import { CancelOutlined, CheckCircleOutlined } from '@material-ui/icons';
-import { Link } from 'react-router-dom';
 import DataListInput from 'react-datalist-input';
+
 import 'react-datalist-input/dist/styles.css';
 
 import { getType } from '../../functions/functions';
@@ -102,8 +104,8 @@ export class EntityFactory {
                                 setItems(
                                     res.data.map((v: any) => {
                                         return {
-                                            id: v.id,
-                                            value: v.name ?? v.title,
+                                            id: v.id ?? v,
+                                            value: v.name ?? v.title ?? v,
                                         };
                                     }),
                                 );
@@ -195,9 +197,9 @@ export class EntityFactory {
                             {row[key] !== null && row[key] !== undefined ? (
                                 config.option === undefined ? (
                                     <Link
-                                        to={`/admin/entity/${key as string}/${
-                                            row[key]['id']
-                                        }`}
+                                        to={`/admin/entity/${
+                                            key as string
+                                        }/show/${row[key]['id']}`}
                                     >
                                         {row[key]['id']}
                                     </Link>
@@ -208,7 +210,7 @@ export class EntityFactory {
                                             key === 'parent'
                                                 ? 'product/category'
                                                 : (key as string)
-                                        }/${row[key]['id']}`}
+                                        }/show/${row[key]['id']}`}
                                         reloadDocument
                                     >
                                         {row[key][config.option[key]]}
@@ -320,8 +322,15 @@ export class EntityFactory {
         };
 
         return () => {
-            const [reload, setReload] = useState(() => async () => {});
-            const [deleted, setDeleted] = useState(() => async () => {});
+            const [editHandler, setEditHandler] = useState(
+                () => async () => {},
+            );
+            const [reloadHandler, setReloadHandler] = useState(
+                () => async () => {},
+            );
+            const [deletHandler, setDeleteHandler] = useState(
+                () => async () => {},
+            );
             const [deleteRows, setDeleteRows] = useState<Array<string>>([]);
 
             const editInput =
@@ -329,28 +338,38 @@ export class EntityFactory {
                     ? useRef(columnConfig.edit.default)
                     : undefined;
 
+            const updateInput =
+                columnConfig.update !== undefined
+                    ? useRef(columnConfig.update.default)
+                    : undefined;
+
             return (
                 <>
                     <EntityIndexHeader
                         entityName={columnConfig.name}
                         baseURL={columnConfig.baseURL}
-                        reload={reload}
-                        deleted={deleted}
+                        editHandler={editHandler}
+                        reloadHandler={reloadHandler}
+                        deleteHandler={deletHandler}
                         deleteRows={deleteRows}
                         isList={config.list !== undefined}
                         isShow={config.show !== undefined}
                         isEdit={config.edit !== undefined}
+                        isUpdate={config.update !== undefined}
                     />
                     <EntityIndex
                         baseURL={columnConfig.baseURL}
-                        setReload={setReload}
-                        setDeleted={setDeleted}
+                        setEditHandler={setEditHandler}
+                        setReloadHandler={setReloadHandler}
+                        setDeleteHandler={setDeleteHandler}
                         deleteRows={deleteRows}
                         setDeleteRows={setDeleteRows}
                         list={config.list}
                         show={config.show}
                         edit={config.edit}
-                        EditInput={editInput}
+                        update={config.update}
+                        editInput={editInput}
+                        updateInput={updateInput}
                     />
                 </>
             );

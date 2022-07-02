@@ -1,19 +1,24 @@
-import React, { Dispatch, SetStateAction } from 'react';
 import { IconButton } from '@material-ui/core';
 import { Add, Delete, FilterList, Replay } from '@material-ui/icons';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 export function EntityIndexHeader(props: {
     entityName: string;
     baseURL: string;
-    reload: () => Promise<void>;
-    deleted: () => Promise<void>;
+
+    editHandler: () => Promise<void>;
+    reloadHandler: () => Promise<void>;
+    deleteHandler: () => Promise<void>;
     deleteRows: Array<string>;
+
     isList: boolean;
     isShow: boolean;
     isEdit: boolean;
+    isUpdate: boolean;
 }) {
-    const navi = useNavigate();
+    const isShowPage = location.pathname.includes('show');
+    const isAddDisabled =
+        (isShowPage && !props.isUpdate) || (!isShowPage && !props.isEdit);
 
     return (
         <>
@@ -46,13 +51,13 @@ export function EntityIndexHeader(props: {
                         size="small"
                         style={{
                             color: `var(${
-                                props.isEdit ? '--bs-success' : '--bs-gray'
+                                isAddDisabled ? '--bs-gray' : '--bs-success'
                             })`,
                         }}
-                        onClick={() => {
-                            navi(`${props.baseURL}/edit`);
+                        onClick={async () => {
+                            await props.editHandler();
                         }}
-                        disabled={!props.isEdit}
+                        disabled={isAddDisabled}
                     >
                         <Add />
                     </IconButton>
@@ -77,7 +82,7 @@ export function EntityIndexHeader(props: {
                             })`,
                         }}
                         onClick={async () => {
-                            await props.deleted();
+                            await props.deleteHandler();
                         }}
                         disabled={props.deleteRows.length === 0}
                     >
@@ -88,7 +93,7 @@ export function EntityIndexHeader(props: {
                         size="small"
                         color="primary"
                         onClick={async () => {
-                            await props.reload();
+                            await props.reloadHandler();
                         }}
                     >
                         <Replay />

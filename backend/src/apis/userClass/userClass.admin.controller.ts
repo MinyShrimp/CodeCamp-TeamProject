@@ -4,10 +4,12 @@ import {
     Delete,
     Get,
     Param,
+    Patch,
     Post,
     Put,
 } from '@nestjs/common';
 import { CreateUserClassInput } from './dto/createUserClass.input';
+import { UpdateUserClassInput } from './dto/updateUserClass.input';
 import { UserClassAdminRepository } from './entities/userClass.admin.repository';
 import { UserClassEntity } from './entities/userClass.entity';
 
@@ -20,6 +22,12 @@ export class UserClassAdminController {
     @Get('user-classes')
     findAll(): Promise<UserClassEntity[]> {
         return this.userClassRepository.findAll();
+    }
+
+    @Get('user-class/names')
+    async findAllNames(): Promise<Array<string>> {
+        const results = await this.userClassRepository.findAllNames();
+        return results.map((r) => r.id);
     }
 
     @Get('user-class/:id')
@@ -36,8 +44,13 @@ export class UserClassAdminController {
         return this.userClassRepository.create(input);
     }
 
-    @Put('user-class')
-    update() {}
+    @Patch('user-class')
+    async update(
+        @Body() input: UpdateUserClassInput, //
+    ): Promise<boolean> {
+        const result = await this.userClassRepository.update(input);
+        return result.affected ? true : false;
+    }
 
     @Delete('user-classes')
     async bulkDelete(

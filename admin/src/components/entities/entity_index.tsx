@@ -1,22 +1,26 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { EntityEditIndex } from './entity_edit_index';
 
+import { IEntityConfig } from './types';
+import { EntityEditIndex } from './entity_edit_index';
 import { EntityListIndex } from './entity_list_index';
 import { EntityShowIndex } from './entity_show_index';
-import { IEntityConfig } from './types';
+import { EntityUpdateIndex } from './entity_update_index';
 
 export function EntityIndex(props: {
     baseURL: string;
     deleteRows: Array<string>;
-    setReload: Dispatch<SetStateAction<() => Promise<void>>>;
-    setDeleted: Dispatch<SetStateAction<() => Promise<void>>>;
+    setEditHandler: Dispatch<SetStateAction<() => Promise<void>>>;
+    setReloadHandler: Dispatch<SetStateAction<() => Promise<void>>>;
+    setDeleteHandler: Dispatch<SetStateAction<() => Promise<void>>>;
     setDeleteRows: Dispatch<SetStateAction<string[]>>;
 
     list?: { column: IEntityConfig[]; url: string };
     show?: { column: IEntityConfig[]; url: string };
     edit?: { column: IEntityConfig[]; url: { [key in string]: string } };
-    EditInput?: any;
+    update?: { column: IEntityConfig[]; url: { [key in string]: string } };
+    editInput?: any;
+    updateInput?: any;
 }) {
     return (
         <Routes>
@@ -26,9 +30,11 @@ export function EntityIndex(props: {
                     element={
                         <EntityListIndex
                             url={props.list.url}
+                            baseURL={props.baseURL}
                             columns={props.list.column}
-                            setReload={props.setReload}
-                            setDeleted={props.setDeleted}
+                            setEditHandler={props.setEditHandler}
+                            setReloadHandler={props.setReloadHandler}
+                            setDeleteHandler={props.setDeleteHandler}
                             deleteRows={props.deleteRows}
                             setDeleteRows={props.setDeleteRows}
                         />
@@ -41,12 +47,32 @@ export function EntityIndex(props: {
                     path="/edit"
                     element={
                         <EntityEditIndex
-                            baseURL={props.baseURL}
                             url={props.edit.url}
+                            baseURL={props.baseURL}
                             columns={props.edit.column}
-                            inputs={props.EditInput}
-                            setReload={props.setReload}
-                            setDeleted={props.setDeleted}
+                            input={props.editInput}
+                            setEditHandler={props.setEditHandler}
+                            setReloadHandler={props.setReloadHandler}
+                            setDeleteHandler={props.setDeleteHandler}
+                            deleteRows={props.deleteRows}
+                            setDeleteRows={props.setDeleteRows}
+                        />
+                    }
+                />
+            ) : null}
+
+            {props.update ? (
+                <Route
+                    path="/edit/*"
+                    element={
+                        <EntityUpdateIndex
+                            url={props.update.url}
+                            baseURL={props.baseURL}
+                            columns={props.update.column}
+                            input={props.updateInput}
+                            setEditHandler={props.setEditHandler}
+                            setReloadHandler={props.setReloadHandler}
+                            setDeleteHandler={props.setDeleteHandler}
                             deleteRows={props.deleteRows}
                             setDeleteRows={props.setDeleteRows}
                         />
@@ -56,13 +82,16 @@ export function EntityIndex(props: {
 
             {props.show ? (
                 <Route
-                    path="*"
+                    path="/show/*"
                     element={
                         <EntityShowIndex
                             url={props.show.url}
+                            baseURL={props.baseURL}
                             columns={props.show.column}
-                            setReload={props.setReload}
-                            setDeleted={props.setDeleted}
+                            updateInput={props.updateInput}
+                            setEditHandler={props.setEditHandler}
+                            setReloadHandler={props.setReloadHandler}
+                            setDeleteHandler={props.setDeleteHandler}
                             deleteRows={props.deleteRows}
                             setDeleteRows={props.setDeleteRows}
                         />

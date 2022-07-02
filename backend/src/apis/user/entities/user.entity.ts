@@ -88,6 +88,9 @@ export class UserEntity {
     @JoinColumn()
     userClass: UserClassEntity;
 
+    @Column({ name: 'userClassId', unique: true, nullable: true })
+    userClassID: string;
+
     // 핸드폰 인증
     @OneToOne(
         () => PhoneEntity, //

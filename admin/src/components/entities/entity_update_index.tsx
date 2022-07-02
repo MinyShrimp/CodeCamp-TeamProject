@@ -1,10 +1,13 @@
 import axios from 'axios';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Button } from '@material-ui/core';
-import { IEntityConfig } from './types';
 import { useNavigate } from 'react-router-dom';
 
-export function EntityEditIndex(props: {
+import { getLastPath } from '../../functions/functions';
+
+import { IEntityConfig } from './types';
+
+export function EntityUpdateIndex(props: {
     baseURL: string;
     setEditHandler: Dispatch<SetStateAction<() => Promise<void>>>;
     setReloadHandler: Dispatch<SetStateAction<() => Promise<void>>>;
@@ -16,6 +19,9 @@ export function EntityEditIndex(props: {
     columns: Array<IEntityConfig>;
     input: any;
 }) {
+    const pathName = window.location.pathname;
+    const entityID = getLastPath(pathName);
+
     const [pending, setPending] = useState<boolean>(false);
     const navi = useNavigate();
 
@@ -39,17 +45,18 @@ export function EntityEditIndex(props: {
         navi(`${props.baseURL}`);
     };
 
-    const submitInput = async (input: any) => {
-        const res = await axios.post(
+    const submitInput = async (inputs: any) => {
+        console.log(inputs);
+
+        const res = await axios.patch(
             `${process.env.BE_URL}${props.url['default']}`,
-            input,
+            { ...inputs, originID: entityID },
             {
                 headers: {
                     'Content-Type': 'application/json',
                 },
             },
         );
-        console.log(res);
 
         return res;
     };
@@ -85,7 +92,6 @@ export function EntityEditIndex(props: {
             },
         });
 
-        console.log(res);
         return res;
     };
 
@@ -94,6 +100,7 @@ export function EntityEditIndex(props: {
         props.setReloadHandler(() => async () => {});
         props.setDeleteHandler(() => async () => {});
         props.setDeleteRows([]);
+
         return () => {};
     }, []);
 
@@ -107,6 +114,11 @@ export function EntityEditIndex(props: {
                 overflowY: 'scroll',
             }}
         >
+            <div className="mb-4">
+                <div>id</div>
+                <div>{entityID}</div>
+            </div>
+
             {props.columns.map((column, idx) => {
                 return (
                     <div className="mb-4" key={idx}>

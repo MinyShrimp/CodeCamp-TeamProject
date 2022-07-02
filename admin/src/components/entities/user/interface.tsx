@@ -8,6 +8,6 @@ export const DummyUserColumn = {
     phone: '', pwd: '', point: 0, 
     loginAt: now, logoutAt: now, isLogin: false,
     createAt: now, updateAt: now, deleteAt: now,
-    userClass: DummyUserClassColumn
+    userClass: DummyUserClassColumn, userClassID: ''
 };
 export type IUserColumn = typeof DummyUserColumn;

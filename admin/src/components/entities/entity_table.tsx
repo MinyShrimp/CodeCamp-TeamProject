@@ -24,7 +24,7 @@ export function EntityTable(props: {
             pointerOnHover
             highlightOnHover
             onRowClicked={(row) => {
-                navigate(`${window.location.pathname}/${row.id}`);
+                navigate(`${window.location.pathname}/show/${row.id}`);
             }}
             sortIcon={<KeyboardArrowDown />}
             progressPending={props.pending}

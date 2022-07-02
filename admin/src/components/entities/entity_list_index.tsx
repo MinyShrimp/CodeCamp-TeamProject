@@ -1,19 +1,24 @@
 import axios, { AxiosResponse } from 'axios';
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { EntityTable } from './entity_table';
 import { IColumn } from './interface';
 import { IEntityConfig } from './types';
 
 export function EntityListIndex(props: {
     url: string;
+    baseURL: string;
     columns: Array<IEntityConfig>;
-    setReload: Dispatch<SetStateAction<() => Promise<void>>>;
-    setDeleted: Dispatch<SetStateAction<() => Promise<void>>>;
+    setEditHandler: Dispatch<SetStateAction<() => Promise<void>>>;
+    setReloadHandler: Dispatch<SetStateAction<() => Promise<void>>>;
+    setDeleteHandler: Dispatch<SetStateAction<() => Promise<void>>>;
     deleteRows: Array<string>;
     setDeleteRows: Dispatch<SetStateAction<string[]>>;
 }) {
     const [datas, setDatas] = useState<IColumn[]>([]);
     const [pending, setPending] = useState<boolean>(true);
+
+    const navi = useNavigate();
 
     const _reload = async () => {
         setPending(true);
@@ -50,7 +55,10 @@ export function EntityListIndex(props: {
     };
 
     useEffect(() => {
-        props.setReload(() => _reload);
+        props.setEditHandler(() => async () => {
+            navi(`${props.baseURL}/edit`);
+        });
+        props.setReloadHandler(() => _reload);
         props.setDeleteRows([]);
 
         (async () => {
@@ -61,7 +69,7 @@ export function EntityListIndex(props: {
     }, []);
 
     useEffect(() => {
-        props.setDeleted(() => _delete);
+        props.setDeleteHandler(() => _delete);
         return () => {};
     }, [props.deleteRows]);
 

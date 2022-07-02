@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository } from 'typeorm';
+import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { CreateUserClassInput } from '../dto/createUserClass.input';
+import { UpdateUserClassInput } from '../dto/updateUserClass.input';
 import { UserClassEntity } from './userClass.entity';
 
 @Injectable()
@@ -30,12 +31,30 @@ export class UserClassAdminRepository {
             .getOne();
     }
 
+    async findAllNames(): Promise<UserClassEntity[]> {
+        return await this.userClassRepository
+            .createQueryBuilder('class')
+            .select(['class.id'])
+            .getMany();
+    }
+
     async create(
         input: CreateUserClassInput, //
     ): Promise<UserClassEntity> {
         return await this.userClassRepository.save({
             ...input,
         });
+    }
+
+    async update(
+        input: UpdateUserClassInput, //
+    ): Promise<UpdateResult> {
+        const { originID, ...updateInfo } = input;
+
+        return await this.userClassRepository.update(
+            { id: input.originID },
+            { ...updateInfo },
+        );
     }
 
     async bulkDelete(
