@@ -33,7 +33,7 @@ export class EmailEntity extends BaseEntity {
 
     @OneToOne(
         () => UserEntity, //
-        (user) => user.email,
+        (user) => user.authEmail,
         { cascade: true, onDelete: 'CASCADE' },
     )
     @JoinColumn()

@@ -8,23 +8,34 @@ export const UserIndex = EntityFactory.getEntity<IUserColumn>({
     baseURL: '/admin/entity/user',
     list: {
         column: [
-            'id', 'name', 'nickName', 'email', 
-            'phone', 'point', 'userClass',
+            'id', 'name', 'nickName', 
+            'email', 'authEmail',
+            'phone', 'authPhone', 
+            'point', 'userClass',
             'loginAt', 'logoutAt', 'isLogin',
             'createAt', 'updateAt', 'deleteAt'
         ],
         option: {
-            userClass: 'id'
+            userClass: 'id',
+            authEmail: 'isAuth',
+            authPhone: 'isAuth',
         },
         url: '/admin/users'
     },
     show: {
         column: [
-            'id', 'name', 'nickName', 'email', 
-            'phone', 'point', 'userClass',
+            'id', 'name', 'nickName', 
+            'email', 'authEmail',
+            'phone', 'authPhone', 
+            'point', 'userClass',
             'loginAt', 'logoutAt', 'isLogin',
             'createAt', 'updateAt', 'deleteAt',
         ],
+        option: {
+            userClass: 'id',
+            authEmail: 'isAuth',
+            authPhone: 'isAuth',
+        },
         url: '/admin/user'
     },
     update: {

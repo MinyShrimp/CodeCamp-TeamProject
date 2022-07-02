@@ -112,6 +112,18 @@ export function IndexBodySide() {
                                     >
                                         UserClass
                                     </Nav.Link>
+                                    <Nav.Link
+                                        as={Link}
+                                        to="/admin/entity/authPhone"
+                                    >
+                                        Auth Phone
+                                    </Nav.Link>
+                                    <Nav.Link
+                                        as={Link}
+                                        to="/admin/entity/authEmail"
+                                    >
+                                        Auth Email
+                                    </Nav.Link>
                                     <Nav.Link as={Link} to="/admin/entity/file">
                                         File
                                     </Nav.Link>

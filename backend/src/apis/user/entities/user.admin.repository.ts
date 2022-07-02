@@ -25,8 +25,8 @@ export class UserAdminRepository {
             .createQueryBuilder('user')
             .select(this._selector)
             .withDeleted()
-            .leftJoin('user.emailAuth', 'e')
-            .leftJoin('user.phoneAuth', 'p')
+            .leftJoin('user.authEmail', 'e')
+            .leftJoin('user.authPhone', 'p')
             .leftJoin('user.userClass', 'c')
             .orderBy('user.createAt')
             .getMany();
@@ -39,8 +39,8 @@ export class UserAdminRepository {
             .createQueryBuilder('user')
             .select(this._selector)
             .withDeleted()
-            .leftJoin('user.emailAuth', 'e')
-            .leftJoin('user.phoneAuth', 'p')
+            .leftJoin('user.authEmail', 'e')
+            .leftJoin('user.authPhone', 'p')
             .leftJoin('user.userClass', 'c')
             .where('user.id=:id', { id: userID })
             .getOne();

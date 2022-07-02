@@ -96,12 +96,12 @@ export class UserEntity {
         () => PhoneEntity, //
         (phone) => phone.user,
     )
-    phoneAuth: PhoneEntity;
+    authPhone: PhoneEntity;
 
     // 이메일 인증
     @OneToOne(
         () => EmailEntity, //
         (email) => email.user,
     )
-    emailAuth: EmailEntity;
+    authEmail: EmailEntity;
 }

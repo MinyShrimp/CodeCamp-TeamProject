@@ -8,6 +8,7 @@ import {
     JoinColumn,
     OneToOne,
     PrimaryGeneratedColumn,
+    UpdateDateColumn,
 } from 'typeorm';
 
 @Entity({ name: 'auth_phone' })
@@ -31,9 +32,12 @@ export class PhoneEntity extends BaseEntity {
     @CreateDateColumn()
     createAt: Date;
 
+    @UpdateDateColumn()
+    updateAt: Date;
+
     @OneToOne(
         () => UserEntity, //
-        (user) => user.phoneAuth,
+        (user) => user.authPhone,
         { cascade: true, onDelete: 'CASCADE' },
     )
     @JoinColumn()

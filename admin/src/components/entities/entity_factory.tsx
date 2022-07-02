@@ -213,7 +213,17 @@ export class EntityFactory {
                                         }/show/${row[key]['id']}`}
                                         reloadDocument
                                     >
-                                        {row[key][config.option[key]]}
+                                        {getType(
+                                            row[key][config.option[key]],
+                                        ) === 'Boolean' ? (
+                                            row[key][config.option[key]] ? (
+                                                <CheckCircleOutlined htmlColor="green" />
+                                            ) : (
+                                                <CancelOutlined htmlColor="red" />
+                                            )
+                                        ) : (
+                                            row[key][config.option[key]]
+                                        )}
                                     </Link>
                                 )
                             ) : (

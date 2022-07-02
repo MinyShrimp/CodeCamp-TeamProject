@@ -6,6 +6,8 @@ import { EmailRepository } from './entities/email.repository';
 
 import { EmailService } from './email.service';
 import { EmailController } from './email.controller';
+import { EmailAdminController } from './email.controller.admin';
+import { EmailAdminRepository } from './entities/email.repository.admin';
 
 @Module({
     imports: [
@@ -19,10 +21,12 @@ import { EmailController } from './email.controller';
     ],
     controllers: [
         EmailController, //
+        EmailAdminController,
     ],
     providers: [
         EmailRepository, //
         EmailService,
+        EmailAdminRepository,
     ],
 })
 export class EmailModule {}
