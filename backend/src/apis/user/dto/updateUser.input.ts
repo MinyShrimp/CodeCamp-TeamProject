@@ -3,5 +3,5 @@ import { UserEntity } from '../entities/user.entity';
 
 @InputType()
 export class UpdateUserInput extends PartialType(
-    PickType(UserEntity, ['name', 'email'], InputType),
+    PickType(UserEntity, ['name', 'email', 'nickName'], InputType),
 ) {}

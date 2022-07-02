@@ -15,6 +15,9 @@ import {
     DeleteDateColumn,
     PrimaryGeneratedColumn,
     OneToOne,
+    ManyToOne,
+    JoinColumn,
+    OneToMany,
 } from 'typeorm';
 
 @Entity({ name: 'user' })
@@ -79,23 +82,44 @@ export class UserEntity {
     deleteAt: Date;
 
     // 유저 등급
-    @OneToOne(
+    @ManyToOne(
         () => UserClassEntity, //
-        (userClass) => userClass.user,
+        { cascade: true, onDelete: 'SET NULL' },
     )
+    @JoinColumn()
     userClass: UserClassEntity;
+
+    @Column({ name: 'userClassId', unique: true, nullable: true })
+    userClassID: string;
 
     // 핸드폰 인증
     @OneToOne(
         () => PhoneEntity, //
         (phone) => phone.user,
     )
-    phoneAuth: PhoneEntity;
+    @Field(() => PhoneEntity)
+    authPhone: PhoneEntity;
 
     // 이메일 인증
     @OneToOne(
         () => EmailEntity, //
         (email) => email.user,
     )
-    emailAuth: EmailEntity;
+    @Field(() => EmailEntity)
+    authEmail: EmailEntity;
+
+    //
+    @ManyToOne(
+        () => UserEntity, //
+        (user) => user.likeUsers,
+    )
+    parent: UserEntity;
+
+    // 선호 작가
+    @OneToMany(
+        () => UserEntity, //
+        (user) => user.parent,
+    )
+    @Field(() => [UserEntity], { description: '선호 작가 목록' })
+    likeUsers: UserEntity[];
 }
