@@ -11,7 +11,7 @@ import {
 
 import { UserEntity } from 'src/apis/user/entities/user.entity';
 
-@Entity({ name: 'email' })
+@Entity({ name: 'auth_email' })
 export class EmailEntity extends BaseEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
