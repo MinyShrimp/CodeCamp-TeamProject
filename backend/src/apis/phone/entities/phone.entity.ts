@@ -1,4 +1,4 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { UserEntity } from 'src/apis/user/entities/user.entity';
 import {
     BaseEntity,
@@ -12,21 +12,22 @@ import {
 } from 'typeorm';
 
 @Entity({ name: 'auth_phone' })
-@ObjectType({ description: '저자 Entity' })
+@ObjectType({ description: '핸드폰 인증 Entity' })
 export class PhoneEntity extends BaseEntity {
     @PrimaryGeneratedColumn('uuid')
+    @Field(() => ID)
     id: string;
 
     @Column({ nullable: true })
-    @Field(() => String, { nullable: true })
+    @Field(() => String, { nullable: true, description: '핸드폰 번호' })
     phone: string;
 
     @Column({ nullable: true })
-    @Field(() => String, { nullable: true })
+    @Field(() => String, { nullable: true, description: '토큰' })
     token: string;
 
     @Column({ default: false })
-    @Field(() => Boolean)
+    @Field(() => Boolean, { description: '핸드폰 인증 여부' })
     isAuth: boolean;
 
     @CreateDateColumn()
@@ -41,5 +42,6 @@ export class PhoneEntity extends BaseEntity {
         { cascade: true, onDelete: 'CASCADE' },
     )
     @JoinColumn()
+    @Field(() => UserEntity)
     user: UserEntity;
 }

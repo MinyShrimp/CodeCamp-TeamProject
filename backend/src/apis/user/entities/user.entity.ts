@@ -17,6 +17,7 @@ import {
     OneToOne,
     ManyToOne,
     JoinColumn,
+    OneToMany,
 } from 'typeorm';
 
 @Entity({ name: 'user' })
@@ -96,6 +97,7 @@ export class UserEntity {
         () => PhoneEntity, //
         (phone) => phone.user,
     )
+    @Field(() => PhoneEntity)
     authPhone: PhoneEntity;
 
     // 이메일 인증
@@ -103,5 +105,21 @@ export class UserEntity {
         () => EmailEntity, //
         (email) => email.user,
     )
+    @Field(() => EmailEntity)
     authEmail: EmailEntity;
+
+    //
+    @ManyToOne(
+        () => UserEntity, //
+        (user) => user.likeUsers,
+    )
+    parent: UserEntity;
+
+    // 선호 작가
+    @OneToMany(
+        () => UserEntity, //
+        (user) => user.parent,
+    )
+    @Field(() => [UserEntity], { description: '선호 작가 목록' })
+    likeUsers: UserEntity[];
 }

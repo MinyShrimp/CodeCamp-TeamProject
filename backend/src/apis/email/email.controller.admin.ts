@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param } from '@nestjs/common';
 import { EmailEntity } from './entities/email.entity';
 import { EmailAdminRepository } from './entities/email.repository.admin';
 
@@ -18,5 +18,13 @@ export class EmailAdminController {
         @Param('id') id: string, //
     ): Promise<EmailEntity> {
         return this.emailAdminRepository.findOne(id);
+    }
+
+    @Delete('/emails')
+    async bulkDelete(
+        @Body() IDs: Array<string>, //
+    ): Promise<boolean[]> {
+        const results = await this.emailAdminRepository.bulkDelete(IDs);
+        return results.map((r) => (r.affected ? true : false));
     }
 }

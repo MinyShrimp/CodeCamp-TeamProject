@@ -2,6 +2,36 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+"""이메일 인증 Entity"""
+type EmailEntity {
+  id: ID!
+
+  """이메일"""
+  email: String!
+
+  """토큰"""
+  token: String!
+
+  """인증 여부"""
+  isAuth: Boolean!
+  user: UserEntity!
+}
+
+"""핸드폰 인증 Entity"""
+type PhoneEntity {
+  id: ID!
+
+  """핸드폰 번호"""
+  phone: String
+
+  """토큰"""
+  token: String
+
+  """핸드폰 인증 여부"""
+  isAuth: Boolean!
+  user: UserEntity!
+}
+
 """유저 Entity"""
 type UserEntity {
   id: ID!
@@ -20,6 +50,11 @@ type UserEntity {
 
   """포인트"""
   point: Int!
+  authPhone: PhoneEntity!
+  authEmail: EmailEntity!
+
+  """선호 작가 목록"""
+  likeUsers: [UserEntity!]!
 }
 
 """결과 메세지"""
@@ -63,7 +98,10 @@ type Query {
 }
 
 input PhoneInput {
+  """핸드폰 번호"""
   phone: String
+
+  """토큰"""
   token: String
 }
 

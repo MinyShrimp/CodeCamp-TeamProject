@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 import { EmailEntity } from './email.entity';
 
 @Injectable()
@@ -37,5 +37,17 @@ export class EmailAdminRepository {
             .leftJoin('email.user', 'user')
             .where('email.id=:id', { id: id })
             .getOne();
+    }
+
+    async bulkDelete(
+        IDs: Array<string>, //
+    ): Promise<DeleteResult[]> {
+        return await Promise.all(
+            IDs.map((id) =>
+                this.emailRepository.delete({
+                    id: id,
+                }),
+            ),
+        );
     }
 }
