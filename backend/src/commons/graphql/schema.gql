@@ -37,6 +37,20 @@ type ResultMessage {
   isSuccess: Boolean!
 }
 
+"""FileUpload Entity"""
+type FileEntity {
+  id: ID!
+
+  """이름"""
+  name: String!
+
+  """폴더"""
+  path: String!
+
+  """URL"""
+  url: String!
+}
+
 type Query {
   """회원 단일 조회, Bearer JWT"""
   fetchLoginUser: UserEntity
@@ -77,6 +91,12 @@ type Mutation {
 
   """회원 탈퇴 ( Soft ), Bearer JWT"""
   deleteLoginUser: ResultMessage!
+
+  """File"""
+  uploadFile(files: [Upload!]!): [FileEntity!]!
+
+  """File 삭제 ( Real )"""
+  deleteFileUpload(fileIDs: [String!]!): [ResultMessage!]!
 }
 
 input LoginInput {
@@ -114,3 +134,6 @@ input UpdateUserInput {
   """이메일"""
   email: String
 }
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
