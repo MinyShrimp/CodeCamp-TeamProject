@@ -1,45 +1,48 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    Param,
+    Patch,
+    Post,
+} from '@nestjs/common';
 import { CreateUserInput } from './dto/createUser.input';
+import { UpdateUserAdminInput } from './dto/updateUser.admin.input';
 import { UserAdminRepository } from './entities/user.admin.repository';
 import { UserEntity } from './entities/user.entity';
-import { UserService } from './user.service';
 
 @Controller('admin')
 export class UserAdminController {
     constructor(
-        private readonly userService: UserService, //
-        private readonly userAdminRepository: UserAdminRepository,
+        private readonly userAdminRepository: UserAdminRepository, //
     ) {}
 
     @Get('/users')
-    getUsers(): Promise<UserEntity[]> {
+    findAll(): Promise<UserEntity[]> {
         return this.userAdminRepository.findAll();
     }
 
-    @Get('/user/names')
-    findAllName(): Promise<UserEntity[]> {
-        return this.userAdminRepository.findAllName();
-    }
-
     @Get('/user/:id')
-    getUser(
+    findOne(
         @Param('id') userID: string, //
     ): Promise<UserEntity> {
         return this.userAdminRepository.findOne(userID);
     }
 
-    @Post('/user')
-    async createUser(
-        @Body() input: CreateUserInput, //
-    ) {
-        return await this.userService.createUser(input);
+    @Patch('/user')
+    async update(
+        @Body() input: UpdateUserAdminInput, //
+    ): Promise<boolean> {
+        const result = await this.userAdminRepository.update(input);
+        return result.affected ? true : false;
     }
 
     @Delete('/users')
-    async bulkDeleteUsers(
+    async bulkDelete(
         @Body() IDs: Array<string>, //
     ) {
-        await this.userAdminRepository.bulkDelete(IDs);
-        return 'delete ok';
+        const results = await this.userAdminRepository.bulkDelete(IDs);
+        return results.map((r) => (r.affected ? true : false));
     }
 }

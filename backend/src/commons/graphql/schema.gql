@@ -2,12 +2,45 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+"""이메일 인증 Entity"""
+type EmailEntity {
+  id: ID!
+
+  """이메일"""
+  email: String!
+
+  """토큰"""
+  token: String!
+
+  """인증 여부"""
+  isAuth: Boolean!
+  user: UserEntity!
+}
+
+"""핸드폰 인증 Entity"""
+type PhoneEntity {
+  id: ID!
+
+  """핸드폰 번호"""
+  phone: String
+
+  """토큰"""
+  token: String
+
+  """핸드폰 인증 여부"""
+  isAuth: Boolean!
+  user: UserEntity!
+}
+
 """유저 Entity"""
 type UserEntity {
   id: ID!
 
   """이름"""
   name: String!
+
+  """닉네임"""
+  nickName: String!
 
   """이메일"""
   email: String!
@@ -17,6 +50,11 @@ type UserEntity {
 
   """포인트"""
   point: Int!
+  authPhone: PhoneEntity!
+  authEmail: EmailEntity!
+
+  """선호 작가 목록"""
+  likeUsers: [UserEntity!]!
 }
 
 """결과 메세지"""
@@ -34,6 +72,20 @@ type ResultMessage {
   isSuccess: Boolean!
 }
 
+"""FileUpload Entity"""
+type FileEntity {
+  id: ID!
+
+  """이름"""
+  name: String!
+
+  """폴더"""
+  path: String!
+
+  """URL"""
+  url: String!
+}
+
 type Query {
   """회원 단일 조회, Bearer JWT"""
   fetchLoginUser: UserEntity
@@ -46,7 +98,10 @@ type Query {
 }
 
 input PhoneInput {
+  """핸드폰 번호"""
   phone: String
+
+  """토큰"""
   token: String
 }
 
@@ -74,6 +129,12 @@ type Mutation {
 
   """회원 탈퇴 ( Soft ), Bearer JWT"""
   deleteLoginUser: ResultMessage!
+
+  """File"""
+  uploadFile(files: [Upload!]!): [FileEntity!]!
+
+  """File 삭제 ( Real )"""
+  deleteFileUpload(fileIDs: [String!]!): [ResultMessage!]!
 }
 
 input LoginInput {
@@ -87,6 +148,9 @@ input LoginInput {
 input CreateUserInput {
   """이름"""
   name: String!
+
+  """닉네임"""
+  nickName: String!
 
   """이메일"""
   email: String!
@@ -102,6 +166,12 @@ input UpdateUserInput {
   """이름"""
   name: String
 
+  """닉네임"""
+  nickName: String
+
   """이메일"""
   email: String
 }
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload

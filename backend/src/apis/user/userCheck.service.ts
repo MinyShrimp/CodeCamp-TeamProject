@@ -1,13 +1,13 @@
 import {
-    ConflictException,
     Injectable,
+    ConflictException,
     UnprocessableEntityException,
 } from '@nestjs/common';
 
 import { MESSAGES } from '../../commons/message/Message.enum';
+import { IPayload } from '../../commons/interfaces/Payload.interface';
 
 import { UserEntity } from './entities/user.entity';
-import { IPayload } from 'src/commons/interfaces/Payload.interface';
 
 @Injectable()
 export class UserCheckService {

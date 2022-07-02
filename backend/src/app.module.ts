@@ -22,6 +22,8 @@ import { AuthModule } from './apis/auth/auth.module';
 import { UserModule } from './apis/user/user.module';
 import { EmailModule } from './apis/email/email.module';
 import { PhoneModule } from './apis/phone/phone.module';
+import { UserClassModule } from './apis/userClass/userClass.module';
+import { FileModule } from './apis/file/file.module';
 
 ///////////////////////////////////////////////////////////////////////////
 @Module({
@@ -79,9 +81,12 @@ import { PhoneModule } from './apis/phone/phone.module';
         ///////////////////////////////////////////////////////////////////////////
         // Modules //
         AuthModule,
+        UserClassModule,
         UserModule,
         PhoneModule,
         EmailModule,
+
+        FileModule,
     ],
     controllers: [AppController],
     providers: [],
