@@ -106,57 +106,6 @@ export function IndexBodySide() {
                                     <Nav.Link as={Link} to="/admin/entity/user">
                                         User
                                     </Nav.Link>
-                                    <Nav.Link
-                                        as={Link}
-                                        to="/admin/entity/author"
-                                    >
-                                        Author
-                                    </Nav.Link>
-                                    <Nav.Link
-                                        as={Link}
-                                        to="/admin/entity/publisher"
-                                    >
-                                        Publisher
-                                    </Nav.Link>
-                                    <Nav.Link as={Link} to="/admin/entity/book">
-                                        Book
-                                    </Nav.Link>
-                                    <Nav.Link
-                                        as={Link}
-                                        to="/admin/entity/book/image"
-                                    >
-                                        Book Image
-                                    </Nav.Link>
-                                    <Nav.Link
-                                        as={Link}
-                                        to="/admin/entity/product"
-                                    >
-                                        Product
-                                    </Nav.Link>
-                                    <Nav.Link
-                                        as={Link}
-                                        to="/admin/entity/product/category"
-                                    >
-                                        Product Category
-                                    </Nav.Link>
-                                    <Nav.Link
-                                        as={Link}
-                                        to="/admin/entity/product/tag"
-                                    >
-                                        Product Tag
-                                    </Nav.Link>
-                                    <Nav.Link
-                                        as={Link}
-                                        to="/admin/entity/review"
-                                    >
-                                        Review
-                                    </Nav.Link>
-                                    <Nav.Link
-                                        as={Link}
-                                        to="/admin/entity/payment"
-                                    >
-                                        Payment
-                                    </Nav.Link>
                                     <Nav.Link as={Link} to="/admin/entity/file">
                                         File
                                     </Nav.Link>
