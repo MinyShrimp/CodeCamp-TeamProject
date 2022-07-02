@@ -10,7 +10,7 @@ import {
     PrimaryGeneratedColumn,
 } from 'typeorm';
 
-@Entity({ name: 'phone' })
+@Entity({ name: 'auth_phone' })
 @ObjectType({ description: '저자 Entity' })
 export class PhoneEntity extends BaseEntity {
     @PrimaryGeneratedColumn('uuid')

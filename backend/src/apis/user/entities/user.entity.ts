@@ -6,6 +6,7 @@ import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
 import { IsEmail } from 'class-validator';
 import { EmailEntity } from 'src/apis/email/entities/email.entity';
 import { PhoneEntity } from 'src/apis/phone/entities/phone.entity';
+import { UserClassEntity } from 'src/apis/userClass/entities/userClass.entity';
 import {
     Entity,
     Column,
@@ -28,6 +29,11 @@ export class UserEntity {
     @Field(() => String, { description: '이름' })
     name: string;
 
+    // 닉네임
+    @Column()
+    @Field(() => String, { description: '닉네임' })
+    nickName: string;
+
     // 이메일
     @Column()
     @IsEmail()
@@ -47,9 +53,6 @@ export class UserEntity {
     @Column({ default: 0, unsigned: true })
     @Field(() => Int, { description: '포인트' })
     point: number;
-
-    @Column({ default: false })
-    isAdmin: boolean;
 
     // 로그인 시간
     @Column({ nullable: true })
@@ -75,12 +78,21 @@ export class UserEntity {
     @DeleteDateColumn()
     deleteAt: Date;
 
+    // 유저 등급
+    @OneToOne(
+        () => UserClassEntity, //
+        (userClass) => userClass.user,
+    )
+    userClass: UserClassEntity;
+
+    // 핸드폰 인증
     @OneToOne(
         () => PhoneEntity, //
         (phone) => phone.user,
     )
     phoneAuth: PhoneEntity;
 
+    // 이메일 인증
     @OneToOne(
         () => EmailEntity, //
         (email) => email.user,

@@ -54,9 +54,11 @@ export class AuthService {
             email: user.email,
         };
 
-        if (user.isAdmin) {
-            payload['isAdmin'] = true;
-        }
+        // TODO:
+        // 권한 처리
+        // if (user.isAdmin) {
+        //     payload['isAdmin'] = true;
+        // }
 
         return payload;
     }
