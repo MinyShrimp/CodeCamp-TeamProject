@@ -8,6 +8,7 @@ import { IUser } from '../../commons/interfaces/User.interface';
 
 import { PhoneService } from '../phone/phone.service';
 import { EmailService } from '../email/email.service';
+import { UserClassRepository } from '../userClass/entities/userClass.repository';
 
 import { CreateUserInput } from './dto/createUser.input';
 import { UpdateUserInput } from './dto/updateUser.input';
@@ -20,6 +21,7 @@ import { UserCheckService } from './userCheck.service';
 export class UserService {
     constructor(
         private readonly userRepository: UserRepository, //
+        private readonly userClassRepository: UserClassRepository,
         private readonly userCheckService: UserCheckService,
         private readonly phoneService: PhoneService,
         private readonly emailService: EmailService,
@@ -81,6 +83,7 @@ export class UserService {
 
         newUser.phoneAuth = phoneAuth;
         newUser.emailAuth = emailAuth;
+        newUser.userClass = await this.userClassRepository.getClass();
 
         // 비밀번호 해싱 후 생성
         return await this.userRepository.save(newUser);

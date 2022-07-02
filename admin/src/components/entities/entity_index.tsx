@@ -7,6 +7,7 @@ import { EntityShowIndex } from './entity_show_index';
 import { IEntityConfig } from './types';
 
 export function EntityIndex(props: {
+    baseURL: string;
     deleteRows: Array<string>;
     setReload: Dispatch<SetStateAction<() => Promise<void>>>;
     setDeleted: Dispatch<SetStateAction<() => Promise<void>>>;
@@ -40,6 +41,7 @@ export function EntityIndex(props: {
                     path="/edit"
                     element={
                         <EntityEditIndex
+                            baseURL={props.baseURL}
                             url={props.edit.url}
                             columns={props.edit.column}
                             inputs={props.EditInput}

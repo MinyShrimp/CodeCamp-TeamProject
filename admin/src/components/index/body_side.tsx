@@ -106,6 +106,12 @@ export function IndexBodySide() {
                                     <Nav.Link as={Link} to="/admin/entity/user">
                                         User
                                     </Nav.Link>
+                                    <Nav.Link
+                                        as={Link}
+                                        to="/admin/entity/userClass"
+                                    >
+                                        UserClass
+                                    </Nav.Link>
                                     <Nav.Link as={Link} to="/admin/entity/file">
                                         File
                                     </Nav.Link>

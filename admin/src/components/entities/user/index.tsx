@@ -1,23 +1,27 @@
-import React from 'react';
 import { EntityFactory } from '../entity_factory';
 import { IUserColumn, DummyUserColumn } from './interface';
 
 // prettier-ignore
 export const UserIndex = EntityFactory.getEntity<IUserColumn>({
-    name: "User",
+    name: "회원",
     dummyData: DummyUserColumn,
+    baseURL: '/admin/entity/user',
     list: {
         column: [
-            'id', 'name', 'email', 'phone', 'point',
+            'id', 'name', 'nickName', 'email', 
+            'phone', 'point', 'userClass',
             'loginAt', 'logoutAt', 'isLogin',
             'createAt', 'updateAt', 'deleteAt'
         ],
+        option: {
+            userClass: 'id'
+        },
         url: "/admin/users"
     },
     show: {
         column: [
-            'id', 'name', 'email', 'phone',
-            'pwd', 'point', 'isAdmin', 
+            'id', 'name', 'nickName', 'email', 
+            'phone', 'point', 'userClass',
             'loginAt', 'logoutAt', 'isLogin',
             'createAt', 'updateAt', 'deleteAt',
         ],
@@ -35,12 +39,12 @@ export const UserIndex = EntityFactory.getEntity<IUserColumn>({
     update: {
         column: [
             'name', 'email', 'pwd', 'point', 
-            'isLogin', 'isAdmin'
+            'isLogin'
         ],
         url: { 'default': '/admin/user' },
         default: {
-            name: "", email: "", pwd: "", point: 0, 
-            isLogin: false, isAdmin: false
+            name: "", email: "", pwd: "", 
+            point: 0, isLogin: false
         }
     }
 });

@@ -91,6 +91,9 @@ input CreateUserInput {
   """이름"""
   name: String!
 
+  """닉네임"""
+  nickName: String!
+
   """이메일"""
   email: String!
 

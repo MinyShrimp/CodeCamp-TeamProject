@@ -15,6 +15,8 @@ import {
     DeleteDateColumn,
     PrimaryGeneratedColumn,
     OneToOne,
+    ManyToOne,
+    JoinColumn,
 } from 'typeorm';
 
 @Entity({ name: 'user' })
@@ -79,10 +81,11 @@ export class UserEntity {
     deleteAt: Date;
 
     // 유저 등급
-    @OneToOne(
+    @ManyToOne(
         () => UserClassEntity, //
-        (userClass) => userClass.user,
+        { cascade: true, onDelete: 'SET NULL' },
     )
+    @JoinColumn()
     userClass: UserClassEntity;
 
     // 핸드폰 인증

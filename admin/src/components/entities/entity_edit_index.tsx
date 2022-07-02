@@ -5,6 +5,7 @@ import { IEntityConfig } from './types';
 import { useNavigate } from 'react-router-dom';
 
 export function EntityEditIndex(props: {
+    baseURL: string;
     setReload: Function;
     setDeleted: Dispatch<SetStateAction<() => Promise<void>>>;
     deleteRows: Array<string>;
@@ -34,7 +35,7 @@ export function EntityEditIndex(props: {
         }
 
         setPending(false);
-        navi(`/admin/entity/${props.url['default'].split('/').slice(-1)}`);
+        navi(`${props.baseURL}`);
     };
 
     const submitInput = async (inputs: any) => {

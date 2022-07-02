@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 export function EntityIndexHeader(props: {
     entityName: string;
+    baseURL: string;
     reload: () => Promise<void>;
     deleted: () => Promise<void>;
     deleteRows: Array<string>;
@@ -34,10 +35,7 @@ export function EntityIndexHeader(props: {
                         }}
                         className="mb-0 h1"
                         id="entity_name"
-                        to={`/admin/entity/${props.entityName
-                            .split(' ')
-                            .join('/')
-                            .toLowerCase()}`}
+                        to={`${props.baseURL}`}
                     >
                         {props.entityName}
                     </Link>
@@ -52,12 +50,7 @@ export function EntityIndexHeader(props: {
                             })`,
                         }}
                         onClick={() => {
-                            navi(
-                                `/admin/entity/${props.entityName
-                                    .split(' ')
-                                    .join('/')
-                                    .toLowerCase()}/edit`,
-                            );
+                            navi(`${props.baseURL}/edit`);
                         }}
                         disabled={!props.isEdit}
                     >

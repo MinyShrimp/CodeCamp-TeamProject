@@ -80,8 +80,8 @@ import { UserClassModule } from './apis/userClass/userClass.module';
         ///////////////////////////////////////////////////////////////////////////
         // Modules //
         AuthModule,
-        UserModule,
         UserClassModule,
+        UserModule,
         PhoneModule,
         EmailModule,
     ],

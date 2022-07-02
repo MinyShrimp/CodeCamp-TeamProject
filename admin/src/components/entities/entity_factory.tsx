@@ -254,6 +254,7 @@ export class EntityFactory {
     static getEntity<T>(columnConfig: {
         name: string;
         dummyData: T;
+        baseURL: string;
         list?: {
             url: string;
             column: Array<keyof T>;
@@ -319,7 +320,6 @@ export class EntityFactory {
         };
 
         return () => {
-            const [entityName, setEntityName] = useState<string>('');
             const [reload, setReload] = useState(() => async () => {});
             const [deleted, setDeleted] = useState(() => async () => {});
             const [deleteRows, setDeleteRows] = useState<Array<string>>([]);
@@ -329,15 +329,11 @@ export class EntityFactory {
                     ? useRef(columnConfig.edit.default)
                     : undefined;
 
-            useEffect(() => {
-                setEntityName(columnConfig.name);
-                return () => {};
-            }, []);
-
             return (
                 <>
                     <EntityIndexHeader
-                        entityName={entityName}
+                        entityName={columnConfig.name}
+                        baseURL={columnConfig.baseURL}
                         reload={reload}
                         deleted={deleted}
                         deleteRows={deleteRows}
@@ -346,6 +342,7 @@ export class EntityFactory {
                         isEdit={config.edit !== undefined}
                     />
                     <EntityIndex
+                        baseURL={columnConfig.baseURL}
                         setReload={setReload}
                         setDeleted={setDeleted}
                         deleteRows={deleteRows}

@@ -31,6 +31,7 @@ export function LogicRegisterIndex() {
 
     const input = useRef<IRegisterInput>({
         name: '',
+        nickname: '',
         email: '',
         phone: ['010', '', ''],
         pwd: '',
@@ -58,7 +59,7 @@ export function LogicRegisterIndex() {
         try {
             const phone = input.current.phone.join('');
             const { data, message } = await sendGraphQL({
-                query: `mutation { createUser( createUserInput: { name: "${input.current.name}", email: "${input.current.email}", pwd: "${input.current.pwd}", phone: "${phone}" } ) { id } }`,
+                query: `mutation { createUser( createUserInput: { name: "${input.current.name}", nickName: "${input.current.nickname}", email: "${input.current.email}", pwd: "${input.current.pwd}", phone: "${phone}" } ) { id } }`,
             });
 
             if (data) {
@@ -110,7 +111,7 @@ export function LogicRegisterIndex() {
             <Container>
                 <CardStyle>
                     <h1 className="mb-3" style={{ textAlign: 'center' }}>
-                        Register
+                        회원가입
                     </h1>
                     <CardBody>
                         {showAlert ? (
@@ -132,13 +133,25 @@ export function LogicRegisterIndex() {
 
                         <InputGroup>
                             <Label htmlFor="name">
-                                <Typography>Name</Typography>
+                                <Typography>이름</Typography>
                             </Label>
                             <Input
                                 style={{ width: '100%' }}
                                 id="name"
                                 onChange={(e) => {
                                     input.current.name = e.target.value;
+                                }}
+                            />
+                        </InputGroup>
+                        <InputGroup>
+                            <Label htmlFor="nickname">
+                                <Typography>닉네임</Typography>
+                            </Label>
+                            <Input
+                                style={{ width: '100%' }}
+                                id="nickname"
+                                onChange={(e) => {
+                                    input.current.nickname = e.target.value;
                                 }}
                             />
                         </InputGroup>
@@ -160,7 +173,7 @@ export function LogicRegisterIndex() {
                         </InputGroup>
                         <InputGroup>
                             <Label htmlFor="phone1">
-                                <Typography>Phone</Typography>
+                                <Typography>핸드폰 번호</Typography>
                             </Label>
                             <InputItemBetween>
                                 <InputItemBetween>
@@ -246,7 +259,7 @@ export function LogicRegisterIndex() {
                         </InputGroup>
                         <InputGroup>
                             <Label htmlFor="pwd">
-                                <Typography>Password</Typography>
+                                <Typography>비밀번호</Typography>
                             </Label>
                             <Input
                                 style={{ width: '100%' }}
@@ -259,7 +272,7 @@ export function LogicRegisterIndex() {
                         </InputGroup>
                         <InputGroup>
                             <Label htmlFor="pwd-again">
-                                <Typography>Password Again</Typography>
+                                <Typography>비밀번호 재확인</Typography>
                             </Label>
                             <Input
                                 style={{ width: '100%' }}
