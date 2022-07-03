@@ -2,25 +2,25 @@ import { Body, Controller, Delete, Get, Param } from '@nestjs/common';
 import { PhoneEntity } from './entities/phone.entity';
 import { PhoneAdminRepository } from './entities/phone.repository.admin';
 
-@Controller('admin')
+@Controller('admin/phone')
 export class PhoneAdminController {
     constructor(
         private readonly phoneAdminRepository: PhoneAdminRepository, //
     ) {}
 
-    @Get('/phones')
+    @Get('/all')
     findAll(): Promise<PhoneEntity[]> {
         return this.phoneAdminRepository.findAll();
     }
 
-    @Get('/phone/:id')
+    @Get('/:id')
     findOne(
         @Param('id') id: string, //
     ): Promise<PhoneEntity> {
         return this.phoneAdminRepository.findOne(id);
     }
 
-    @Delete('/phones')
+    @Delete('/bulk')
     async bulkDelete(
         @Body() IDs: Array<string>, //
     ): Promise<boolean[]> {

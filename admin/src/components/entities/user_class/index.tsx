@@ -6,23 +6,21 @@ export const UserClassIndex = EntityFactory.getEntity<IUserClassColumn>({
     name: '회원 등급',
     dummyData: DummyUserClassColumn,
     baseURL: '/admin/entity/userClass',
+    beURL: '/admin/user-class',
     list: {
         column: [
             'id', 'description',
         ],
-        url: '/admin/user-classes'
     },
     show: {
         column: [
             'id', 'description',
         ],
-        url: '/admin/user-class'
     },
     edit: {
         column: [
             'id', 'description',
         ],
-        url: { 'default': '/admin/user-class' },
         default: {
             id: '', description: ''
         }
@@ -31,7 +29,6 @@ export const UserClassIndex = EntityFactory.getEntity<IUserClassColumn>({
         column: [
             'id', 'description',
         ],
-        url: { 'default': '/admin/user-class' },
         default: {
             id: '', description: ''
         }

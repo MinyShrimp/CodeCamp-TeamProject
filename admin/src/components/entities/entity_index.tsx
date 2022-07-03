@@ -8,6 +8,7 @@ import { EntityShowIndex } from './entity_show_index';
 import { EntityUpdateIndex } from './entity_update_index';
 
 export function EntityIndex(props: {
+    beURL: string;
     baseURL: string;
     deleteRows: Array<string>;
     setEditHandler: Dispatch<SetStateAction<() => Promise<void>>>;
@@ -15,10 +16,10 @@ export function EntityIndex(props: {
     setDeleteHandler: Dispatch<SetStateAction<() => Promise<void>>>;
     setDeleteRows: Dispatch<SetStateAction<string[]>>;
 
-    list?: { column: IEntityConfig[]; url: string };
-    show?: { column: IEntityConfig[]; url: string };
-    edit?: { column: IEntityConfig[]; url: { [key in string]: string } };
-    update?: { column: IEntityConfig[]; url: { [key in string]: string } };
+    list?: { column: IEntityConfig[] };
+    show?: { column: IEntityConfig[] };
+    edit?: { column: IEntityConfig[]; url?: { [key in string]: string } };
+    update?: { column: IEntityConfig[]; url?: { [key in string]: string } };
     editInput?: any;
     updateInput?: any;
 }) {
@@ -29,7 +30,7 @@ export function EntityIndex(props: {
                     path="/"
                     element={
                         <EntityListIndex
-                            url={props.list.url}
+                            beURL={props.beURL}
                             baseURL={props.baseURL}
                             columns={props.list.column}
                             setEditHandler={props.setEditHandler}
@@ -47,7 +48,7 @@ export function EntityIndex(props: {
                     path="/edit"
                     element={
                         <EntityEditIndex
-                            url={props.edit.url}
+                            beURL={props.beURL}
                             baseURL={props.baseURL}
                             columns={props.edit.column}
                             input={props.editInput}
@@ -66,7 +67,7 @@ export function EntityIndex(props: {
                     path="/edit/*"
                     element={
                         <EntityUpdateIndex
-                            url={props.update.url}
+                            beURL={props.beURL}
                             baseURL={props.baseURL}
                             columns={props.update.column}
                             input={props.updateInput}
@@ -85,7 +86,7 @@ export function EntityIndex(props: {
                     path="/show/*"
                     element={
                         <EntityShowIndex
-                            url={props.show.url}
+                            beURL={props.beURL}
                             baseURL={props.baseURL}
                             columns={props.show.column}
                             updateInput={props.updateInput}

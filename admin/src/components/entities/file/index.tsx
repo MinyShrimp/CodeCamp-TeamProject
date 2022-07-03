@@ -7,19 +7,15 @@ export const FileIndex = EntityFactory.getEntity<IFileColumn>({
     name: 'File',
     dummyData: DummyFileColumn,
     baseURL: '/admin/entity/file',
+    beURL: '/admin/file',
     list: {
         column: ['id', 'name', 'path', 'url', 'createAt'],
-        url: '/admin/files',
     },
     show: {
         column: ['id', 'name', 'path', 'url', 'createAt', 'deleteAt'],
-        url: '/admin/file',
     },
     edit: {
         column: ["files"],
-        url: {
-            default: "/admin/file"
-        },
         default: {
             files: [DummyFile]
         }

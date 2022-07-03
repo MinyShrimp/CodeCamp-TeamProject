@@ -6,23 +6,21 @@ export const PaymentStatusIndex = EntityFactory.getEntity<IPaymentStatusColumn>(
     name: '결제 상태',
     dummyData: DummyPaymentStatusColumn,
     baseURL: '/admin/entity/paymentStatus',
+    beURL: '/admin/payment-status',
     list: {
         column: [
             'id', 'description',
         ],
-        url: '/admin/payment-status/all'
     },
     show: {
         column: [
             'id', 'description',
         ],
-        url: '/admin/payment-status'
     },
     edit: {
         column: [
             'id', 'description',
         ],
-        url: { 'default': '/admin/payment-status' },
         default: {
             id: '', description: ''
         }
@@ -31,7 +29,6 @@ export const PaymentStatusIndex = EntityFactory.getEntity<IPaymentStatusColumn>(
         column: [
             'id', 'description',
         ],
-        url: { 'default': '/admin/payment-status' },
         default: {
             id: '', description: ''
         }

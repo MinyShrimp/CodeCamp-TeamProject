@@ -13,7 +13,7 @@ import { getLastPath } from '../../functions/functions';
 import { IEntityConfig } from './types';
 
 export function EntityShowIndex(props: {
-    url: string;
+    beURL: string;
     baseURL: string;
     columns: Array<IEntityConfig>;
     updateInput: MutableRefObject<any>;
@@ -36,7 +36,7 @@ export function EntityShowIndex(props: {
 
         setData(undefined);
         axios
-            .get(`${process.env.BE_URL}${props.url}/${entityID}`)
+            .get(`${process.env.BE_URL}${props.beURL}/${entityID}`)
             .then((res: AxiosResponse) => {
                 if (res.data === '') {
                     navi(props.baseURL);
@@ -52,11 +52,11 @@ export function EntityShowIndex(props: {
 
     const _delete = useCallback(async () => {
         axios
-            .delete(`${process.env.BE_URL}${props.url}s`, {
+            .delete(`${process.env.BE_URL}${props.beURL}/bulk`, {
                 data: props.deleteRows,
             })
             .then((res: AxiosResponse) => {
-                navi(`/admin/entity/${props.url.split('/').slice(-1)[0]}`);
+                navi(`/admin/entity/${props.beURL.split('/').slice(-1)[0]}`);
             })
             .catch((error) => {
                 console.log(error);

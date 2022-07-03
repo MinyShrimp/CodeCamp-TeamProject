@@ -6,23 +6,21 @@ export const ProductIndex = EntityFactory.getEntity<IProductColumn>({
     name: '상품',
     dummyData: DummyProductColumn,
     baseURL: '/admin/entity/product',
+    beURL: '/admin/product',
     list: {
         column: [
             'id', 'name', 'description', 'price', 'point',
         ],
-        url: '/admin/product/all'
     },
     show: {
         column: [
             'id', 'name', 'description', 'price', 'point',
         ],
-        url: '/admin/product'
     },
     edit: {
         column: [
             'name', 'price', 'point', 'description',
         ],
-        url: { 'default': '/admin/product' },
         default: {
             name: '', price: 0, point: 0, description: ''
         }
@@ -31,7 +29,6 @@ export const ProductIndex = EntityFactory.getEntity<IProductColumn>({
         column: [
             'name', 'price', 'point', 'description',
         ],
-        url: { 'default': '/admin/product' },
         default: {
             name: '', price: 0, point: 0, description: ''
         }

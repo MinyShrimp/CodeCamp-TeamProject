@@ -8,6 +8,7 @@ import { getLastPath } from '../../functions/functions';
 import { IEntityConfig } from './types';
 
 export function EntityUpdateIndex(props: {
+    beURL: string;
     baseURL: string;
     setEditHandler: Dispatch<SetStateAction<() => Promise<void>>>;
     setReloadHandler: Dispatch<SetStateAction<() => Promise<void>>>;
@@ -15,7 +16,6 @@ export function EntityUpdateIndex(props: {
     deleteRows: Array<string>;
     setDeleteRows: Dispatch<SetStateAction<string[]>>;
 
-    url: { [key in string]: string };
     columns: Array<IEntityConfig>;
     input: any;
 }) {
@@ -49,7 +49,7 @@ export function EntityUpdateIndex(props: {
         console.log(inputs);
 
         const res = await axios.patch(
-            `${process.env.BE_URL}${props.url['default']}`,
+            `${process.env.BE_URL}${props.beURL}`,
             { ...inputs, originID: entityID },
             {
                 headers: {
