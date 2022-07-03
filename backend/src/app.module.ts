@@ -24,6 +24,9 @@ import { EmailModule } from './apis/email/email.module';
 import { PhoneModule } from './apis/phone/phone.module';
 import { UserClassModule } from './apis/userClass/userClass.module';
 import { FileModule } from './apis/file/file.module';
+import { PaymentStatusModule } from './apis/paymentStatus/paymentStatus.module';
+import { ProductModule } from './apis/product/product.module';
+import { PaymentModule } from './apis/payment/payment.module';
 
 ///////////////////////////////////////////////////////////////////////////
 @Module({
@@ -85,6 +88,10 @@ import { FileModule } from './apis/file/file.module';
         UserModule,
         PhoneModule,
         EmailModule,
+
+        ProductModule,
+        PaymentModule,
+        PaymentStatusModule,
 
         FileModule,
     ],

@@ -6,6 +6,7 @@ export const UserIndex = EntityFactory.getEntity<IUserColumn>({
     name: '회원',
     dummyData: DummyUserColumn,
     baseURL: '/admin/entity/user',
+    beURL: '/admin/user',
     list: {
         column: [
             'id', 'name', 'nickName', 
@@ -20,7 +21,6 @@ export const UserIndex = EntityFactory.getEntity<IUserColumn>({
             authEmail: 'isAuth',
             authPhone: 'isAuth',
         },
-        url: '/admin/users'
     },
     show: {
         column: [
@@ -36,7 +36,6 @@ export const UserIndex = EntityFactory.getEntity<IUserColumn>({
             authEmail: 'isAuth',
             authPhone: 'isAuth',
         },
-        url: '/admin/user'
     },
     update: {
         column: [
@@ -44,7 +43,6 @@ export const UserIndex = EntityFactory.getEntity<IUserColumn>({
             'point', 'isLogin', 'userClassID'
         ],
         url: { 
-            'default': '/admin/user',
             'userClassID': '/admin/user-class/names'
         },
         default: {

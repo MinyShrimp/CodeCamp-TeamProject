@@ -6,7 +6,7 @@ import { IColumn } from './interface';
 import { IEntityConfig } from './types';
 
 export function EntityListIndex(props: {
-    url: string;
+    beURL: string;
     baseURL: string;
     columns: Array<IEntityConfig>;
     setEditHandler: Dispatch<SetStateAction<() => Promise<void>>>;
@@ -26,7 +26,7 @@ export function EntityListIndex(props: {
         setDatas([]);
         props.setDeleteRows([]);
         axios
-            .get(`${process.env.BE_URL}${props.url}`)
+            .get(`${process.env.BE_URL}${props.beURL}/all`)
             .then((res: AxiosResponse) => {
                 setDatas(res.data);
                 setPending(false);
@@ -41,7 +41,7 @@ export function EntityListIndex(props: {
         setPending(true);
 
         axios
-            .delete(`${process.env.BE_URL}${props.url}`, {
+            .delete(`${process.env.BE_URL}${props.beURL}/bulk`, {
                 data: props.deleteRows,
             })
             .then((res: AxiosResponse) => {

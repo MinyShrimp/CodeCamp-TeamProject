@@ -6,6 +6,7 @@ export const EmailIndex = EntityFactory.getEntity<IEmailColumn>({
     name: '이메일 인증',
     dummyData: DummyEmailColumn,
     baseURL: '/admin/entity/authEmail',
+    beURL: '/admin/email',
 
     list: {
         column: [
@@ -15,7 +16,6 @@ export const EmailIndex = EntityFactory.getEntity<IEmailColumn>({
         option: {
             user: 'email',
         },
-        url: '/admin/emails',
     },
     show: {
         column: [
@@ -25,6 +25,5 @@ export const EmailIndex = EntityFactory.getEntity<IEmailColumn>({
         option: {
             user: 'email',
         },
-        url: '/admin/email',
     },
 });

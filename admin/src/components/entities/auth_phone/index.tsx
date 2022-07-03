@@ -6,6 +6,7 @@ export const PhoneIndex = EntityFactory.getEntity<IPhoneColumn>({
     name: '핸드폰 인증',
     dummyData: DummyPhoneColumn,
     baseURL: '/admin/entity/authPhone',
+    beURL: '/admin/phone',
 
     list: {
         column: [
@@ -15,7 +16,6 @@ export const PhoneIndex = EntityFactory.getEntity<IPhoneColumn>({
         option: {
             user: 'email',
         },
-        url: '/admin/phones',
     },
     show: {
         column: [
@@ -25,6 +25,5 @@ export const PhoneIndex = EntityFactory.getEntity<IPhoneColumn>({
         option: {
             user: 'email',
         },
-        url: '/admin/phone',
     },
 });
