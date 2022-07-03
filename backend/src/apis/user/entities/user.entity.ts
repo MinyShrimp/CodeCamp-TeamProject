@@ -17,10 +17,13 @@ import {
     OneToOne,
     ManyToOne,
     JoinColumn,
-    OneToMany,
+    Tree,
+    TreeParent,
+    TreeChildren,
 } from 'typeorm';
 
 @Entity({ name: 'user' })
+@Tree('closure-table')
 @ObjectType({ description: '유저 Entity' })
 export class UserEntity {
     @PrimaryGeneratedColumn('uuid')
@@ -108,18 +111,17 @@ export class UserEntity {
     @Field(() => EmailEntity)
     authEmail: EmailEntity;
 
-    //
-    @ManyToOne(
-        () => UserEntity, //
-        (user) => user.likeUsers,
-    )
+    // 선호 작가 부모
+    @TreeParent()
     parent: UserEntity;
 
     // 선호 작가
-    @OneToMany(
-        () => UserEntity, //
-        (user) => user.parent,
-    )
-    @Field(() => [UserEntity], { description: '선호 작가 목록' })
+    @TreeChildren()
+    @Field(() => [UserEntity], { description: '선호 회원 목록' })
     likeUsers: UserEntity[];
+
+    // 차단 회원
+    @TreeChildren()
+    @Field(() => [UserEntity], { description: '차단 회원 목록' })
+    dislikeUsers: UserEntity[];
 }

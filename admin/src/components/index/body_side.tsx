@@ -124,6 +124,30 @@ export function IndexBodySide() {
                                     >
                                         Auth Email
                                     </Nav.Link>
+
+                                    <hr />
+
+                                    <Nav.Link
+                                        as={Link}
+                                        to="/admin/entity/product"
+                                    >
+                                        Product
+                                    </Nav.Link>
+                                    <Nav.Link
+                                        as={Link}
+                                        to="/admin/entity/payment"
+                                    >
+                                        Payment
+                                    </Nav.Link>
+                                    <Nav.Link
+                                        as={Link}
+                                        to="/admin/entity/paymentStatus"
+                                    >
+                                        PaymentStatus
+                                    </Nav.Link>
+
+                                    <hr />
+
                                     <Nav.Link as={Link} to="/admin/entity/file">
                                         File
                                     </Nav.Link>
