@@ -20,7 +20,7 @@ export class EntityFactory {
     private static createColumn<T>(
         dummy: T,
         config: {
-            url: string | { [key in string]: string };
+            url?: { [key in string]: string };
             column: Array<keyof T>;
             option?: Partial<{ [key in keyof T]: string }>;
         },
@@ -267,23 +267,22 @@ export class EntityFactory {
         name: string;
         dummyData: T;
         baseURL: string;
+        beURL: string;
         list?: {
-            url: string;
             column: Array<keyof T>;
             option?: Partial<{ [key in keyof T]: string }>;
         };
         show?: {
-            url: string;
             column: Array<keyof T>;
             option?: Partial<{ [key in keyof T]: string }>;
         };
         edit?: {
-            url: { [key in string]: string };
+            url?: { [key in string]: string };
             default: Partial<T>;
             column: Array<keyof T>;
         };
         update?: {
-            url: { [key in string]: string };
+            url?: { [key in string]: string };
             default: Partial<T>;
             column: Array<keyof T>;
         };
@@ -296,7 +295,7 @@ export class EntityFactory {
                               columnConfig.dummyData,
                               columnConfig.list,
                           ),
-                          url: columnConfig.list.url,
+                          url: columnConfig.beURL + '/all',
                       }
                     : undefined,
             show:
@@ -306,7 +305,7 @@ export class EntityFactory {
                               columnConfig.dummyData,
                               columnConfig.show,
                           ),
-                          url: columnConfig.show.url,
+                          url: columnConfig.beURL,
                       }
                     : undefined,
             edit:
@@ -369,6 +368,7 @@ export class EntityFactory {
                     />
                     <EntityIndex
                         baseURL={columnConfig.baseURL}
+                        beURL={columnConfig.beURL}
                         setEditHandler={setEditHandler}
                         setReloadHandler={setReloadHandler}
                         setDeleteHandler={setDeleteHandler}

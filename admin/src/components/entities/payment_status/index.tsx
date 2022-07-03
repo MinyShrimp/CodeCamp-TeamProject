@@ -1,12 +1,12 @@
 import { EntityFactory } from '../entity_factory';
-import { IUserClassColumn, DummyUserClassColumn } from './interface';
+import { IPaymentStatusColumn, DummyPaymentStatusColumn } from './interface';
 
 // prettier-ignore
-export const UserClassIndex = EntityFactory.getEntity<IUserClassColumn>({
-    name: '회원 등급',
-    dummyData: DummyUserClassColumn,
-    baseURL: '/admin/entity/userClass',
-    beURL: '/admin/user-class',
+export const PaymentStatusIndex = EntityFactory.getEntity<IPaymentStatusColumn>({
+    name: '결제 상태',
+    dummyData: DummyPaymentStatusColumn,
+    baseURL: '/admin/entity/paymentStatus',
+    beURL: '/admin/payment-status',
     list: {
         column: [
             'id', 'description',

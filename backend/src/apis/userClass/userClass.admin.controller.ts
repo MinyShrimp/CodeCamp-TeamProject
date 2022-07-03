@@ -6,45 +6,44 @@ import {
     Param,
     Patch,
     Post,
-    Put,
 } from '@nestjs/common';
 import { CreateUserClassInput } from './dto/createUserClass.input';
 import { UpdateUserClassInput } from './dto/updateUserClass.input';
 import { UserClassAdminRepository } from './entities/userClass.admin.repository';
 import { UserClassEntity } from './entities/userClass.entity';
 
-@Controller('admin')
+@Controller('admin/user-class')
 export class UserClassAdminController {
     constructor(
         private readonly userClassRepository: UserClassAdminRepository,
     ) {}
 
-    @Get('user-classes')
+    @Get('/all')
     findAll(): Promise<UserClassEntity[]> {
         return this.userClassRepository.findAll();
     }
 
-    @Get('user-class/names')
+    @Get('/names')
     async findAllNames(): Promise<Array<string>> {
         const results = await this.userClassRepository.findAllNames();
         return results.map((r) => r.id);
     }
 
-    @Get('user-class/:id')
+    @Get('/:id')
     findOne(
         @Param('id') id: string, //
     ): Promise<UserClassEntity> {
         return this.userClassRepository.findOne(id);
     }
 
-    @Post('user-class')
+    @Post('/')
     create(
         @Body() input: CreateUserClassInput, //
     ): Promise<UserClassEntity> {
         return this.userClassRepository.create(input);
     }
 
-    @Patch('user-class')
+    @Patch('/')
     async update(
         @Body() input: UpdateUserClassInput, //
     ): Promise<boolean> {
@@ -52,7 +51,7 @@ export class UserClassAdminController {
         return result.affected ? true : false;
     }
 
-    @Delete('user-classes')
+    @Delete('/bulk')
     async bulkDelete(
         @Body() IDs: Array<string>, //
     ): Promise<boolean[]> {

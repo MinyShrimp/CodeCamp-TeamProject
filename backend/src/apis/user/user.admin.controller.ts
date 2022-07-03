@@ -1,36 +1,27 @@
-import {
-    Body,
-    Controller,
-    Delete,
-    Get,
-    Param,
-    Patch,
-    Post,
-} from '@nestjs/common';
-import { CreateUserInput } from './dto/createUser.input';
+import { Body, Controller, Delete, Get, Param, Patch } from '@nestjs/common';
 import { UpdateUserAdminInput } from './dto/updateUser.admin.input';
 import { UserAdminRepository } from './entities/user.admin.repository';
 import { UserEntity } from './entities/user.entity';
 
-@Controller('admin')
+@Controller('admin/user')
 export class UserAdminController {
     constructor(
         private readonly userAdminRepository: UserAdminRepository, //
     ) {}
 
-    @Get('/users')
+    @Get('/all')
     findAll(): Promise<UserEntity[]> {
         return this.userAdminRepository.findAll();
     }
 
-    @Get('/user/:id')
+    @Get('/:id')
     findOne(
         @Param('id') userID: string, //
     ): Promise<UserEntity> {
         return this.userAdminRepository.findOne(userID);
     }
 
-    @Patch('/user')
+    @Patch('/')
     async update(
         @Body() input: UpdateUserAdminInput, //
     ): Promise<boolean> {
@@ -38,7 +29,7 @@ export class UserAdminController {
         return result.affected ? true : false;
     }
 
-    @Delete('/users')
+    @Delete('/bulk')
     async bulkDelete(
         @Body() IDs: Array<string>, //
     ) {

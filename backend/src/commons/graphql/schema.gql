@@ -53,8 +53,11 @@ type UserEntity {
   authPhone: PhoneEntity!
   authEmail: EmailEntity!
 
-  """선호 작가 목록"""
+  """선호 회원 목록"""
   likeUsers: [UserEntity!]!
+
+  """차단 회원 목록"""
+  dislikeUsers: [UserEntity!]!
 }
 
 """결과 메세지"""

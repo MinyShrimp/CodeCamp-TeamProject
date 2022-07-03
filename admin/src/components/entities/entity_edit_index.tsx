@@ -5,6 +5,7 @@ import { IEntityConfig } from './types';
 import { useNavigate } from 'react-router-dom';
 
 export function EntityEditIndex(props: {
+    beURL: string;
     baseURL: string;
     setEditHandler: Dispatch<SetStateAction<() => Promise<void>>>;
     setReloadHandler: Dispatch<SetStateAction<() => Promise<void>>>;
@@ -12,7 +13,6 @@ export function EntityEditIndex(props: {
     deleteRows: Array<string>;
     setDeleteRows: Dispatch<SetStateAction<string[]>>;
 
-    url: { [key in string]: string };
     columns: Array<IEntityConfig>;
     input: any;
 }) {
@@ -41,7 +41,7 @@ export function EntityEditIndex(props: {
 
     const submitInput = async (input: any) => {
         const res = await axios.post(
-            `${process.env.BE_URL}${props.url['default']}`,
+            `${process.env.BE_URL}${props.beURL}`,
             input,
             {
                 headers: {
