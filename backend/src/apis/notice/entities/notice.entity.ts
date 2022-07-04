@@ -44,9 +44,9 @@ export class NoticeEntity {
 
     @ManyToOne(
         () => UserEntity,
-        { cascade: true, onDelete: 'NO ACTION' }, //
+        { cascade: true, onDelete: 'SET NULL' }, //
     )
     @JoinColumn()
-    @Field(() => Date)
+    @Field(() => UserEntity, { nullable: true })
     user: UserEntity;
 }

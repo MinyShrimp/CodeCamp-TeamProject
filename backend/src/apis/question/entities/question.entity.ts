@@ -40,9 +40,9 @@ export class QuestionEntity {
 
     @ManyToOne(
         () => UserEntity, //
-        { cascade: true, onDelete: 'CASCADE' },
+        { cascade: true, onDelete: 'SET NULL' },
     )
     @JoinColumn()
-    @Field(() => UserEntity)
+    @Field(() => UserEntity, { nullable: true })
     user: UserEntity;
 }
