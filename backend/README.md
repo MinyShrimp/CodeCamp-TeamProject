@@ -99,3 +99,12 @@ async function bootstrap() {
 }
 bootstrap();
 ```
+
+## 깃 이모지 추가
+
+```
+npm i -g gitmogi-cli
+git add .
+gitmoji -c
+git push origin main
+```
