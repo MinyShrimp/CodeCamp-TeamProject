@@ -28,8 +28,8 @@ export class AnswerAdminRepository {
     async findAllNames(): Promise<AnswerEntity[]> {
         return await this.answerRepository
             .createQueryBuilder('answer')
-            .select(['answer.id', 'answer.name'])
-            .orderBy('')
+            .select(['answer.id', 'answer.title'])
+            .orderBy('answer.createAt')
             .getMany();
     }
 

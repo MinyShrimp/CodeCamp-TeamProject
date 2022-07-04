@@ -1,6 +1,8 @@
 // prettier-ignore
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 
+import { TitleOutput } from '../../commons/dto/title.admin.output';
+
 import { CreateAnswerAdminInput } from './dto/createAnswer.admin.input';
 import { UpdateAnswerAdminInput } from './dto/updateAnswer.admin.input';
 
@@ -19,9 +21,11 @@ export class AnswerAdminController {
     }
 
     @Get('/names')
-    async findAllNames(): Promise<Array<string>> {
+    async findAllNames(): Promise<Array<TitleOutput>> {
         const results = await this.answerAdminRepository.findAllNames();
-        return results.map((r) => r.id);
+        return results.map((r) => {
+            return { id: r.id, title: r.title };
+        });
     }
 
     @Get('/:id')

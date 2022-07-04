@@ -1,15 +1,19 @@
 import { Field, Float, ID, ObjectType } from '@nestjs/graphql';
 import { Max, Min } from 'class-validator';
+
+import { UserEntity } from 'src/apis/user/entities/user.entity';
 import { QuestionEntity } from 'src/apis/question/entities/question.entity';
+
 import {
     Entity,
     Column,
     OneToOne,
+    ManyToOne,
+    JoinColumn,
     CreateDateColumn,
     UpdateDateColumn,
     DeleteDateColumn,
     PrimaryGeneratedColumn,
-    JoinColumn,
 } from 'typeorm';
 
 /* Answer Entity */
@@ -19,6 +23,10 @@ export class AnswerEntity {
     @PrimaryGeneratedColumn('uuid')
     @Field(() => ID, { description: 'UUID' })
     id: string;
+
+    @Column()
+    @Field(() => String, { description: '제목' })
+    title: string;
 
     @Column({ type: 'text' })
     @Field(() => String, { description: '내용' })
@@ -48,4 +56,12 @@ export class AnswerEntity {
     @JoinColumn()
     @Field(() => QuestionEntity, { nullable: true })
     question: QuestionEntity;
+
+    @ManyToOne(
+        () => UserEntity, //
+        { cascade: true, onDelete: 'SET NULL' },
+    )
+    @JoinColumn()
+    @Field(() => UserEntity, { nullable: true })
+    user: UserEntity;
 }
