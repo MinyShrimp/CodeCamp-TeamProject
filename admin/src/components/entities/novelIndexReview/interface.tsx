@@ -13,7 +13,7 @@ export const SimpleDummyNovelIndexReview = {
 export const DummyNovelIndexReviewColumn = {
     ...SimpleDummyNovelIndexReview, 
     likeCount: 0, dislikeCount: 0, star: 0,
-    startAt: now, updateAt: now, deleteAt: now,
+    createAt: now, updateAt: now, deleteAt: now,
     user: SimpleDummyUser, novelIndex: SimpleDummyNovelIndex,
 };
 export type INovelIndexReviewColumn = typeof DummyNovelIndexReviewColumn;

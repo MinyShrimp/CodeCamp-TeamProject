@@ -1,8 +1,5 @@
 // prettier-ignore
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
-
-import { CreatePaymentPointAdminInput } from './dto/createPaymentPoint.admin.input';
-import { UpdatePaymentPointAdminInput } from './dto/updatePaymentPoint.admin.input';
+import { Body, Controller, Delete, Get, Param } from '@nestjs/common';
 
 import { PaymentPointEntity } from './entities/paymentPoint.entity';
 import { PaymentPointAdminRepository } from './entities/paymentPoint.admin.repository';
@@ -23,21 +20,6 @@ export class PaymentPointAdminController {
         @Param('id') id: string, //
     ): Promise<PaymentPointEntity> {
         return this.paymentPointAdminRepository.findOne(id);
-    }
-
-    @Post('/')
-    create(
-        @Body() input: CreatePaymentPointAdminInput, //
-    ): Promise<PaymentPointEntity> {
-        return this.paymentPointAdminRepository.create(input);
-    }
-
-    @Patch('/')
-    async update(
-        @Body() input: UpdatePaymentPointAdminInput, //
-    ): Promise<boolean> {
-        const result = await this.paymentPointAdminRepository.update(input);
-        return result.affected ? true : false;
     }
 
     @Delete('/bulk')

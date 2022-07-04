@@ -30,13 +30,15 @@ import { NoticeIndex } from './notice';
 /****************************************************************************/
 /* 소설 */
 import { NovelIndex } from './novel';
+import { NovelTagIndex } from './novelTag';
 import { NovelIndexIndex } from './novelIndex';
 import { NovelReviewIndex } from './novelReview';
 import { NovelIndexReviewIndex } from './novelIndexReview';
-import { NovelTagIndex } from './novelTag';
 
 /****************************************************************************/
 /* 포인트 결제 */
+import { PointPaymentIndex } from './pointPayment';
+import { PointPaymentStatusIndex } from './pointPaymentStatus';
 
 export function EntityMain() {
     return (
@@ -90,8 +92,14 @@ export function EntityMain() {
 
                     {/****************************************************************************/}
                     {/* 포인트 결제 */}
-                    <Route path="/pointPayment/*" element={<></>} />
-                    <Route path="/pointPaymentStatus/*" element={<></>} />
+                    <Route
+                        path="/pointPayment/*"
+                        element={<PointPaymentIndex />}
+                    />
+                    <Route
+                        path="/pointPaymentStatus/*"
+                        element={<PointPaymentStatusIndex />}
+                    />
 
                     {/****************************************************************************/}
                     {/* 파일 */}

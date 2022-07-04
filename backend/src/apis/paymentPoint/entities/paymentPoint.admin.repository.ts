@@ -1,9 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
-
-import { CreatePaymentPointAdminInput } from '../dto/createPaymentPoint.admin.input';
-import { UpdatePaymentPointAdminInput } from '../dto/updatePaymentPoint.admin.input';
+import { DeleteResult, Repository } from 'typeorm';
 
 import { PaymentPointEntity } from './paymentPoint.entity';
 
@@ -46,19 +43,6 @@ export class PaymentPointAdminRepository {
             .leftJoin('pp.novelIndex', 'ni')
             .where('pp.id=:id', { id: id })
             .getOne();
-    }
-
-    async create(
-        input: CreatePaymentPointAdminInput, //
-    ): Promise<PaymentPointEntity> {
-        return await this.paymentPointRepository.save(input);
-    }
-
-    async update(
-        input: UpdatePaymentPointAdminInput, //
-    ): Promise<UpdateResult> {
-        const { originID, ...rest } = input;
-        return await this.paymentPointRepository.update({ id: originID }, rest);
     }
 
     async bulkDelete(
