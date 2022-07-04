@@ -191,6 +191,15 @@ type NovelEntity {
   novelReviews: [NovelReviewEntity!]!
 }
 
+"""포인트 결제 상태 Entity"""
+type PaymentPointStatusEntity {
+  """KEY"""
+  id: String!
+
+  """설명"""
+  description: String!
+}
+
 """FileUpload Entity"""
 type FileEntity {
   id: ID!

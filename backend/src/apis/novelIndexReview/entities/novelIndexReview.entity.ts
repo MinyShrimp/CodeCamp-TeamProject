@@ -19,7 +19,7 @@ import { UserEntity } from 'src/apis/user/entities/user.entity';
 @ObjectType({ description: '편당 리뷰 Entity' })
 export class NovelIndexReviewEntity {
     @PrimaryGeneratedColumn('uuid')
-    @Field(() => ID)
+    @Field(() => ID, { description: 'UUID' })
     id: string;
 
     @Column({ type: 'text' })
