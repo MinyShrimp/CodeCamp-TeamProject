@@ -118,7 +118,7 @@ ADMIN_CONT_FILE=$APIDIR/$FILENAME.admin.controller.ts
 echo "// prettier-ignore
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 
-import { NameOutput } from 'src/commons/dto/title.admin.output';
+import { NameOutput } from 'src/commons/dto/name.admin.output';
 
 import { Create${UPPER}AdminInput } from './dto/create${UPPER}.admin.input';
 import { Update${UPPER}AdminInput } from './dto/update${UPPER}.admin.input';
