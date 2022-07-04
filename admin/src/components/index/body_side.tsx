@@ -134,6 +134,24 @@ export function IndexBodySide() {
                                                 >
                                                     이메일 인증
                                                 </Nav.Link>
+                                                <Nav.Link
+                                                    as={Link}
+                                                    to="/admin/entity/novelDonate"
+                                                >
+                                                    후원작
+                                                </Nav.Link>
+                                                <Nav.Link
+                                                    as={Link}
+                                                    to="/admin/entity/novelLike"
+                                                >
+                                                    선호작
+                                                </Nav.Link>
+                                                <Nav.Link
+                                                    as={Link}
+                                                    to="/admin/entity/bookMark"
+                                                >
+                                                    북마크
+                                                </Nav.Link>
                                             </>
                                         }
                                     />
@@ -284,35 +302,6 @@ export function IndexBodySide() {
                                                     to="/admin/entity/pointPaymentStatus"
                                                 >
                                                     포인트 결제 상태
-                                                </Nav.Link>
-                                            </>
-                                        }
-                                    />
-
-                                    {/****************************************************************************/}
-                                    {/* 소설과 유저 연결 */}
-                                    <NavCollapse
-                                        id="entity-novel-user-collapes"
-                                        title="소설과 유저"
-                                        items={
-                                            <>
-                                                <Nav.Link
-                                                    as={Link}
-                                                    to="/admin/entity/novelDonate"
-                                                >
-                                                    후원작
-                                                </Nav.Link>
-                                                <Nav.Link
-                                                    as={Link}
-                                                    to="/admin/entity/novelLike"
-                                                >
-                                                    선호작
-                                                </Nav.Link>
-                                                <Nav.Link
-                                                    as={Link}
-                                                    to="/admin/entity/bookMark"
-                                                >
-                                                    북마크
                                                 </Nav.Link>
                                             </>
                                         }
