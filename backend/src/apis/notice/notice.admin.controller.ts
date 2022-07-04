@@ -1,6 +1,7 @@
 // prettier-ignore
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 
+import { TitleOutput } from './dto/title.admin.output';
 import { CreateNoticeAdminInput } from './dto/createNotice.admin.input';
 import { UpdateNoticeAdminInput } from './dto/updateNotice.admin.input';
 
@@ -19,9 +20,11 @@ export class NoticeAdminController {
     }
 
     @Get('/names')
-    async findAllNames(): Promise<Array<string>> {
+    async findAllNames(): Promise<Array<TitleOutput>> {
         const results = await this.noticeAdminRepository.findAllNames();
-        return results.map((r) => r.id);
+        return results.map((r) => {
+            return { id: r.id, title: r.title };
+        });
     }
 
     @Get('/:id')
