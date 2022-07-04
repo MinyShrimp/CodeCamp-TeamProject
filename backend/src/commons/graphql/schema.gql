@@ -112,6 +112,31 @@ type NovelTagEntity {
   novels: [NovelEntity!]!
 }
 
+"""NovelIndex Entity"""
+type NovelIndexEntity {
+  """UUID"""
+  id: ID!
+
+  """제목"""
+  title: String!
+
+  """내용"""
+  contents: String!
+
+  """몇 화"""
+  index: Int!
+
+  """평균 별점"""
+  star: Float!
+
+  """생성 시간"""
+  createAt: DateTime!
+
+  """수정 시간"""
+  updateAt: DateTime!
+  novel: NovelEntity!
+}
+
 """소설 Entity"""
 type NovelEntity {
   """UUID"""
@@ -136,6 +161,7 @@ type NovelEntity {
   updateAt: DateTime!
   user: UserEntity!
   novelTags: [NovelTagEntity!]!
+  novelIndexs: [NovelIndexEntity!]!
 }
 
 """FileUpload Entity"""

@@ -18,7 +18,7 @@ export class NovelAdminRepository {
     private readonly _selector = [
         'n.id', 'n.title', 'n.subtitle', 'n.description',
         'n.likeCount', 'n.createAt', 'n.updateAt', 'n.deleteAt',
-        'u.id', 'u.email', 't.id', 't.name'
+        'u.id', 'u.email', 't.id', 't.name', 'i.id', 'i.title',
     ];
 
     async findAll(): Promise<NovelEntity[]> {
@@ -29,6 +29,7 @@ export class NovelAdminRepository {
             .orderBy('n.createAt')
             .leftJoin('n.user', 'u')
             .leftJoin('n.novelTags', 't')
+            .leftJoin('n.novelIndexs', 'i')
             .getMany();
     }
 
@@ -51,6 +52,7 @@ export class NovelAdminRepository {
             .withDeleted()
             .leftJoin('n.user', 'u')
             .leftJoin('n.novelTags', 't')
+            .leftJoin('n.novelIndexs', 'i')
             .where('n.id=:id', { id: id })
             .getOne();
     }
