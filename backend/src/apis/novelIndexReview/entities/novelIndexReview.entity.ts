@@ -1,7 +1,5 @@
 import { Field, Float, ID, Int, ObjectType } from '@nestjs/graphql';
 import { Max, Min } from 'class-validator';
-import { NovelEntity } from 'src/apis/novel/entities/novel.entity';
-import { UserEntity } from 'src/apis/user/entities/user.entity';
 import {
     Entity,
     Column,
@@ -13,12 +11,15 @@ import {
     PrimaryGeneratedColumn,
 } from 'typeorm';
 
-/* NovelReview Entity */
-@Entity({ name: 'nove_review' })
-@ObjectType({ description: '소설 리뷰 Entity' })
-export class NovelReviewEntity {
+import { NovelIndexEntity } from 'src/apis/novelIndex/entities/novelIndex.entity';
+import { UserEntity } from 'src/apis/user/entities/user.entity';
+
+/* NovelIndexReview Entity */
+@Entity({ name: 'novel_index_review' })
+@ObjectType({ description: '편당 리뷰 Entity' })
+export class NovelIndexReviewEntity {
     @PrimaryGeneratedColumn('uuid')
-    @Field(() => ID, { description: 'UUID' })
+    @Field(() => ID)
     id: string;
 
     @Column({ type: 'text' })
@@ -53,12 +54,12 @@ export class NovelReviewEntity {
     deleteAt: Date;
 
     @ManyToOne(
-        () => NovelEntity, //
+        () => NovelIndexEntity, //
         { cascade: true, onDelete: 'CASCADE' },
     )
     @JoinColumn()
-    @Field(() => NovelEntity)
-    novel: NovelEntity;
+    @Field(() => NovelIndexEntity)
+    novelIndex: NovelIndexEntity;
 
     @ManyToOne(
         () => UserEntity, //
