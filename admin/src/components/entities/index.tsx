@@ -1,18 +1,40 @@
 import { Route, Routes } from 'react-router-dom';
 
+/****************************************************************************/
+/* 파일 */
 import { FileIndex } from './file';
 
+/****************************************************************************/
+/* 회원 */
 import { UserIndex } from './user';
 import { UserClassIndex } from './userClass';
 import { PhoneIndex } from './authPhone';
 import { EmailIndex } from './authEmail';
 
+/****************************************************************************/
+/* 회원 */
 import { ProductIndex } from './product';
 import { PaymentIndex } from './payment';
 import { PaymentStatusIndex } from './paymentStatus';
 
+/****************************************************************************/
+/* 결제 */
 import { AnswerIndex } from './answer';
 import { QuestionIndex } from './question';
+
+/****************************************************************************/
+/* 문의 */
+import { NoticeIndex } from './notice';
+import { EventIndex } from './event';
+
+/****************************************************************************/
+/* 게시판 */
+
+/****************************************************************************/
+/* 소설 */
+
+/****************************************************************************/
+/* 포인트 결제 */
 
 export function EntityMain() {
     return (
@@ -25,6 +47,9 @@ export function EntityMain() {
                     <Route path="/authPhone/*" element={<PhoneIndex />} />
                     <Route path="/userClass/*" element={<UserClassIndex />} />
                     <Route path="/user/*" element={<UserIndex />} />
+                    <Route path="/novelDonate/*" element={<></>} />
+                    <Route path="/novelLike/*" element={<></>} />
+                    <Route path="/bookmark/*" element={<></>} />
 
                     {/****************************************************************************/}
                     {/* 결제 */}
@@ -39,14 +64,11 @@ export function EntityMain() {
                     {/* 문의 */}
                     <Route path="/answer/*" element={<AnswerIndex />} />
                     <Route path="/question/*" element={<QuestionIndex />} />
-                    <Route path="/novelDonate/*" element={<></>} />
-                    <Route path="/novelLike/*" element={<></>} />
-                    <Route path="/bookmark/*" element={<></>} />
 
                     {/****************************************************************************/}
                     {/* 게시판 */}
-                    <Route path="/notice/*" element={<></>} />
-                    <Route path="/event/*" element={<></>} />
+                    <Route path="/notice/*" element={<NoticeIndex />} />
+                    <Route path="/event/*" element={<EventIndex />} />
                     <Route path="/board/*" element={<></>} />
                     <Route path="/comment/*" element={<></>} />
 
