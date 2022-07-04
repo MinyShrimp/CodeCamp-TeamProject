@@ -1,5 +1,5 @@
 import { getDefaultDate } from '../../../functions/functions';
-import { DummyUserClassColumn } from '../user_class/interface';
+import { DummyUserClassColumn } from '../userClass/interface';
 
 const now = getDefaultDate();
 // prettier-ignore

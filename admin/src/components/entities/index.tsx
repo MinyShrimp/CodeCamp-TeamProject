@@ -1,13 +1,15 @@
 import { Route, Routes } from 'react-router-dom';
 
-import { UserIndex } from './user';
 import { FileIndex } from './file';
-import { UserClassIndex } from './user_class';
-import { PhoneIndex } from './auth_phone';
-import { EmailIndex } from './auth_email';
-import { PaymentStatusIndex } from './payment_status';
+
+import { UserIndex } from './user';
+import { UserClassIndex } from './userClass';
+import { PhoneIndex } from './authPhone';
+import { EmailIndex } from './authEmail';
+
 import { ProductIndex } from './product';
 import { PaymentIndex } from './payment';
+import { PaymentStatusIndex } from './paymentStatus';
 
 export function EntityMain() {
     return (
