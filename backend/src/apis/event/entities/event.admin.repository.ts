@@ -18,7 +18,6 @@ export class EventAdminRepository {
     private readonly _selector = [
         'event.id', 'event.title', 'event.contents', 
         'event.startAt', 'event.endAt', 'event.createAt', 'event.updateAt', 
-        'user.id', 'user.email'
     ];
 
     async findAll(): Promise<EventEntity[]> {
@@ -26,16 +25,7 @@ export class EventAdminRepository {
             .createQueryBuilder('event')
             .select(this._selector)
             .withDeleted()
-            .leftJoin('event.user', 'user')
             .orderBy('event.createAt')
-            .getMany();
-    }
-
-    async findAllNames(): Promise<EventEntity[]> {
-        return await this.eventRepository
-            .createQueryBuilder('event')
-            .select(['event.id', 'event.title'])
-            .orderBy('')
             .getMany();
     }
 
@@ -48,7 +38,6 @@ export class EventAdminRepository {
                 ...this._selector, //
             ])
             .withDeleted()
-            .leftJoin('event.user', 'user')
             .where('event.id=:id', { id: id })
             .getOne();
     }

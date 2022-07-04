@@ -1,8 +1,6 @@
 // prettier-ignore
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 
-import { NameOutput } from '../../commons/dto/name.admin.output';
-
 import { CreateEventAdminInput } from './dto/createEvent.admin.input';
 import { UpdateEventAdminInput } from './dto/updateEvent.admin.input';
 
@@ -18,14 +16,6 @@ export class EventAdminController {
     @Get('/all')
     findAll(): Promise<EventEntity[]> {
         return this.eventAdminRepository.findAll();
-    }
-
-    @Get('/names')
-    async findAllNames(): Promise<Array<NameOutput>> {
-        const results = await this.eventAdminRepository.findAllNames();
-        return results.map((r) => {
-            return { id: r.id, name: r.title };
-        });
     }
 
     @Get('/:id')
