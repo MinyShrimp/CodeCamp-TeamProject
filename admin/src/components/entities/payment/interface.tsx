@@ -1,5 +1,5 @@
 import { getDefaultDate } from '../../../functions/functions';
-import { DummyPaymentStatusColumn } from '../payment_status/interface';
+import { DummyPaymentStatusColumn } from '../paymentStatus/interface';
 import { DummyProductColumn } from '../product/interface';
 import { DummyUserColumn } from '../user/interface';
 

@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, Param } from '@nestjs/common';
+
 import { PhoneEntity } from './entities/phone.entity';
-import { PhoneAdminRepository } from './entities/phone.repository.admin';
+import { PhoneAdminRepository } from './entities/phone.admin.repository';
 
 @Controller('admin/phone')
 export class PhoneAdminController {

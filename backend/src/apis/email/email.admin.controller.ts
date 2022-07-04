@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, Param } from '@nestjs/common';
+
 import { EmailEntity } from './entities/email.entity';
-import { EmailAdminRepository } from './entities/email.repository.admin';
+import { EmailAdminRepository } from './entities/email.admin.repository';
 
 @Controller('admin/email')
 export class EmailAdminController {

@@ -1,5 +1,5 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Field, ObjectType } from '@nestjs/graphql';
+import { Column, Entity, PrimaryColumn } from 'typeorm';
 
 /**
  * 결제 상태 Entity
@@ -12,8 +12,8 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 @Entity({ name: 'payment_status' })
 @ObjectType({ description: '결제 상태 Entity' })
 export class PaymentStatusEntity {
-    @PrimaryGeneratedColumn('uuid')
-    @Field(() => ID)
+    @PrimaryColumn({ unique: true, nullable: false })
+    @Field(() => String, { description: 'KEY' })
     id: string;
 
     @Column()
