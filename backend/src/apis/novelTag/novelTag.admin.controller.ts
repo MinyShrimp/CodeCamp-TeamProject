@@ -9,7 +9,7 @@ import { UpdateNovelTagAdminInput } from './dto/updateNovelTag.admin.input';
 import { NovelTagEntity } from './entities/novelTag.entity';
 import { NovelTagAdminRepository } from './entities/novelTag.admin.repository';
 
-@Controller('admin/novelTag')
+@Controller('admin/novel-tag')
 export class NovelTagAdminController {
     constructor(
         private readonly novelTagAdminRepository: NovelTagAdminRepository, //

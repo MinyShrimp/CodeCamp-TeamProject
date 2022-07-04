@@ -9,7 +9,7 @@ import { UpdateNovelIndexAdminInput } from './dto/updateNovelIndex.admin.input';
 import { NovelIndexEntity } from './entities/novelIndex.entity';
 import { NovelIndexAdminRepository } from './entities/novelIndex.admin.repository';
 
-@Controller('admin/novelIndex')
+@Controller('admin/novel-index')
 export class NovelIndexAdminController {
     constructor(
         private readonly novelIndexAdminRepository: NovelIndexAdminRepository, //

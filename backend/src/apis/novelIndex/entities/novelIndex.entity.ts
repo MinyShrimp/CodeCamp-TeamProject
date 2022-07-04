@@ -13,7 +13,7 @@ import {
 } from 'typeorm';
 
 /* NovelIndex Entity */
-@Entity({ name: 'novelIndex' })
+@Entity({ name: 'novel_index' })
 @ObjectType({ description: 'NovelIndex Entity' })
 export class NovelIndexEntity {
     @PrimaryGeneratedColumn('uuid')
