@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 
 /* NovelTag Entity */
-@Entity({ name: 'novelTag' })
+@Entity({ name: 'novel_tag' })
 @ObjectType({ description: 'NovelTag Entity' })
 export class NovelTagEntity {
     @PrimaryGeneratedColumn('uuid')
