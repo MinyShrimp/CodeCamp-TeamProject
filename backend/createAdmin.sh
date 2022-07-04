@@ -69,7 +69,7 @@ export class ${UPPER}AdminRepository {
         return await this.${FILENAME}Repository
             .createQueryBuilder('${FILENAME}')
             .select(['${FILENAME}.id', '${FILENAME}.name'])
-            .orderBy('')
+            .orderBy('${FILENAME}.createAt')
             .getMany();
     }
 
@@ -118,6 +118,8 @@ ADMIN_CONT_FILE=$APIDIR/$FILENAME.admin.controller.ts
 echo "// prettier-ignore
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 
+import { NameOutput } from 'src/commons/dto/name.admin.output';
+
 import { Create${UPPER}AdminInput } from './dto/create${UPPER}.admin.input';
 import { Update${UPPER}AdminInput } from './dto/update${UPPER}.admin.input';
 
@@ -136,9 +138,11 @@ export class ${UPPER}AdminController {
     }
 
     @Get('/names')
-    async findAllNames(): Promise<Array<string>> {
+    async findAllNames(): Promise<Array<NameOutput>> {
         const results = await this.${FILENAME}AdminRepository.findAllNames();
-        return results.map((r) => r.id);
+        return results.map((r) => {
+            return { id: r.id, name: r.name };
+        });
     }
 
     @Get('/:id')

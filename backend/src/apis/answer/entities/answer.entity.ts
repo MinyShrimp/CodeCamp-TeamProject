@@ -1,19 +1,25 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, Float, ID, ObjectType } from '@nestjs/graphql';
+import { Max, Min } from 'class-validator';
+
 import { UserEntity } from 'src/apis/user/entities/user.entity';
+import { QuestionEntity } from 'src/apis/question/entities/question.entity';
+
 import {
-    Column,
     Entity,
+    Column,
+    OneToOne,
     ManyToOne,
     JoinColumn,
     CreateDateColumn,
     UpdateDateColumn,
+    DeleteDateColumn,
     PrimaryGeneratedColumn,
 } from 'typeorm';
 
-/* Event Entity */
-@Entity({ name: 'event' })
-@ObjectType({ description: 'Event Entity' })
-export class EventEntity {
+/* Answer Entity */
+@Entity({ name: 'answer' })
+@ObjectType({ description: '답변 Entity' })
+export class AnswerEntity {
     @PrimaryGeneratedColumn('uuid')
     @Field(() => ID, { description: 'UUID' })
     id: string;
@@ -26,17 +32,11 @@ export class EventEntity {
     @Field(() => String, { description: '내용' })
     contents: string;
 
-    @Column()
-    @Field(() => Boolean, { description: '이벤트 진행 여부' })
-    isEvent: boolean;
-
-    @Column()
-    @Field(() => Date, { description: '이벤트 시작 시간' })
-    startAt: Date;
-
-    @Column()
-    @Field(() => Date, { description: '이벤트 종료 시간' })
-    endAt: Date;
+    @Min(0)
+    @Max(5)
+    @Column({ type: 'decimal', precision: 2, scale: 1 })
+    @Field(() => Float, { description: '내용' })
+    star: number;
 
     @CreateDateColumn()
     @Field(() => Date, { description: '생성 시간' })
@@ -46,11 +46,22 @@ export class EventEntity {
     @Field(() => Date, { description: '수정 시간' })
     updateAt: Date;
 
+    @DeleteDateColumn()
+    deleteAt: Date;
+
+    @OneToOne(
+        () => QuestionEntity, //
+        { cascade: true, onDelete: 'SET NULL' },
+    )
+    @JoinColumn()
+    @Field(() => QuestionEntity, { nullable: true })
+    question: QuestionEntity;
+
     @ManyToOne(
         () => UserEntity, //
         { cascade: true, onDelete: 'SET NULL' },
     )
     @JoinColumn()
-    @Field(() => UserEntity)
+    @Field(() => UserEntity, { nullable: true })
     user: UserEntity;
 }
