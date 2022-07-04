@@ -17,6 +17,7 @@ import {
 import { UserEntity } from 'src/apis/user/entities/user.entity';
 import { NovelTagEntity } from 'src/apis/novelTag/entities/novelTag.entity';
 import { NovelIndexEntity } from 'src/apis/novelIndex/entities/novelIndex.entity';
+import { NovelReviewEntity } from 'src/apis/novelReview/entities/novelReview.entity';
 
 /* Novel Entity */
 @Entity({ name: 'novel' })
@@ -77,4 +78,11 @@ export class NovelEntity {
     )
     @Field(() => [NovelIndexEntity])
     novelIndexs: NovelIndexEntity[];
+
+    @OneToMany(
+        () => NovelReviewEntity, //
+        (review) => review.novel,
+    )
+    @Field(() => [NovelReviewEntity])
+    novelReviews: NovelReviewEntity[];
 }

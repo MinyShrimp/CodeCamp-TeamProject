@@ -37,6 +37,7 @@ import { QuestionModule } from './apis/question/question.module';
 import { NovelModule } from './apis/novel/novel.module';
 import { NovelTagModule } from './apis/novelTag/novelTag.module';
 import { NovelIndexModule } from './apis/novelIndex/novelIndex.module';
+import { NovelReviewModule } from './apis/novelReview/novelReview.module';
 
 import { FileModule } from './apis/file/file.module';
 
@@ -114,6 +115,7 @@ import { FileModule } from './apis/file/file.module';
         NovelModule,
         NovelTagModule,
         NovelIndexModule,
+        NovelReviewModule,
 
         FileModule,
     ],
