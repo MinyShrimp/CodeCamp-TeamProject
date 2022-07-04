@@ -4,6 +4,9 @@ import {
     Entity,
     Column,
     ManyToOne,
+    JoinColumn,
+    JoinTable,
+    ManyToMany,
     CreateDateColumn,
     UpdateDateColumn,
     DeleteDateColumn,
@@ -11,6 +14,7 @@ import {
 } from 'typeorm';
 
 import { UserEntity } from 'src/apis/user/entities/user.entity';
+import { NovelTagEntity } from 'src/apis/novelTag/entities/novelTag.entity';
 
 /* Novel Entity */
 @Entity({ name: 'novel' })
@@ -53,6 +57,15 @@ export class NovelEntity {
         () => UserEntity, //
         { cascade: true, onDelete: 'SET NULL' },
     )
+    @JoinColumn()
     @Field(() => UserEntity)
     user: UserEntity;
+
+    @ManyToMany(
+        () => NovelTagEntity, //
+        (tag) => tag.novels,
+    )
+    @JoinTable()
+    @Field(() => [NovelTagEntity])
+    novelTags: NovelTagEntity[];
 }

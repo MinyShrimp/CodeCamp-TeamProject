@@ -99,6 +99,45 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+"""NovelTag Entity"""
+type NovelTagEntity {
+  """UUID"""
+  id: ID!
+
+  """이름"""
+  name: String!
+
+  """생성 시간"""
+  createAt: DateTime!
+  novels: [NovelEntity!]!
+}
+
+"""소설 Entity"""
+type NovelEntity {
+  """UUID"""
+  id: ID!
+
+  """제목"""
+  title: String!
+
+  """소제목"""
+  subtitle: String!
+
+  """설명"""
+  description: String!
+
+  """좋아요 갯수"""
+  likeCount: Int!
+
+  """시작 시간"""
+  createAt: DateTime!
+
+  """수정 시간"""
+  updateAt: DateTime!
+  user: UserEntity!
+  novelTags: [NovelTagEntity!]!
+}
+
 """FileUpload Entity"""
 type FileEntity {
   id: ID!

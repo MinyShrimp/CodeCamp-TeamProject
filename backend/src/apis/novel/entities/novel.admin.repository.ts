@@ -14,7 +14,12 @@ export class NovelAdminRepository {
         private readonly novelRepository: Repository<NovelEntity>,
     ) {}
 
-    private readonly _selector = [];
+    // prettier-ignore
+    private readonly _selector = [
+        'n.id', 'n.title', 'n.subtitle', 'n.description',
+        'n.likeCount', 'n.createAt', 'n.updateAt', 'n.deleteAt',
+        'u.id', 'u.email', 't.id', 't.name'
+    ];
 
     async findAll(): Promise<NovelEntity[]> {
         return await this.novelRepository
@@ -22,6 +27,8 @@ export class NovelAdminRepository {
             .select(this._selector)
             .withDeleted()
             .orderBy('n.createAt')
+            .leftJoin('n.user', 'u')
+            .leftJoin('n.novelTags', 't')
             .getMany();
     }
 
@@ -42,6 +49,8 @@ export class NovelAdminRepository {
                 ...this._selector, //
             ])
             .withDeleted()
+            .leftJoin('n.user', 'u')
+            .leftJoin('n.novelTags', 't')
             .where('n.id=:id', { id: id })
             .getOne();
     }
