@@ -11,7 +11,6 @@ mkdir $APIDIR
 # interface
 INTERFACE_FILE=$APIDIR/interface.tsx
 echo "import { getDefaultDate } from '../../../functions/functions';
-import { Dummy${UPPER}ClassColumn } from '../${FILENAME}/interface';
 
 const now = getDefaultDate();
 
@@ -25,8 +24,7 @@ export type I${UPPER}Column = typeof Dummy${UPPER}Column;
 ##############################################################################
 # index
 INDEX_FILE=$APIDIR/index.tsx
-echo "
-import { EntityFactory } from '../entity_factory';
+echo "import { EntityFactory } from '../entity_factory';
 import { I${UPPER}Column, Dummy${UPPER}Column } from './interface';
 
 // prettier-ignore

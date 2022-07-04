@@ -1,9 +1,6 @@
 // prettier-ignore
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch } from '@nestjs/common';
 
-import { NameOutput } from '../../commons/dto/name.admin.output';
-
-import { CreateAnswerAdminInput } from './dto/createAnswer.admin.input';
 import { UpdateAnswerAdminInput } from './dto/updateAnswer.admin.input';
 
 import { AnswerEntity } from './entities/answer.entity';
@@ -20,26 +17,11 @@ export class AnswerAdminController {
         return this.answerAdminRepository.findAll();
     }
 
-    @Get('/names')
-    async findAllNames(): Promise<Array<NameOutput>> {
-        const results = await this.answerAdminRepository.findAllNames();
-        return results.map((r) => {
-            return { id: r.id, name: r.title };
-        });
-    }
-
     @Get('/:id')
     findOne(
         @Param('id') id: string, //
     ): Promise<AnswerEntity> {
         return this.answerAdminRepository.findOne(id);
-    }
-
-    @Post('/')
-    create(
-        @Body() input: CreateAnswerAdminInput, //
-    ): Promise<AnswerEntity> {
-        return this.answerAdminRepository.create(input);
     }
 
     @Patch('/')

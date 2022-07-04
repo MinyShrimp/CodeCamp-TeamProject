@@ -103,53 +103,73 @@ export function IndexBodySide() {
                             title="Entities"
                             items={
                                 <>
+                                    {/****************************************************************************/}
+                                    {/* USER */}
                                     <Nav.Link as={Link} to="/admin/entity/user">
-                                        User
+                                        회원
                                     </Nav.Link>
                                     <Nav.Link
                                         as={Link}
                                         to="/admin/entity/userClass"
                                     >
-                                        UserClass
+                                        회원 등급
                                     </Nav.Link>
                                     <Nav.Link
                                         as={Link}
                                         to="/admin/entity/authPhone"
                                     >
-                                        Auth Phone
+                                        핸드폰 인증
                                     </Nav.Link>
                                     <Nav.Link
                                         as={Link}
                                         to="/admin/entity/authEmail"
                                     >
-                                        Auth Email
+                                        이메일 인증
                                     </Nav.Link>
-
                                     <hr />
 
+                                    {/****************************************************************************/}
+                                    {/* PRODUCT */}
                                     <Nav.Link
                                         as={Link}
                                         to="/admin/entity/product"
                                     >
-                                        Product
+                                        상품
                                     </Nav.Link>
                                     <Nav.Link
                                         as={Link}
                                         to="/admin/entity/payment"
                                     >
-                                        Payment
+                                        결제
                                     </Nav.Link>
                                     <Nav.Link
                                         as={Link}
                                         to="/admin/entity/paymentStatus"
                                     >
-                                        PaymentStatus
+                                        결제 상태
                                     </Nav.Link>
-
                                     <hr />
 
+                                    {/****************************************************************************/}
+                                    {/* QUESTION */}
+                                    <Nav.Link
+                                        as={Link}
+                                        to="/admin/entity/question"
+                                    >
+                                        문의
+                                    </Nav.Link>
+                                    <Nav.Link
+                                        as={Link}
+                                        to="/admin/entity/answer"
+                                    >
+                                        답변
+                                    </Nav.Link>
+                                    <hr />
+
+                                    {/****************************************************************************/}
+                                    {/* FILE */}
                                     <Nav.Link as={Link} to="/admin/entity/file">
-                                        File
+                                        파일
                                     </Nav.Link>
                                 </>
                             }

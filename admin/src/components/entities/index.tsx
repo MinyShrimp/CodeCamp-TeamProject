@@ -11,6 +11,9 @@ import { ProductIndex } from './product';
 import { PaymentIndex } from './payment';
 import { PaymentStatusIndex } from './paymentStatus';
 
+import { AnswerIndex } from './answer';
+import { QuestionIndex } from './question';
+
 export function EntityMain() {
     return (
         <main>
@@ -27,6 +30,9 @@ export function EntityMain() {
                         path="/paymentStatus/*"
                         element={<PaymentStatusIndex />}
                     />
+
+                    <Route path="/answer/*" element={<AnswerIndex />} />
+                    <Route path="/question/*" element={<QuestionIndex />} />
 
                     <Route path="/file/*" element={<FileIndex />} />
                 </Routes>
