@@ -34,7 +34,9 @@ import { NoticeModule } from './apis/notice/notice.module';
 import { AnswerModule } from './apis/answer/answer.module';
 import { QuestionModule } from './apis/question/question.module';
 
-import { NovelEntity } from './apis/novel/entities/novel.entity';
+import { NovelModule } from './apis/novel/novel.module';
+import { NovelTagModule } from './apis/novelTag/novelTag.module';
+import { NovelIndexModule } from './apis/novelIndex/novelIndex.module';
 
 import { FileModule } from './apis/file/file.module';
 
@@ -109,7 +111,9 @@ import { FileModule } from './apis/file/file.module';
         EventModule,
         NoticeModule,
 
-        NovelEntity,
+        NovelModule,
+        NovelTagModule,
+        NovelIndexModule,
 
         FileModule,
     ],
