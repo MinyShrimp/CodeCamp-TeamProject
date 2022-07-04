@@ -12,26 +12,24 @@ import { PhoneIndex } from './authPhone';
 import { EmailIndex } from './authEmail';
 
 /****************************************************************************/
-/* 회원 */
+/* 결제 */
 import { ProductIndex } from './product';
 import { PaymentIndex } from './payment';
 import { PaymentStatusIndex } from './paymentStatus';
 
 /****************************************************************************/
-/* 결제 */
+/* 문의 */
 import { AnswerIndex } from './answer';
 import { QuestionIndex } from './question';
 
 /****************************************************************************/
-/* 문의 */
-import { NoticeIndex } from './notice';
-import { EventIndex } from './event';
-
-/****************************************************************************/
 /* 게시판 */
+import { EventIndex } from './event';
+import { NoticeIndex } from './notice';
 
 /****************************************************************************/
 /* 소설 */
+import { NovelIndex } from './novel';
 
 /****************************************************************************/
 /* 포인트 결제 */
@@ -74,7 +72,7 @@ export function EntityMain() {
 
                     {/****************************************************************************/}
                     {/* 소설 */}
-                    <Route path="/novel/*" element={<></>} />
+                    <Route path="/novel/*" element={<NovelIndex />} />
                     <Route path="/novelReview/*" element={<></>} />
                     <Route path="/novelIndex/*" element={<></>} />
                     <Route path="/novelIndexReview/*" element={<></>} />
