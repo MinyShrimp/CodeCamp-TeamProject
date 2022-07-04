@@ -1,7 +1,8 @@
 // prettier-ignore
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 
-import { TitleOutput } from './dto/title.admin.output';
+import { TitleOutput } from 'src/commons/dto/title.admin.output';
+
 import { CreateNoticeAdminInput } from './dto/createNotice.admin.input';
 import { UpdateNoticeAdminInput } from './dto/updateNotice.admin.input';
 
