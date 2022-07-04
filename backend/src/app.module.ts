@@ -34,6 +34,8 @@ import { NoticeModule } from './apis/notice/notice.module';
 import { AnswerModule } from './apis/answer/answer.module';
 import { QuestionModule } from './apis/question/question.module';
 
+import { NovelEntity } from './apis/novel/entities/novel.entity';
+
 import { FileModule } from './apis/file/file.module';
 
 ///////////////////////////////////////////////////////////////////////////
@@ -106,6 +108,8 @@ import { FileModule } from './apis/file/file.module';
 
         EventModule,
         NoticeModule,
+
+        NovelEntity,
 
         FileModule,
     ],
