@@ -40,6 +40,10 @@ import { NovelIndexModule } from './apis/novelIndex/novelIndex.module';
 import { NovelReviewModule } from './apis/novelReview/novelReview.module';
 import { NovelIndexReviewModule } from './apis/novelIndexReview/novelIndexReview.module';
 
+import { BookmarkModule } from './apis/bookmark/bookmark.module';
+import { NovelLikeModule } from './apis/novelLike/novelLike.module';
+import { NovelDonateModule } from './apis/novelDonate/novelDonate.module';
+
 import { PaymentPointModule } from './apis/paymentPoint/paymentPoint.module';
 import { PaymentPointStatusModule } from './apis/paymentPointStatus/paymentPointStatus.module';
 
@@ -121,6 +125,10 @@ import { FileModule } from './apis/file/file.module';
         NovelIndexModule,
         NovelReviewModule,
         NovelIndexReviewModule,
+
+        BookmarkModule,
+        NovelLikeModule,
+        NovelDonateModule,
 
         PaymentPointModule,
         PaymentPointStatusModule,
