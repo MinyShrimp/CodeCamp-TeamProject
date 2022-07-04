@@ -7,7 +7,7 @@ import { UpdateNovelDonateAdminInput } from './dto/updateNovelDonate.admin.input
 import { NovelDonateEntity } from './entities/novelDonate.entity';
 import { NovelDonateAdminRepository } from './entities/novelDonate.admin.repository';
 
-@Controller('admin/novelDonate')
+@Controller('admin/novel-donate')
 export class NovelDonateAdminController {
     constructor(
         private readonly novelDonateAdminRepository: NovelDonateAdminRepository, //

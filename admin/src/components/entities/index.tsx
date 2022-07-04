@@ -10,6 +10,9 @@ import { UserIndex } from './user';
 import { UserClassIndex } from './userClass';
 import { PhoneIndex } from './authPhone';
 import { EmailIndex } from './authEmail';
+import { BookmarkIndex } from './bookmark';
+import { NovelLikeIndex } from './novelLike';
+import { NovelDonateIndex } from './novelDonate';
 
 /****************************************************************************/
 /* 결제 */
@@ -51,9 +54,12 @@ export function EntityMain() {
                     <Route path="/authPhone/*" element={<PhoneIndex />} />
                     <Route path="/userClass/*" element={<UserClassIndex />} />
                     <Route path="/user/*" element={<UserIndex />} />
-                    <Route path="/novelDonate/*" element={<></>} />
-                    <Route path="/novelLike/*" element={<></>} />
-                    <Route path="/bookmark/*" element={<></>} />
+                    <Route
+                        path="/novelDonate/*"
+                        element={<NovelDonateIndex />}
+                    />
+                    <Route path="/novelLike/*" element={<NovelLikeIndex />} />
+                    <Route path="/bookmark/*" element={<BookmarkIndex />} />
 
                     {/****************************************************************************/}
                     {/* 결제 */}

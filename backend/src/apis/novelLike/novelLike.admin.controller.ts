@@ -7,7 +7,7 @@ import { UpdateNovelLikeAdminInput } from './dto/updateNovelLike.admin.input';
 import { NovelLikeEntity } from './entities/novelLike.entity';
 import { NovelLikeAdminRepository } from './entities/novelLike.admin.repository';
 
-@Controller('admin/novelLike')
+@Controller('admin/novel-like')
 export class NovelLikeAdminController {
     constructor(
         private readonly novelLikeAdminRepository: NovelLikeAdminRepository, //

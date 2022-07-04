@@ -1,9 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
-
-import { CreateBookmarkAdminInput } from '../dto/createBookmark.admin.input';
-import { UpdateBookmarkAdminInput } from '../dto/updateBookmark.admin.input';
+import { DeleteResult, Repository } from 'typeorm';
 
 import { BookmarkEntity } from './bookmark.entity';
 
@@ -44,19 +41,6 @@ export class BookmarkAdminRepository {
             .leftJoin('bm.novelIndex', 'ni')
             .where('bm.id=:id', { id: id })
             .getOne();
-    }
-
-    async create(
-        input: CreateBookmarkAdminInput, //
-    ): Promise<BookmarkEntity> {
-        return await this.bookmarkRepository.save(input);
-    }
-
-    async update(
-        input: UpdateBookmarkAdminInput, //
-    ): Promise<UpdateResult> {
-        const { originID, ...rest } = input;
-        return await this.bookmarkRepository.update({ id: originID }, rest);
     }
 
     async bulkDelete(

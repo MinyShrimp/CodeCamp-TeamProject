@@ -1,10 +1,5 @@
 // prettier-ignore
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
-
-import { NameOutput } from 'src/commons/dto/name.admin.output';
-
-import { CreateBookmarkAdminInput } from './dto/createBookmark.admin.input';
-import { UpdateBookmarkAdminInput } from './dto/updateBookmark.admin.input';
+import { Body, Controller, Delete, Get, Param } from '@nestjs/common';
 
 import { BookmarkEntity } from './entities/bookmark.entity';
 import { BookmarkAdminRepository } from './entities/bookmark.admin.repository';
@@ -25,21 +20,6 @@ export class BookmarkAdminController {
         @Param('id') id: string, //
     ): Promise<BookmarkEntity> {
         return this.bookmarkAdminRepository.findOne(id);
-    }
-
-    @Post('/')
-    create(
-        @Body() input: CreateBookmarkAdminInput, //
-    ): Promise<BookmarkEntity> {
-        return this.bookmarkAdminRepository.create(input);
-    }
-
-    @Patch('/')
-    async update(
-        @Body() input: UpdateBookmarkAdminInput, //
-    ): Promise<boolean> {
-        const result = await this.bookmarkAdminRepository.update(input);
-        return result.affected ? true : false;
     }
 
     @Delete('/bulk')
