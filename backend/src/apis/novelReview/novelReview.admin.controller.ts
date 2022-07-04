@@ -1,8 +1,5 @@
 // prettier-ignore
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
-
-import { CreateNovelReviewAdminInput } from './dto/createNovelReview.admin.input';
-import { UpdateNovelReviewAdminInput } from './dto/updateNovelReview.admin.input';
+import { Body, Controller, Delete, Get, Param } from '@nestjs/common';
 
 import { NovelReviewEntity } from './entities/novelReview.entity';
 import { NovelReviewAdminRepository } from './entities/novelReview.admin.repository';
@@ -23,21 +20,6 @@ export class NovelReviewAdminController {
         @Param('id') id: string, //
     ): Promise<NovelReviewEntity> {
         return this.novelReviewAdminRepository.findOne(id);
-    }
-
-    @Post('/')
-    create(
-        @Body() input: CreateNovelReviewAdminInput, //
-    ): Promise<NovelReviewEntity> {
-        return this.novelReviewAdminRepository.create(input);
-    }
-
-    @Patch('/')
-    async update(
-        @Body() input: UpdateNovelReviewAdminInput, //
-    ): Promise<boolean> {
-        const result = await this.novelReviewAdminRepository.update(input);
-        return result.affected ? true : false;
     }
 
     @Delete('/bulk')

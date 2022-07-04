@@ -1,5 +1,5 @@
 import { Field, Float, ID, Int, ObjectType } from '@nestjs/graphql';
-import { Max, Min } from 'class-validator';
+import { IsInt, Max, Min } from 'class-validator';
 import {
     Entity,
     Column,
@@ -27,11 +27,13 @@ export class NovelIndexReviewEntity {
     contents: string;
 
     @Min(0)
+    @IsInt()
     @Column()
     @Field(() => Int, { description: '좋아요 갯수' })
     likeCount: number;
 
     @Min(0)
+    @IsInt()
     @Column()
     @Field(() => Int, { description: '싫어요 갯수' })
     dislikeCount: number;

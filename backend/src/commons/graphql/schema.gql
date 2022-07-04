@@ -112,6 +112,32 @@ type NovelTagEntity {
   novels: [NovelEntity!]!
 }
 
+"""편당 리뷰 Entity"""
+type NovelIndexReviewEntity {
+  """UUID"""
+  id: ID!
+
+  """내용"""
+  contents: String!
+
+  """좋아요 갯수"""
+  likeCount: Int!
+
+  """싫어요 갯수"""
+  dislikeCount: Int!
+
+  """평점"""
+  star: Float!
+
+  """생성 시간"""
+  createAt: DateTime!
+
+  """수정 시간"""
+  updateAt: DateTime!
+  novelIndex: NovelIndexEntity!
+  user: UserEntity!
+}
+
 """NovelIndex Entity"""
 type NovelIndexEntity {
   """UUID"""
@@ -134,7 +160,9 @@ type NovelIndexEntity {
 
   """수정 시간"""
   updateAt: DateTime!
+  user: UserEntity
   novel: NovelEntity!
+  novelIndexReviews: [NovelIndexReviewEntity!]!
 }
 
 """소설 리뷰 Entity"""

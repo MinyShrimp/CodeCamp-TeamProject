@@ -15,8 +15,7 @@ export class NovelAdminRepository {
     private readonly _selector = [
         'n.id', 'n.title', 'n.subtitle', 'n.description',
         'n.likeCount', 'n.createAt', 'n.updateAt', 'n.deleteAt',
-        'u.id', 'u.email', 't.id', 't.name', 
-        'i.id', 'i.title', 'r.id', 'r.contents'
+        'u.id', 'u.email', 
     ];
 
     async findAll(): Promise<NovelEntity[]> {
@@ -26,19 +25,20 @@ export class NovelAdminRepository {
             .withDeleted()
             .orderBy('n.createAt')
             .leftJoin('n.user', 'u')
-            .leftJoin('n.novelTags', 't')
-            .leftJoin('n.novelIndexs', 'i')
-            .leftJoin('n.novelReviews', 'r')
             .getMany();
     }
 
     async findOne(
         id: string, //
     ): Promise<NovelEntity> {
+        // prettier-ignore
         return await this.novelRepository
             .createQueryBuilder('n')
             .select([
-                ...this._selector, //
+                ...this._selector,
+                't.id', 't.name',
+                'i.id', 'i.title',
+                'r.id', 'r.contents',
             ])
             .withDeleted()
             .leftJoin('n.user', 'u')

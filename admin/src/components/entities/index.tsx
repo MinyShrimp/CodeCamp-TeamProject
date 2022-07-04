@@ -30,6 +30,10 @@ import { NoticeIndex } from './notice';
 /****************************************************************************/
 /* 소설 */
 import { NovelIndex } from './novel';
+import { NovelIndexIndex } from './novelIndex';
+import { NovelReviewIndex } from './novelReview';
+import { NovelIndexReviewIndex } from './novelIndexReview';
+import { NovelTagIndex } from './novelTag';
 
 /****************************************************************************/
 /* 포인트 결제 */
@@ -73,10 +77,16 @@ export function EntityMain() {
                     {/****************************************************************************/}
                     {/* 소설 */}
                     <Route path="/novel/*" element={<NovelIndex />} />
-                    <Route path="/novelReview/*" element={<></>} />
-                    <Route path="/novelIndex/*" element={<></>} />
-                    <Route path="/novelIndexReview/*" element={<></>} />
-                    <Route path="/novelTag/*" element={<></>} />
+                    <Route
+                        path="/novelReview/*"
+                        element={<NovelReviewIndex />}
+                    />
+                    <Route path="/novelIndex/*" element={<NovelIndexIndex />} />
+                    <Route
+                        path="/novelIndexReview/*"
+                        element={<NovelIndexReviewIndex />}
+                    />
+                    <Route path="/novelTag/*" element={<NovelTagIndex />} />
 
                     {/****************************************************************************/}
                     {/* 포인트 결제 */}

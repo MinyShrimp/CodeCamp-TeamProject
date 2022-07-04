@@ -1,12 +1,24 @@
 import { getDefaultDate } from '../../../functions/functions';
-import { DummyUserColumn } from '../user/interface';
+
+import { SimpleDummyUser } from '../user/interface';
+import { SimpleDummyNovelTag } from '../novelTag/interface';
+import { SimpleDummyNovelReview } from '../novelReview/interface';
+import { SimpleDummyNovelIndex } from '../novelIndex/interface';
 
 const now = getDefaultDate();
 
 // prettier-ignore
+export const SimpleDummyNovel = {
+    id: '', title: '',
+};
+
+// prettier-ignore
 export const DummyNovelColumn = {
-    id: '', title: '', subtitle: '', description: '',
+    ...SimpleDummyNovel, subtitle: '', description: '',
     likeCount: 0, createAt: now, updateAt: now, deleteAt: now,
-    user: DummyUserColumn
+    user: SimpleDummyUser, 
+    novelTags: [SimpleDummyNovelTag],
+    novelIndexs: [SimpleDummyNovelIndex],
+    novelReviews: [SimpleDummyNovelReview],
 };
 export type INovelColumn = typeof DummyNovelColumn;

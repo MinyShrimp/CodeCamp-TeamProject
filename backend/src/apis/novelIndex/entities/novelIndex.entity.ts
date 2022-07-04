@@ -1,6 +1,8 @@
 import { Field, Float, ID, Int, ObjectType } from '@nestjs/graphql';
 import { IsInt, Max, Min } from 'class-validator';
 import { NovelEntity } from 'src/apis/novel/entities/novel.entity';
+import { NovelIndexReviewEntity } from 'src/apis/novelIndexReview/entities/novelIndexReview.entity';
+import { UserEntity } from 'src/apis/user/entities/user.entity';
 import {
     Entity,
     Column,
@@ -10,6 +12,7 @@ import {
     UpdateDateColumn,
     DeleteDateColumn,
     PrimaryGeneratedColumn,
+    OneToMany,
 } from 'typeorm';
 
 /* NovelIndex Entity */
@@ -52,10 +55,25 @@ export class NovelIndexEntity {
     deleteAt: Date;
 
     @ManyToOne(
+        () => UserEntity, //
+        { cascade: true, onDelete: 'SET NULL' },
+    )
+    @JoinColumn()
+    @Field(() => UserEntity, { nullable: true })
+    user: UserEntity;
+
+    @ManyToOne(
         () => NovelEntity, //
         { cascade: true, onDelete: 'CASCADE' },
     )
     @JoinColumn()
     @Field(() => NovelEntity)
     novel: NovelEntity;
+
+    @OneToMany(
+        () => NovelIndexReviewEntity, //
+        (review) => review.novelIndex,
+    )
+    @Field(() => [NovelIndexReviewEntity])
+    novelIndexReviews: NovelIndexReviewEntity[];
 }

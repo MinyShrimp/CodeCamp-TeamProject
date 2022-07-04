@@ -2,9 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 
-import { CreateNovelIndexReviewAdminInput } from '../dto/createNovelIndexReview.admin.input';
-import { UpdateNovelIndexReviewAdminInput } from '../dto/updateNovelIndexReview.admin.input';
-
 import { NovelIndexReviewEntity } from './novelIndexReview.entity';
 
 @Injectable()
@@ -25,14 +22,6 @@ export class NovelIndexReviewAdminRepository {
             .getMany();
     }
 
-    async findAllNames(): Promise<NovelIndexReviewEntity[]> {
-        return await this.novelIndexReviewRepository
-            .createQueryBuilder('novelIndexReview')
-            .select(['novelIndexReview.id', 'novelIndexReview.name'])
-            .orderBy('novelIndexReview.createAt')
-            .getMany();
-    }
-
     async findOne(
         id: string, //
     ): Promise<NovelIndexReviewEntity> {
@@ -44,19 +33,6 @@ export class NovelIndexReviewAdminRepository {
             .withDeleted()
             .where('novelIndexReview.id=:id', { id: id })
             .getOne();
-    }
-
-    async create(
-        input: CreateNovelIndexReviewAdminInput, //
-    ): Promise<NovelIndexReviewEntity> {
-        return await this.novelIndexReviewRepository.save(input);
-    }
-
-    async update(
-        input: UpdateNovelIndexReviewAdminInput, //
-    ): Promise<UpdateResult> {
-        const { originID, ...rest } = input;
-        return await this.novelIndexReviewRepository.update({ id: originID }, rest);
     }
 
     async bulkDelete(

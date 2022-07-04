@@ -1,9 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
-
-import { CreateNovelReviewAdminInput } from '../dto/createNovelReview.admin.input';
-import { UpdateNovelReviewAdminInput } from '../dto/updateNovelReview.admin.input';
+import { DeleteResult, Repository } from 'typeorm';
 
 import { NovelReviewEntity } from './novelReview.entity';
 
@@ -45,19 +42,6 @@ export class NovelReviewAdminRepository {
             .leftJoin('r.novel', 'n')
             .where('r.id=:id', { id: id })
             .getOne();
-    }
-
-    async create(
-        input: CreateNovelReviewAdminInput, //
-    ): Promise<NovelReviewEntity> {
-        return await this.novelReviewRepository.save(input);
-    }
-
-    async update(
-        input: UpdateNovelReviewAdminInput, //
-    ): Promise<UpdateResult> {
-        const { originID, ...rest } = input;
-        return await this.novelReviewRepository.update({ id: originID }, rest);
     }
 
     async bulkDelete(
