@@ -16,7 +16,7 @@ import {
 @ObjectType({ description: '공지 Entity' })
 export class NoticeEntity {
     @PrimaryGeneratedColumn('uuid')
-    @Field(() => ID)
+    @Field(() => ID, { description: 'UUID' })
     id: string;
 
     @Column()
@@ -32,15 +32,14 @@ export class NoticeEntity {
     isTop: boolean;
 
     @CreateDateColumn()
-    @Field(() => Date)
+    @Field(() => Date, { description: '생성 시간' })
     createAt: Date;
 
     @UpdateDateColumn()
-    @Field(() => Date)
+    @Field(() => Date, { description: '수정 시간' })
     updateAt: Date;
 
     @DeleteDateColumn()
-    @Field(() => Date)
     deleteAt: Date;
 
     @ManyToOne(

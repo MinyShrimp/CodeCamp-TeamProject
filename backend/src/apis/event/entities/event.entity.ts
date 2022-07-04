@@ -15,33 +15,35 @@ import {
 @ObjectType({ description: 'Event Entity' })
 export class EventEntity {
     @PrimaryGeneratedColumn('uuid')
-    @Field(() => ID)
+    @Field(() => ID, { description: 'UUID' })
     id: string;
 
     @Column()
-    @Field(() => String)
+    @Field(() => String, { description: '제목' })
     title: string;
 
     @Column({ type: 'text' })
-    @Field(() => String)
+    @Field(() => String, { description: '내용' })
     contents: string;
 
     @Column()
-    @Field(() => Boolean)
+    @Field(() => Boolean, { description: '이벤트 진행 여부' })
     isEvent: boolean;
 
     @Column()
-    @Field(() => Date)
+    @Field(() => Date, { description: '이벤트 시작 시간' })
     startAt: Date;
 
     @Column()
-    @Field(() => Date)
+    @Field(() => Date, { description: '이벤트 종료 시간' })
     endAt: Date;
 
     @CreateDateColumn()
+    @Field(() => Date, { description: '생성 시간' })
     createAt: Date;
 
     @UpdateDateColumn()
+    @Field(() => Date, { description: '수정 시간' })
     updateAt: Date;
 
     @ManyToOne(
