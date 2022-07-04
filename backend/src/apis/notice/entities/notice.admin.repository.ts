@@ -18,6 +18,7 @@ export class NoticeAdminRepository {
     private readonly _selector = [
         'notice.id', 'notice.title', 'notice.contents', 
         'notice.createAt', 'notice.updateAt', 'notice.deleteAt', 
+        'user.id', 'user.email',
     ];
 
     async findAll(): Promise<NoticeEntity[]> {
@@ -25,7 +26,8 @@ export class NoticeAdminRepository {
             .createQueryBuilder('notice')
             .select(this._selector)
             .withDeleted()
-            .orderBy('notice.createAt')
+            .leftJoin('notice.user', 'user')
+            .orderBy('notice.createAt', 'DESC')
             .getMany();
     }
 
@@ -33,7 +35,7 @@ export class NoticeAdminRepository {
         return await this.noticeRepository
             .createQueryBuilder('notice')
             .select(['notice.id', 'notice.title'])
-            .orderBy('')
+            .orderBy('notice.createAt', 'DESC')
             .getMany();
     }
 
@@ -46,6 +48,7 @@ export class NoticeAdminRepository {
                 ...this._selector, //
             ])
             .withDeleted()
+            .leftJoin('notice.user', 'user')
             .where('notice.id=:id', { id: id })
             .getOne();
     }

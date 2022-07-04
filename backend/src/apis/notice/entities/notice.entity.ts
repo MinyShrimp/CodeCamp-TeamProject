@@ -1,7 +1,10 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { UserEntity } from 'src/apis/user/entities/user.entity';
 import {
     Entity,
     Column,
+    ManyToOne,
+    JoinColumn,
     CreateDateColumn,
     UpdateDateColumn,
     DeleteDateColumn,
@@ -39,4 +42,12 @@ export class NoticeEntity {
     @DeleteDateColumn()
     @Field(() => Date)
     deleteAt: Date;
+
+    @ManyToOne(
+        () => UserEntity,
+        { cascade: true, onDelete: 'NO ACTION' }, //
+    )
+    @JoinColumn()
+    @Field(() => Date)
+    user: UserEntity;
 }
