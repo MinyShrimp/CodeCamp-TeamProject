@@ -16,6 +16,17 @@ gitmoji -c
 git push origin main
 ```
 
+|         |                    |            |
+| ------- | ------------------ | ---------- |
+| RELEASE | 릴리즈 / 버전 태그 | :bookmark: |
+| DELETE  | 삭제               | :fire:     |
+| ADD     | 새 기능            | :spakles:  |
+|         | 문서 추가 / 수정   | :memo:     |
+| UPDATE  | 버그 수정          | :bug:      |
+|         | 성능 개선          | :zap:      |
+|         | 코드 리펙토링      | :recycle:  |
+|         | 이름 변경, 이동    | :truck:    |
+
 ### import 순서
 
 1. 기본 라이브러리 ( ex. fs, path, os, ... )
