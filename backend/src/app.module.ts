@@ -23,10 +23,18 @@ import { UserModule } from './apis/user/user.module';
 import { EmailModule } from './apis/email/email.module';
 import { PhoneModule } from './apis/phone/phone.module';
 import { UserClassModule } from './apis/userClass/userClass.module';
-import { FileModule } from './apis/file/file.module';
-import { PaymentStatusModule } from './apis/paymentStatus/paymentStatus.module';
+
 import { ProductModule } from './apis/product/product.module';
 import { PaymentModule } from './apis/payment/payment.module';
+import { PaymentStatusModule } from './apis/paymentStatus/paymentStatus.module';
+
+import { EventModule } from './apis/event/event.module';
+import { NoticeModule } from './apis/notice/notice.module';
+
+import { AnswerModule } from './apis/answer/answer.module';
+import { QuestionModule } from './apis/question/question.module';
+
+import { FileModule } from './apis/file/file.module';
 
 ///////////////////////////////////////////////////////////////////////////
 @Module({
@@ -84,14 +92,20 @@ import { PaymentModule } from './apis/payment/payment.module';
         ///////////////////////////////////////////////////////////////////////////
         // Modules //
         AuthModule,
-        UserClassModule,
         UserModule,
+        UserClassModule,
         PhoneModule,
         EmailModule,
 
         ProductModule,
         PaymentModule,
         PaymentStatusModule,
+
+        AnswerModule,
+        QuestionModule,
+
+        EventModule,
+        NoticeModule,
 
         FileModule,
     ],
