@@ -18,18 +18,18 @@ export class NovelAdminRepository {
 
     async findAll(): Promise<NovelEntity[]> {
         return await this.novelRepository
-            .createQueryBuilder('novel')
+            .createQueryBuilder('n')
             .select(this._selector)
             .withDeleted()
-            .orderBy('novel.createAt')
+            .orderBy('n.createAt')
             .getMany();
     }
 
     async findAllNames(): Promise<NovelEntity[]> {
         return await this.novelRepository
-            .createQueryBuilder('novel')
-            .select(['novel.id', 'novel.title'])
-            .orderBy('')
+            .createQueryBuilder('n')
+            .select(['n.id', 'n.title'])
+            .orderBy('n.createAt')
             .getMany();
     }
 
@@ -37,12 +37,12 @@ export class NovelAdminRepository {
         id: string, //
     ): Promise<NovelEntity> {
         return await this.novelRepository
-            .createQueryBuilder('novel')
+            .createQueryBuilder('n')
             .select([
                 ...this._selector, //
             ])
             .withDeleted()
-            .where('novel.id=:id', { id: id })
+            .where('n.id=:id', { id: id })
             .getOne();
     }
 

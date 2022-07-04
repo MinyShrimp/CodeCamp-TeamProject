@@ -1,7 +1,7 @@
 // prettier-ignore
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 
-import { TitleOutput } from 'src/commons/dto/title.admin.output';
+import { NameOutput } from 'src/commons/dto/name.admin.output';
 
 import { CreateNovelAdminInput } from './dto/createNovel.admin.input';
 import { UpdateNovelAdminInput } from './dto/updateNovel.admin.input';
@@ -21,10 +21,10 @@ export class NovelAdminController {
     }
 
     @Get('/names')
-    async findAllNames(): Promise<Array<TitleOutput>> {
+    async findAllNames(): Promise<Array<NameOutput>> {
         const results = await this.novelAdminRepository.findAllNames();
         return results.map((r) => {
-            return { id: r.id, title: r.title };
+            return { id: r.id, name: r.title };
         });
     }
 
