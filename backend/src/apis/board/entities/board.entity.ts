@@ -8,40 +8,49 @@ import {
     JoinColumn,
     ManyToOne,
     PrimaryGeneratedColumn,
+    UpdateDateColumn,
 } from 'typeorm';
 
 /* Board Entity */
 @Entity({ name: 'board' })
-@ObjectType({ description: 'Board Entity' })
+@ObjectType({ description: '게시판 Entity' })
 export class BoardEntity {
     @PrimaryGeneratedColumn('uuid')
-    @Field(() => ID)
+    @Field(() => ID, { description: 'UUID' })
     id: string;
 
     @Column()
-    @Field(() => String)
+    @Field(() => String, { description: '제목' })
     title: string;
 
     @Column({ type: 'text' })
-    @Field(() => String)
+    @Field(() => String, { description: '내용' })
     contents: string;
 
     @Column()
-    @Field(() => Int)
+    @Field(() => Int, { description: '좋아요 갯수' })
     likeCount: number;
 
     @Column()
-    @Field(() => Int)
+    @Field(() => Int, { description: '싫어요 갯수' })
     dislikeCount: number;
 
     @CreateDateColumn()
+    @Field(() => Date, { description: '생성 시간' })
     createAt: Date;
+
+    @UpdateDateColumn()
+    @Field(() => Date, { description: '수정 시간' })
+    updateAt: Date;
 
     @DeleteDateColumn()
     deleteAt: Date;
 
-    @ManyToOne(() => UserEntity, { cascade: true, onDelete: 'SET NULL' })
+    @ManyToOne(
+        () => UserEntity, //
+        { cascade: true, onDelete: 'SET NULL' },
+    )
     @JoinColumn()
     @Field(() => UserEntity)
-    userID: string;
+    user: UserEntity;
 }

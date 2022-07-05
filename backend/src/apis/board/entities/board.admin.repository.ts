@@ -14,7 +14,12 @@ export class BoardAdminRepository {
         private readonly boardRepository: Repository<BoardEntity>,
     ) {}
 
-    private readonly _selector = [];
+    // prettier-ignore
+    private readonly _selector = [
+        'board.id', 'board.title', 'board.contents',
+        'board.createAt', 'board.deleteAt',
+        'user.id', 'user.email',
+    ];
 
     async findAll(): Promise<BoardEntity[]> {
         return await this.boardRepository
