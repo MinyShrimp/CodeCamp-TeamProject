@@ -4,6 +4,7 @@
 
 import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
 import { IsEmail } from 'class-validator';
+import { BoardEntity } from 'src/apis/board/entities/board.entity';
 import { EmailEntity } from 'src/apis/email/entities/email.entity';
 import { PhoneEntity } from 'src/apis/phone/entities/phone.entity';
 import { UserClassEntity } from 'src/apis/userClass/entities/userClass.entity';
@@ -20,6 +21,7 @@ import {
     Tree,
     TreeParent,
     TreeChildren,
+    OneToMany,
 } from 'typeorm';
 
 @Entity({ name: 'user' })
@@ -124,4 +126,9 @@ export class UserEntity {
     @TreeChildren()
     @Field(() => [UserEntity], { description: '차단 회원 목록' })
     dislikeUsers: UserEntity[];
+
+    // 게시판
+    @OneToMany(() => BoardEntity, (board) => board.user)
+    @Field(() => [BoardEntity])
+    board: BoardEntity[];
 }
