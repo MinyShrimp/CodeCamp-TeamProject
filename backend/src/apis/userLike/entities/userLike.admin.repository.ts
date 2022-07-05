@@ -1,9 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
-
-import { CreateUserLikeAdminInput } from '../dto/createUserLike.admin.input';
-import { UpdateUserLikeAdminInput } from '../dto/updateUserLike.admin.input';
+import { DeleteResult, Repository } from 'typeorm';
 
 import { UserLikeEntity } from './userLike.entity';
 
@@ -45,19 +42,6 @@ export class UserLikeAdminRepository {
             .leftJoin('userLike.from', 'from')
             .where('userLike.id=:id', { id: id })
             .getOne();
-    }
-
-    async create(
-        input: CreateUserLikeAdminInput, //
-    ): Promise<UserLikeEntity> {
-        return await this.userLikeRepository.save(input);
-    }
-
-    async update(
-        input: UpdateUserLikeAdminInput, //
-    ): Promise<UpdateResult> {
-        const { originID, ...rest } = input;
-        return await this.userLikeRepository.update({ id: originID }, rest);
     }
 
     async bulkDelete(

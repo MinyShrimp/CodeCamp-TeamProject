@@ -1,8 +1,5 @@
 // prettier-ignore
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
-
-import { CreateUserBlockAdminInput } from './dto/createUserBlock.admin.input';
-import { UpdateUserBlockAdminInput } from './dto/updateUserBlock.admin.input';
+import { Body, Controller, Delete, Get, Param } from '@nestjs/common';
 
 import { UserBlockEntity } from './entities/userBlock.entity';
 import { UserBlockAdminRepository } from './entities/userBlock.admin.repository';
@@ -23,21 +20,6 @@ export class UserBlockAdminController {
         @Param('id') id: string, //
     ): Promise<UserBlockEntity> {
         return this.userBlockAdminRepository.findOne(id);
-    }
-
-    @Post('/')
-    create(
-        @Body() input: CreateUserBlockAdminInput, //
-    ): Promise<UserBlockEntity> {
-        return this.userBlockAdminRepository.create(input);
-    }
-
-    @Patch('/')
-    async update(
-        @Body() input: UpdateUserBlockAdminInput, //
-    ): Promise<boolean> {
-        const result = await this.userBlockAdminRepository.update(input);
-        return result.affected ? true : false;
     }
 
     @Delete('/bulk')
