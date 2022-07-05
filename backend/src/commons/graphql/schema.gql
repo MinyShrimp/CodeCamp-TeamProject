@@ -199,6 +199,12 @@ type NovelReviewEntity {
   user: UserEntity!
 }
 
+"""소설 카테고리 Entity"""
+type NovelCategoryEntity {
+  id: ID!
+  name: String!
+}
+
 """소설 Entity"""
 type NovelEntity {
   """UUID"""
@@ -222,6 +228,7 @@ type NovelEntity {
   """수정 시간"""
   updateAt: DateTime!
   user: UserEntity!
+  novelCategory: NovelCategoryEntity!
   novelTags: [NovelTagEntity!]!
   novelIndexs: [NovelIndexEntity!]!
   novelReviews: [NovelReviewEntity!]!
