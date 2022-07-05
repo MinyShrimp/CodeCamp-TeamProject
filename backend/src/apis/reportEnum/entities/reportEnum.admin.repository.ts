@@ -25,7 +25,6 @@ export class ReportEnumAdminRepository {
             .createQueryBuilder('reportEnum')
             .select(this._selector)
             .withDeleted()
-            .orderBy('reportEnum.createAt')
             .getMany();
     }
 

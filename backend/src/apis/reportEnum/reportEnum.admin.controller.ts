@@ -7,7 +7,7 @@ import { UpdateReportEnumAdminInput } from './dto/updateReportEnum.admin.input';
 import { ReportEnumEntity } from './entities/reportEnum.entity';
 import { ReportEnumAdminRepository } from './entities/reportEnum.admin.repository';
 
-@Controller('admin/reportEnum')
+@Controller('admin/report-enum')
 export class ReportEnumAdminController {
     constructor(
         private readonly reportEnumAdminRepository: ReportEnumAdminRepository, //
