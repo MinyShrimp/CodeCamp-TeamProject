@@ -100,7 +100,7 @@ export function IndexBodySide() {
 
                         <NavCollapse
                             id="entity-collapes"
-                            title="Entities"
+                            title="테이블"
                             items={
                                 <>
                                     {/****************************************************************************/}
@@ -151,6 +151,18 @@ export function IndexBodySide() {
                                                     to="/admin/entity/bookMark"
                                                 >
                                                     북마크
+                                                </Nav.Link>
+                                                <Nav.Link
+                                                    as={Link}
+                                                    to="/admin/entity/userBlock"
+                                                >
+                                                    차단한 회원
+                                                </Nav.Link>
+                                                <Nav.Link
+                                                    as={Link}
+                                                    to="/admin/entity/userLike"
+                                                >
+                                                    선호하는 작가
                                                 </Nav.Link>
                                             </>
                                         }
@@ -280,6 +292,12 @@ export function IndexBodySide() {
                                                 >
                                                     소설 태그
                                                 </Nav.Link>
+                                                <Nav.Link
+                                                    as={Link}
+                                                    to="/admin/entity/novelCategory"
+                                                >
+                                                    소설 카테고리
+                                                </Nav.Link>
                                             </>
                                         }
                                     />
@@ -302,6 +320,29 @@ export function IndexBodySide() {
                                                     to="/admin/entity/pointPaymentStatus"
                                                 >
                                                     포인트 결제 상태
+                                                </Nav.Link>
+                                            </>
+                                        }
+                                    />
+
+                                    {/****************************************************************************/}
+                                    {/* REPORT */}
+                                    <NavCollapse
+                                        id="entity-report-collapes"
+                                        title="신고"
+                                        items={
+                                            <>
+                                                <Nav.Link
+                                                    as={Link}
+                                                    to="/admin/entity/report"
+                                                >
+                                                    신고
+                                                </Nav.Link>
+                                                <Nav.Link
+                                                    as={Link}
+                                                    to="/admin/entity/reportEnum"
+                                                >
+                                                    신고 ENUM
                                                 </Nav.Link>
                                             </>
                                         }
