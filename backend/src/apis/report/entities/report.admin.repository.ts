@@ -1,9 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
-
-import { CreateReportAdminInput } from '../dto/createReport.admin.input';
-import { UpdateReportAdminInput } from '../dto/updateReport.admin.input';
+import { DeleteResult, Repository } from 'typeorm';
 
 import { ReportEntity } from './report.entity';
 
@@ -45,19 +42,6 @@ export class ReportAdminRepository {
             .leftJoin('report.enum', 'enum')
             .where('report.id=:id', { id: id })
             .getOne();
-    }
-
-    async create(
-        input: CreateReportAdminInput, //
-    ): Promise<ReportEntity> {
-        return await this.reportRepository.save(input);
-    }
-
-    async update(
-        input: UpdateReportAdminInput, //
-    ): Promise<UpdateResult> {
-        const { originID, ...rest } = input;
-        return await this.reportRepository.update({ id: originID }, rest);
     }
 
     async bulkDelete(

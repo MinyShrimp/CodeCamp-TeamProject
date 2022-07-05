@@ -1,10 +1,5 @@
 // prettier-ignore
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
-
-import { NameOutput } from 'src/commons/dto/name.admin.output';
-
-import { CreateReportAdminInput } from './dto/createReport.admin.input';
-import { UpdateReportAdminInput } from './dto/updateReport.admin.input';
+import { Body, Controller, Delete, Get, Param } from '@nestjs/common';
 
 import { ReportEntity } from './entities/report.entity';
 import { ReportAdminRepository } from './entities/report.admin.repository';
@@ -25,21 +20,6 @@ export class ReportAdminController {
         @Param('id') id: string, //
     ): Promise<ReportEntity> {
         return this.reportAdminRepository.findOne(id);
-    }
-
-    @Post('/')
-    create(
-        @Body() input: CreateReportAdminInput, //
-    ): Promise<ReportEntity> {
-        return this.reportAdminRepository.create(input);
-    }
-
-    @Patch('/')
-    async update(
-        @Body() input: UpdateReportAdminInput, //
-    ): Promise<boolean> {
-        const result = await this.reportAdminRepository.update(input);
-        return result.affected ? true : false;
     }
 
     @Delete('/bulk')

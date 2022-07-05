@@ -9,28 +9,22 @@ export const ReportIndex = EntityFactory.getEntity<IReportColumn>({
     baseURL: '/admin/entity/report',
     list: {
         column: [
-            'id', 
+            'id', 'title', 'contents', 'reportUUID',
+            'user', 'enum', 'createAt', 'updateAt', 'deleteAt',
         ],
+        option: {
+            user: 'email',
+            enum: 'id'
+        }
     },
     show: {
         column: [
-            'id', 
+            'id', 'title', 'contents', 'reportUUID',
+            'user', 'enum', 'createAt', 'updateAt', 'deleteAt',
         ],
-    },
-    edit: {
-        column: [
-            'id', 
-        ],
-        default: {
-            id: '', 
-        }
-    },
-    update: {
-        column: [
-            'id', 
-        ],
-        default: {
-            id: '', 
+        option: {
+            user: 'email',
+            enum: 'id'
         }
     }
 });
