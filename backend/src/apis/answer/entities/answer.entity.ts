@@ -34,7 +34,7 @@ export class AnswerEntity {
 
     @Min(0)
     @Max(5)
-    @Column({ type: 'decimal', precision: 2, scale: 1 })
+    @Column({ type: 'decimal', precision: 2, scale: 1, default: 0 })
     @Field(() => Float, { description: '내용' })
     star: number;
 

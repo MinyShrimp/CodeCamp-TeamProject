@@ -112,6 +112,85 @@ type NovelTagEntity {
   novels: [NovelEntity!]!
 }
 
+"""편당 리뷰 Entity"""
+type NovelIndexReviewEntity {
+  """UUID"""
+  id: ID!
+
+  """내용"""
+  contents: String!
+
+  """좋아요 갯수"""
+  likeCount: Int!
+
+  """싫어요 갯수"""
+  dislikeCount: Int!
+
+  """평점"""
+  star: Float!
+
+  """생성 시간"""
+  createAt: DateTime!
+
+  """수정 시간"""
+  updateAt: DateTime!
+  novelIndex: NovelIndexEntity!
+  user: UserEntity!
+}
+
+"""NovelIndex Entity"""
+type NovelIndexEntity {
+  """UUID"""
+  id: ID!
+
+  """제목"""
+  title: String!
+
+  """내용"""
+  contents: String!
+
+  """몇 화"""
+  index: Int!
+
+  """평균 별점"""
+  star: Float!
+
+  """생성 시간"""
+  createAt: DateTime!
+
+  """수정 시간"""
+  updateAt: DateTime!
+  user: UserEntity
+  novel: NovelEntity!
+  novelIndexReviews: [NovelIndexReviewEntity!]!
+}
+
+"""소설 리뷰 Entity"""
+type NovelReviewEntity {
+  """UUID"""
+  id: ID!
+
+  """내용"""
+  contents: String!
+
+  """좋아요 갯수"""
+  likeCount: Int!
+
+  """싫어요 갯수"""
+  dislikeCount: Int!
+
+  """평점"""
+  star: Float!
+
+  """생성 시간"""
+  createAt: DateTime!
+
+  """수정 시간"""
+  updateAt: DateTime!
+  novel: NovelEntity!
+  user: UserEntity!
+}
+
 """소설 Entity"""
 type NovelEntity {
   """UUID"""
@@ -136,6 +215,17 @@ type NovelEntity {
   updateAt: DateTime!
   user: UserEntity!
   novelTags: [NovelTagEntity!]!
+  novelIndexs: [NovelIndexEntity!]!
+  novelReviews: [NovelReviewEntity!]!
+}
+
+"""포인트 결제 상태 Entity"""
+type PaymentPointStatusEntity {
+  """KEY"""
+  id: String!
+
+  """설명"""
+  description: String!
 }
 
 """FileUpload Entity"""

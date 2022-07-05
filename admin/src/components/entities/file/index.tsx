@@ -1,10 +1,9 @@
-import React from 'react';
 import { EntityFactory } from '../entity_factory';
 import { DummyFile, DummyFileColumn, IFileColumn } from './interface';
 
 // prettier-ignore
 export const FileIndex = EntityFactory.getEntity<IFileColumn>({
-    name: 'File',
+    name: '파일',
     dummyData: DummyFileColumn,
     baseURL: '/admin/entity/file',
     beURL: '/admin/file',

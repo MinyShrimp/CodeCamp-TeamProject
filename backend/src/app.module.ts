@@ -34,7 +34,18 @@ import { NoticeModule } from './apis/notice/notice.module';
 import { AnswerModule } from './apis/answer/answer.module';
 import { QuestionModule } from './apis/question/question.module';
 
-import { NovelEntity } from './apis/novel/entities/novel.entity';
+import { NovelModule } from './apis/novel/novel.module';
+import { NovelTagModule } from './apis/novelTag/novelTag.module';
+import { NovelIndexModule } from './apis/novelIndex/novelIndex.module';
+import { NovelReviewModule } from './apis/novelReview/novelReview.module';
+import { NovelIndexReviewModule } from './apis/novelIndexReview/novelIndexReview.module';
+
+import { BookmarkModule } from './apis/bookmark/bookmark.module';
+import { NovelLikeModule } from './apis/novelLike/novelLike.module';
+import { NovelDonateModule } from './apis/novelDonate/novelDonate.module';
+
+import { PaymentPointModule } from './apis/paymentPoint/paymentPoint.module';
+import { PaymentPointStatusModule } from './apis/paymentPointStatus/paymentPointStatus.module';
 
 import { FileModule } from './apis/file/file.module';
 
@@ -109,7 +120,18 @@ import { FileModule } from './apis/file/file.module';
         EventModule,
         NoticeModule,
 
-        NovelEntity,
+        NovelModule,
+        NovelTagModule,
+        NovelIndexModule,
+        NovelReviewModule,
+        NovelIndexReviewModule,
+
+        BookmarkModule,
+        NovelLikeModule,
+        NovelDonateModule,
+
+        PaymentPointModule,
+        PaymentPointStatusModule,
 
         FileModule,
     ],

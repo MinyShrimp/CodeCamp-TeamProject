@@ -1,9 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
-
-import { CreateQuestionAdminInput } from '../dto/createQuestion.admin.input';
-import { UpdateQuestionAdminInput } from '../dto/updateQuestion.admin.input';
+import { DeleteResult, Repository } from 'typeorm';
 
 import { QuestionEntity } from './question.entity';
 
@@ -34,8 +31,7 @@ export class QuestionAdminRepository {
     async findAllNames(): Promise<QuestionEntity[]> {
         return await this.questionRepository
             .createQueryBuilder('q')
-            .select(['q.id', 'q.name'])
-            .leftJoin('q.user', 'u')
+            .select(['q.id', 'q.title'])
             .orderBy('q.createAt')
             .getMany();
     }
@@ -52,19 +48,6 @@ export class QuestionAdminRepository {
             .leftJoin('q.user', 'u')
             .where('q.id=:id', { id: id })
             .getOne();
-    }
-
-    async create(
-        input: CreateQuestionAdminInput, //
-    ): Promise<QuestionEntity> {
-        return await this.questionRepository.save(input);
-    }
-
-    async update(
-        input: UpdateQuestionAdminInput, //
-    ): Promise<UpdateResult> {
-        const { originID, ...rest } = input;
-        return await this.questionRepository.update({ id: originID }, rest);
     }
 
     async bulkDelete(

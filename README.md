@@ -20,7 +20,7 @@ git push origin main
 | ------- | ------------------ | ---------- |
 | RELEASE | 릴리즈 / 버전 태그 | :bookmark: |
 | DELETE  | 삭제               | :fire:     |
-| ADD     | 새 기능            | :spakles:  |
+| ADD     | 새 기능            | :sparkles: |
 |         | 문서 추가 / 수정   | :memo:     |
 | UPDATE  | 버그 수정          | :bug:      |
 |         | 성능 개선          | :zap:      |

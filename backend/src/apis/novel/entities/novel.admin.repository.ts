@@ -1,9 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
-
-import { CreateNovelAdminInput } from '../dto/createNovel.admin.input';
-import { UpdateNovelAdminInput } from '../dto/updateNovel.admin.input';
+import { DeleteResult, Repository } from 'typeorm';
 
 import { NovelEntity } from './novel.entity';
 
@@ -18,7 +15,7 @@ export class NovelAdminRepository {
     private readonly _selector = [
         'n.id', 'n.title', 'n.subtitle', 'n.description',
         'n.likeCount', 'n.createAt', 'n.updateAt', 'n.deleteAt',
-        'u.id', 'u.email', 't.id', 't.name'
+        'u.id', 'u.email', 
     ];
 
     async findAll(): Promise<NovelEntity[]> {
@@ -28,44 +25,28 @@ export class NovelAdminRepository {
             .withDeleted()
             .orderBy('n.createAt')
             .leftJoin('n.user', 'u')
-            .leftJoin('n.novelTags', 't')
-            .getMany();
-    }
-
-    async findAllNames(): Promise<NovelEntity[]> {
-        return await this.novelRepository
-            .createQueryBuilder('n')
-            .select(['n.id', 'n.title'])
-            .orderBy('n.createAt')
             .getMany();
     }
 
     async findOne(
         id: string, //
     ): Promise<NovelEntity> {
+        // prettier-ignore
         return await this.novelRepository
             .createQueryBuilder('n')
             .select([
-                ...this._selector, //
+                ...this._selector,
+                't.id', 't.name',
+                'i.id', 'i.title',
+                'r.id', 'r.contents',
             ])
             .withDeleted()
             .leftJoin('n.user', 'u')
             .leftJoin('n.novelTags', 't')
+            .leftJoin('n.novelIndexs', 'i')
+            .leftJoin('n.novelReviews', 'r')
             .where('n.id=:id', { id: id })
             .getOne();
-    }
-
-    async create(
-        input: CreateNovelAdminInput, //
-    ): Promise<NovelEntity> {
-        return await this.novelRepository.save(input);
-    }
-
-    async update(
-        input: UpdateNovelAdminInput, //
-    ): Promise<UpdateResult> {
-        const { originID, ...rest } = input;
-        return await this.novelRepository.update({ id: originID }, rest);
     }
 
     async bulkDelete(

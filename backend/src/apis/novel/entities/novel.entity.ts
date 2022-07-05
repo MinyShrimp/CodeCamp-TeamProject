@@ -3,6 +3,7 @@ import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
 import {
     Entity,
     Column,
+    OneToMany,
     ManyToOne,
     JoinColumn,
     JoinTable,
@@ -15,6 +16,8 @@ import {
 
 import { UserEntity } from 'src/apis/user/entities/user.entity';
 import { NovelTagEntity } from 'src/apis/novelTag/entities/novelTag.entity';
+import { NovelIndexEntity } from 'src/apis/novelIndex/entities/novelIndex.entity';
+import { NovelReviewEntity } from 'src/apis/novelReview/entities/novelReview.entity';
 
 /* Novel Entity */
 @Entity({ name: 'novel' })
@@ -68,4 +71,18 @@ export class NovelEntity {
     @JoinTable()
     @Field(() => [NovelTagEntity])
     novelTags: NovelTagEntity[];
+
+    @OneToMany(
+        () => NovelIndexEntity, //
+        (index) => index.novel,
+    )
+    @Field(() => [NovelIndexEntity])
+    novelIndexs: NovelIndexEntity[];
+
+    @OneToMany(
+        () => NovelReviewEntity, //
+        (review) => review.novel,
+    )
+    @Field(() => [NovelReviewEntity])
+    novelReviews: NovelReviewEntity[];
 }

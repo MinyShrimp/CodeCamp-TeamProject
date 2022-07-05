@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 
-import { CreateAnswerAdminInput } from '../dto/createAnswer.admin.input';
 import { UpdateAnswerAdminInput } from '../dto/updateAnswer.admin.input';
 
 import { AnswerEntity } from './answer.entity';
@@ -44,12 +43,6 @@ export class AnswerAdminRepository {
             .withDeleted()
             .where('answer.id=:id', { id: id })
             .getOne();
-    }
-
-    async create(
-        input: CreateAnswerAdminInput, //
-    ): Promise<AnswerEntity> {
-        return await this.answerRepository.save(input);
     }
 
     async update(
