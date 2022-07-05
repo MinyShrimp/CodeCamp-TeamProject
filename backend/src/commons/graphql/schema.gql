@@ -295,58 +295,6 @@ type FileEntity {
   url: String!
 }
 
-"""Comment Entity"""
-type CommentEntity {
-  """UUID"""
-  id: ID!
-
-  """내용"""
-  contents: String!
-
-  """좋아요 갯수"""
-  likeCount: Int!
-
-  """싫어요 갯수"""
-  dislikeCount: Int!
-
-  """생성 시간"""
-  createAt: DateTime!
-
-  """수정 시간"""
-  updateAt: DateTime!
-  board: BoardEntity!
-  user: UserEntity!
-
-  """대댓글"""
-  children: [CommentEntity!]!
-}
-
-"""게시판 Entity"""
-type BoardEntity {
-  """UUID"""
-  id: ID!
-
-  """제목"""
-  title: String!
-
-  """내용"""
-  contents: String!
-
-  """좋아요 갯수"""
-  likeCount: Int!
-
-  """싫어요 갯수"""
-  dislikeCount: Int!
-
-  """생성 시간"""
-  createAt: DateTime!
-
-  """수정 시간"""
-  updateAt: DateTime!
-  user: UserEntity!
-  comment: [CommentEntity!]!
-}
-
 type Query {
   """회원 단일 조회, Bearer JWT"""
   fetchLoginUser: UserEntity
