@@ -6,6 +6,7 @@ import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
 import { IsEmail } from 'class-validator';
 import { EmailEntity } from 'src/apis/email/entities/email.entity';
 import { PhoneEntity } from 'src/apis/phone/entities/phone.entity';
+import { UserClassEntity } from 'src/apis/userClass/entities/userClass.entity';
 import {
     Entity,
     Column,
@@ -14,10 +15,15 @@ import {
     DeleteDateColumn,
     PrimaryGeneratedColumn,
     OneToOne,
+    ManyToOne,
     JoinColumn,
+    Tree,
+    TreeParent,
+    TreeChildren,
 } from 'typeorm';
 
 @Entity({ name: 'user' })
+@Tree('closure-table')
 @ObjectType({ description: '유저 Entity' })
 export class UserEntity {
     @PrimaryGeneratedColumn('uuid')
@@ -28,6 +34,11 @@ export class UserEntity {
     @Column()
     @Field(() => String, { description: '이름' })
     name: string;
+
+    // 닉네임
+    @Column()
+    @Field(() => String, { description: '닉네임' })
+    nickName: string;
 
     // 이메일
     @Column()
@@ -48,9 +59,6 @@ export class UserEntity {
     @Column({ default: 0, unsigned: true })
     @Field(() => Int, { description: '포인트' })
     point: number;
-
-    @Column({ default: false })
-    isAdmin: boolean;
 
     // 로그인 시간
     @Column({ nullable: true })
@@ -76,15 +84,44 @@ export class UserEntity {
     @DeleteDateColumn()
     deleteAt: Date;
 
+    // 유저 등급
+    @ManyToOne(
+        () => UserClassEntity, //
+        { cascade: true, onDelete: 'SET NULL' },
+    )
+    @JoinColumn()
+    userClass: UserClassEntity;
+
+    @Column({ name: 'userClassId', unique: true, nullable: true })
+    userClassID: string;
+
+    // 핸드폰 인증
     @OneToOne(
         () => PhoneEntity, //
         (phone) => phone.user,
     )
-    phoneAuth: PhoneEntity;
+    @Field(() => PhoneEntity)
+    authPhone: PhoneEntity;
 
+    // 이메일 인증
     @OneToOne(
         () => EmailEntity, //
         (email) => email.user,
     )
-    emailAuth: EmailEntity;
+    @Field(() => EmailEntity)
+    authEmail: EmailEntity;
+
+    // 선호 작가 부모
+    @TreeParent()
+    parent: UserEntity;
+
+    // 선호 작가
+    @TreeChildren()
+    @Field(() => [UserEntity], { description: '선호 회원 목록' })
+    likeUsers: UserEntity[];
+
+    // 차단 회원
+    @TreeChildren()
+    @Field(() => [UserEntity], { description: '차단 회원 목록' })
+    dislikeUsers: UserEntity[];
 }

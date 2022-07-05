@@ -10,6 +10,8 @@ config.js
 backup
 product-updateat.txt
 
+media/**/video/
+
 # compiled output
 dist
 

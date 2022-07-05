@@ -1,17 +1,14 @@
 import * as bcrypt from 'bcryptjs';
-import {
-    CACHE_MANAGER,
-    ConflictException,
-    Inject,
-    Injectable,
-} from '@nestjs/common';
-import { Cache } from 'cache-manager';
+import { Injectable } from '@nestjs/common';
+import { randomUUID } from 'crypto';
 
 import { ResultMessage } from '../../commons/message/ResultMessage.dto';
 import { MESSAGES } from '../../commons/message/Message.enum';
+import { IUser } from '../../commons/interfaces/User.interface';
 
 import { PhoneService } from '../phone/phone.service';
 import { EmailService } from '../email/email.service';
+import { UserClassRepository } from '../userClass/entities/userClass.repository';
 
 import { CreateUserInput } from './dto/createUser.input';
 import { UpdateUserInput } from './dto/updateUser.input';
@@ -19,15 +16,12 @@ import { UpdateUserInput } from './dto/updateUser.input';
 import { UserEntity } from './entities/user.entity';
 import { UserRepository } from './entities/user.repository';
 import { UserCheckService } from './userCheck.service';
-import { IUser } from 'src/commons/interfaces/User.interface';
-import { randomUUID } from 'crypto';
 
 @Injectable()
 export class UserService {
     constructor(
-        @Inject(CACHE_MANAGER)
-        private readonly cacheManage: Cache,
         private readonly userRepository: UserRepository, //
+        private readonly userClassRepository: UserClassRepository,
         private readonly userCheckService: UserCheckService,
         private readonly phoneService: PhoneService,
         private readonly emailService: EmailService,
@@ -75,11 +69,11 @@ export class UserService {
         });
 
         // 핸드폰 인증 체크
-        const phoneAuth = await this.phoneService.create(input.phone, newUser);
+        const authPhone = await this.phoneService.create(input.phone, newUser);
 
         // 이메일 인증 보내기
         const token = this.createPassword(input.email);
-        const emailAuth = await this.emailService.SendAuthEmail(
+        const authEmail = await this.emailService.SendAuthEmail(
             {
                 email: input.email,
                 token: token,
@@ -87,8 +81,9 @@ export class UserService {
             newUser,
         );
 
-        newUser.phoneAuth = phoneAuth;
-        newUser.emailAuth = emailAuth;
+        newUser.authPhone = authPhone;
+        newUser.authEmail = authEmail;
+        newUser.userClass = await this.userClassRepository.getClass();
 
         // 비밀번호 해싱 후 생성
         return await this.userRepository.save(newUser);
@@ -110,11 +105,11 @@ export class UserService {
         });
 
         // 핸드폰 인증 체크
-        const phoneAuth = await this.phoneService.createOAuth();
+        const authPhone = await this.phoneService.createOAuth();
 
         // 이메일 인증 보내기
         const token = this.createPassword(userInfo.email);
-        const emailAuth = await this.emailService.SendAuthEmail(
+        const authEmail = await this.emailService.SendAuthEmail(
             {
                 email: userInfo.email,
                 token: token,
@@ -122,8 +117,8 @@ export class UserService {
             newUser,
         );
 
-        newUser.phoneAuth = phoneAuth;
-        newUser.emailAuth = emailAuth;
+        newUser.authPhone = authPhone;
+        newUser.authEmail = authEmail;
 
         // 회원가입
         const result = await this.userRepository.save(newUser);

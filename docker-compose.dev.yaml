@@ -48,45 +48,17 @@ services:
         env_file: ./backend/.env.dev
 
         volumes:
+            - ./backend/src:/app/src
+            - ./backend/dist:/app/dist
+            - ./backend/test:/app/test
+            - ./backend/key:/app/key
+
+            - ./backend/package.json:/app/package.json
+            - ./backend/yarn.lock:/app/yarn.lock
+            - ./backend/tsconfig.build.json:/app/tsconfig.build.json
+            - ./backend/tsconfig.json:/app/tsconfig.json
+
             - ./backend/.env.dev:/app/.env
-
-        # 재시작 설정
-        restart: always
-
-    # Frontend
-    frontend:
-        # Dockerfile 설정
-        build:
-            # Dockerfile의 위치
-            context: ./frontend
-            dockerfile: Dockerfile
-
-        container_name: codecamp-teamproject-api-frontend
-
-        # Container Port 연결
-        #   - host:container
-        ports:
-            - 8080:8080
-
-        # Volume Mount
-        #   - host:container
-        volumes:
-            - ./frontend/src:/app/src
-            - ./frontend/test:/app/test
-            - ./frontend/build:/app/build
-
-            - ./frontend/package.json:/app/package.json
-            - ./frontend/yarn.lock:/app/yarn.lock
-            - ./frontend/tsconfig.build.json:/app/tsconfig.build.json
-            - ./frontend/tsconfig.json:/app/tsconfig.json
-            - ./frontend/.babelrc:/app/.babelrc
-            - ./frontend/webpack.config.js:/app/webpack.config.js
-            - ./frontend/.env.dev:/app/.env
-
-            - ./frontend/node_modules:/app/node_modules
-
-        # 환경 변수 설정
-        env_file: ./frontend/.env.dev
 
         # 재시작 설정
         restart: always

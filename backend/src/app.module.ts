@@ -15,12 +15,39 @@ import * as redisStore from 'cache-manager-redis-store';
 
 // Config //
 import { ConfigModule } from '@nestjs/config';
+import { AppController } from './app.controller';
 
 // Modules //
 import { AuthModule } from './apis/auth/auth.module';
 import { UserModule } from './apis/user/user.module';
 import { EmailModule } from './apis/email/email.module';
 import { PhoneModule } from './apis/phone/phone.module';
+import { UserClassModule } from './apis/userClass/userClass.module';
+
+import { ProductModule } from './apis/product/product.module';
+import { PaymentModule } from './apis/payment/payment.module';
+import { PaymentStatusModule } from './apis/paymentStatus/paymentStatus.module';
+
+import { EventModule } from './apis/event/event.module';
+import { NoticeModule } from './apis/notice/notice.module';
+
+import { AnswerModule } from './apis/answer/answer.module';
+import { QuestionModule } from './apis/question/question.module';
+
+import { NovelModule } from './apis/novel/novel.module';
+import { NovelTagModule } from './apis/novelTag/novelTag.module';
+import { NovelIndexModule } from './apis/novelIndex/novelIndex.module';
+import { NovelReviewModule } from './apis/novelReview/novelReview.module';
+import { NovelIndexReviewModule } from './apis/novelIndexReview/novelIndexReview.module';
+
+import { BookmarkModule } from './apis/bookmark/bookmark.module';
+import { NovelLikeModule } from './apis/novelLike/novelLike.module';
+import { NovelDonateModule } from './apis/novelDonate/novelDonate.module';
+
+import { PaymentPointModule } from './apis/paymentPoint/paymentPoint.module';
+import { PaymentPointStatusModule } from './apis/paymentPointStatus/paymentPointStatus.module';
+
+import { FileModule } from './apis/file/file.module';
 
 ///////////////////////////////////////////////////////////////////////////
 @Module({
@@ -79,10 +106,36 @@ import { PhoneModule } from './apis/phone/phone.module';
         // Modules //
         AuthModule,
         UserModule,
+        UserClassModule,
         PhoneModule,
         EmailModule,
+
+        ProductModule,
+        PaymentModule,
+        PaymentStatusModule,
+
+        AnswerModule,
+        QuestionModule,
+
+        EventModule,
+        NoticeModule,
+
+        NovelModule,
+        NovelTagModule,
+        NovelIndexModule,
+        NovelReviewModule,
+        NovelIndexReviewModule,
+
+        BookmarkModule,
+        NovelLikeModule,
+        NovelDonateModule,
+
+        PaymentPointModule,
+        PaymentPointStatusModule,
+
+        FileModule,
     ],
-    controllers: [],
+    controllers: [AppController],
     providers: [],
 })
 export class AppModule {}

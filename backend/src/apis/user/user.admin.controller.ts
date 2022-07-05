@@ -1,45 +1,39 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
-import { CreateUserInput } from './dto/createUser.input';
+import { Body, Controller, Delete, Get, Param, Patch } from '@nestjs/common';
+import { UpdateUserAdminInput } from './dto/updateUser.admin.input';
 import { UserAdminRepository } from './entities/user.admin.repository';
 import { UserEntity } from './entities/user.entity';
-import { UserService } from './user.service';
 
-@Controller('admin')
+@Controller('admin/user')
 export class UserAdminController {
     constructor(
-        private readonly userService: UserService, //
-        private readonly userAdminRepository: UserAdminRepository,
+        private readonly userAdminRepository: UserAdminRepository, //
     ) {}
 
-    @Get('/users')
-    getUsers(): Promise<UserEntity[]> {
+    @Get('/all')
+    findAll(): Promise<UserEntity[]> {
         return this.userAdminRepository.findAll();
     }
 
-    @Get('/user/names')
-    findAllName(): Promise<UserEntity[]> {
-        return this.userAdminRepository.findAllName();
-    }
-
-    @Get('/user/:id')
-    getUser(
+    @Get('/:id')
+    findOne(
         @Param('id') userID: string, //
     ): Promise<UserEntity> {
         return this.userAdminRepository.findOne(userID);
     }
 
-    @Post('/user')
-    async createUser(
-        @Body() input: CreateUserInput, //
-    ) {
-        return await this.userService.createUser(input);
+    @Patch('/')
+    async update(
+        @Body() input: UpdateUserAdminInput, //
+    ): Promise<boolean> {
+        const result = await this.userAdminRepository.update(input);
+        return result.affected ? true : false;
     }
 
-    @Delete('/users')
-    async bulkDeleteUsers(
+    @Delete('/bulk')
+    async bulkDelete(
         @Body() IDs: Array<string>, //
     ) {
-        await this.userAdminRepository.bulkDelete(IDs);
-        return 'delete ok';
+        const results = await this.userAdminRepository.bulkDelete(IDs);
+        return results.map((r) => (r.affected ? true : false));
     }
 }
