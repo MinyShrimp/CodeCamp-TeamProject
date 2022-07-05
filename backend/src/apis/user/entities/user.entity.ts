@@ -4,6 +4,7 @@
 
 import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
 import { IsEmail } from 'class-validator';
+
 import {
     Entity,
     Column,
@@ -18,6 +19,7 @@ import {
 } from 'typeorm';
 
 import { EmailEntity } from 'src/apis/email/entities/email.entity';
+import { BoardEntity } from 'src/apis/board/entities/board.entity';
 import { PhoneEntity } from 'src/apis/phone/entities/phone.entity';
 import { UserLikeEntity } from 'src/apis/userLike/entities/userLike.entity';
 import { UserBlockEntity } from 'src/apis/userBlock/entities/userBlock.entity';
@@ -118,12 +120,17 @@ export class UserEntity {
     )
     @Field(() => [UserBlockEntity])
     userBlocks: UserBlockEntity[];
-
-    // 선호 작가
+    
+    // 선호 회원
     @OneToMany(
         () => UserLikeEntity, //
         (like) => like.from,
     )
     @Field(() => [UserLikeEntity])
     userLikes: UserLikeEntity[];
+    
+    // 게시판
+    @OneToMany(() => BoardEntity, (board) => board.user)
+    @Field(() => [BoardEntity])
+    board: BoardEntity[];
 }
