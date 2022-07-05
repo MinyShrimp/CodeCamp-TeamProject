@@ -2,6 +2,63 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+"""Comment Entity"""
+type CommentEntity {
+  """UUID"""
+  id: ID!
+
+  """내용"""
+  contents: String!
+
+  """좋아요 갯수"""
+  likeCount: Int!
+
+  """싫어요 갯수"""
+  dislikeCount: Int!
+
+  """생성 시간"""
+  createAt: DateTime!
+
+  """수정 시간"""
+  updateAt: DateTime!
+  board: BoardEntity!
+  user: UserEntity!
+
+  """대댓글"""
+  children: [CommentEntity!]!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+"""게시판 Entity"""
+type BoardEntity {
+  """UUID"""
+  id: ID!
+
+  """제목"""
+  title: String!
+
+  """내용"""
+  contents: String!
+
+  """좋아요 갯수"""
+  likeCount: Int!
+
+  """싫어요 갯수"""
+  dislikeCount: Int!
+
+  """생성 시간"""
+  createAt: DateTime!
+
+  """수정 시간"""
+  updateAt: DateTime!
+  user: UserEntity!
+  comment: [CommentEntity!]!
+}
+
 """이메일 인증 Entity"""
 type EmailEntity {
   id: ID!
@@ -58,6 +115,7 @@ type UserEntity {
 
   """차단 회원 목록"""
   dislikeUsers: [UserEntity!]!
+  board: [BoardEntity!]!
 }
 
 """결과 메세지"""
@@ -93,11 +151,6 @@ type QuestionEntity {
   updateAt: DateTime!
   user: UserEntity
 }
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
 
 """NovelTag Entity"""
 type NovelTagEntity {
