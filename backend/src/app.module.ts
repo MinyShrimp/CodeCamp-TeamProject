@@ -22,6 +22,8 @@ import { AuthModule } from './apis/auth/auth.module';
 import { UserModule } from './apis/user/user.module';
 import { EmailModule } from './apis/email/email.module';
 import { PhoneModule } from './apis/phone/phone.module';
+import { UserLikeModule } from './apis/userLike/userLike.module';
+import { UserBlockModule } from './apis/userBlock/userBlock.module';
 import { UserClassModule } from './apis/userClass/userClass.module';
 
 import { ProductModule } from './apis/product/product.module';
@@ -47,7 +49,11 @@ import { NovelDonateModule } from './apis/novelDonate/novelDonate.module';
 import { PaymentPointModule } from './apis/paymentPoint/paymentPoint.module';
 import { PaymentPointStatusModule } from './apis/paymentPointStatus/paymentPointStatus.module';
 
+import { ReportEnumModule } from './apis/reportEnum/reportEnum.module';
+
 import { FileModule } from './apis/file/file.module';
+import { ReportModule } from './apis/report/report.module';
+import { NovelCategoryModule } from './apis/novelCategory/novelCategory.module';
 
 ///////////////////////////////////////////////////////////////////////////
 @Module({
@@ -106,6 +112,8 @@ import { FileModule } from './apis/file/file.module';
         // Modules //
         AuthModule,
         UserModule,
+        UserLikeModule,
+        UserBlockModule,
         UserClassModule,
         PhoneModule,
         EmailModule,
@@ -124,6 +132,7 @@ import { FileModule } from './apis/file/file.module';
         NovelTagModule,
         NovelIndexModule,
         NovelReviewModule,
+        NovelCategoryModule,
         NovelIndexReviewModule,
 
         BookmarkModule,
@@ -132,6 +141,9 @@ import { FileModule } from './apis/file/file.module';
 
         PaymentPointModule,
         PaymentPointStatusModule,
+
+        ReportModule,
+        ReportEnumModule,
 
         FileModule,
     ],

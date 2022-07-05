@@ -4,26 +4,26 @@
 
 import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
 import { IsEmail } from 'class-validator';
-import { EmailEntity } from 'src/apis/email/entities/email.entity';
-import { PhoneEntity } from 'src/apis/phone/entities/phone.entity';
-import { UserClassEntity } from 'src/apis/userClass/entities/userClass.entity';
 import {
     Entity,
     Column,
+    OneToOne,
+    OneToMany,
+    ManyToOne,
+    JoinColumn,
     CreateDateColumn,
     UpdateDateColumn,
     DeleteDateColumn,
     PrimaryGeneratedColumn,
-    OneToOne,
-    ManyToOne,
-    JoinColumn,
-    Tree,
-    TreeParent,
-    TreeChildren,
 } from 'typeorm';
 
+import { EmailEntity } from 'src/apis/email/entities/email.entity';
+import { PhoneEntity } from 'src/apis/phone/entities/phone.entity';
+import { UserLikeEntity } from 'src/apis/userLike/entities/userLike.entity';
+import { UserBlockEntity } from 'src/apis/userBlock/entities/userBlock.entity';
+import { UserClassEntity } from 'src/apis/userClass/entities/userClass.entity';
+
 @Entity({ name: 'user' })
-@Tree('closure-table')
 @ObjectType({ description: '유저 Entity' })
 export class UserEntity {
     @PrimaryGeneratedColumn('uuid')
@@ -111,17 +111,19 @@ export class UserEntity {
     @Field(() => EmailEntity)
     authEmail: EmailEntity;
 
-    // 선호 작가 부모
-    @TreeParent()
-    parent: UserEntity;
+    // 차단 회원
+    @OneToMany(
+        () => UserBlockEntity, //
+        (block) => block.from,
+    )
+    @Field(() => [UserBlockEntity])
+    userBlocks: UserBlockEntity[];
 
     // 선호 작가
-    @TreeChildren()
-    @Field(() => [UserEntity], { description: '선호 회원 목록' })
-    likeUsers: UserEntity[];
-
-    // 차단 회원
-    @TreeChildren()
-    @Field(() => [UserEntity], { description: '차단 회원 목록' })
-    dislikeUsers: UserEntity[];
+    @OneToMany(
+        () => UserLikeEntity, //
+        (like) => like.from,
+    )
+    @Field(() => [UserLikeEntity])
+    userLikes: UserLikeEntity[];
 }

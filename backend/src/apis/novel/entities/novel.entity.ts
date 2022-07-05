@@ -18,6 +18,7 @@ import { UserEntity } from 'src/apis/user/entities/user.entity';
 import { NovelTagEntity } from 'src/apis/novelTag/entities/novelTag.entity';
 import { NovelIndexEntity } from 'src/apis/novelIndex/entities/novelIndex.entity';
 import { NovelReviewEntity } from 'src/apis/novelReview/entities/novelReview.entity';
+import { NovelCategoryEntity } from 'src/apis/novelCategory/entities/novelCategory.entity';
 
 /* Novel Entity */
 @Entity({ name: 'novel' })
@@ -63,6 +64,14 @@ export class NovelEntity {
     @JoinColumn()
     @Field(() => UserEntity)
     user: UserEntity;
+
+    @ManyToOne(
+        () => NovelCategoryEntity, //
+        { cascade: true, onDelete: 'SET NULL' },
+    )
+    @JoinColumn()
+    @Field(() => NovelCategoryEntity)
+    novelCategory: NovelCategoryEntity;
 
     @ManyToMany(
         () => NovelTagEntity, //

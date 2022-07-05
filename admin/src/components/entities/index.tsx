@@ -7,10 +7,12 @@ import { FileIndex } from './file';
 /****************************************************************************/
 /* 회원 */
 import { UserIndex } from './user';
-import { UserClassIndex } from './userClass';
 import { PhoneIndex } from './authPhone';
 import { EmailIndex } from './authEmail';
 import { BookmarkIndex } from './bookmark';
+import { UserLikeIndex } from './userLike';
+import { UserBlockIndex } from './userBlock';
+import { UserClassIndex } from './userClass';
 import { NovelLikeIndex } from './novelLike';
 import { NovelDonateIndex } from './novelDonate';
 
@@ -36,12 +38,18 @@ import { NovelIndex } from './novel';
 import { NovelTagIndex } from './novelTag';
 import { NovelIndexIndex } from './novelIndex';
 import { NovelReviewIndex } from './novelReview';
+import { NovelCategoryIndex } from './novelCategory';
 import { NovelIndexReviewIndex } from './novelIndexReview';
 
 /****************************************************************************/
 /* 포인트 결제 */
 import { PointPaymentIndex } from './pointPayment';
 import { PointPaymentStatusIndex } from './pointPaymentStatus';
+
+/****************************************************************************/
+/* 신고 */
+import { ReportIndex } from './report';
+import { ReportEnumIndex } from './reportEnum';
 
 export function EntityMain() {
     return (
@@ -60,6 +68,8 @@ export function EntityMain() {
                     />
                     <Route path="/novelLike/*" element={<NovelLikeIndex />} />
                     <Route path="/bookmark/*" element={<BookmarkIndex />} />
+                    <Route path="/userBlock/*" element={<UserBlockIndex />} />
+                    <Route path="/userLike/*" element={<UserLikeIndex />} />
 
                     {/****************************************************************************/}
                     {/* 결제 */}
@@ -95,6 +105,10 @@ export function EntityMain() {
                         element={<NovelIndexReviewIndex />}
                     />
                     <Route path="/novelTag/*" element={<NovelTagIndex />} />
+                    <Route
+                        path="/novelCategory/*"
+                        element={<NovelCategoryIndex />}
+                    />
 
                     {/****************************************************************************/}
                     {/* 포인트 결제 */}
@@ -106,6 +120,11 @@ export function EntityMain() {
                         path="/pointPaymentStatus/*"
                         element={<PointPaymentStatusIndex />}
                     />
+
+                    {/****************************************************************************/}
+                    {/* 신고 */}
+                    <Route path="/report/*" element={<ReportIndex />} />
+                    <Route path="/reportEnum/*" element={<ReportEnumIndex />} />
 
                     {/****************************************************************************/}
                     {/* 파일 */}
