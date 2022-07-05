@@ -68,7 +68,7 @@ export class EntityFactory {
                         />
                     );
                 };
-            } else if (tmp.name === 'description') {
+            } else if (tmp.name === 'description' || tmp.name === 'contents') {
                 tmp.edit_cell = (props: { row: any; data: any }) => {
                     return (
                         <TextareaAutosize
@@ -76,13 +76,13 @@ export class EntityFactory {
                             id={tmp.name as string}
                             style={{
                                 width: '100%',
-                                height: '300px',
+                                height: '200px',
                                 background: 'rgba(0,0,0,0)',
                             }}
                             defaultValue={props.data}
                             onInput={(event) => {
                                 // @ts-ignore
-                                props.row['description'] = event.target.value;
+                                props.row[tmp.name] = event.target.value;
                             }}
                         />
                     );
