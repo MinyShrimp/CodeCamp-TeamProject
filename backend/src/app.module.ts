@@ -49,7 +49,10 @@ import { NovelDonateModule } from './apis/novelDonate/novelDonate.module';
 import { PaymentPointModule } from './apis/paymentPoint/paymentPoint.module';
 import { PaymentPointStatusModule } from './apis/paymentPointStatus/paymentPointStatus.module';
 
+import { ReportEnumModule } from './apis/reportEnum/reportEnum.module';
+
 import { FileModule } from './apis/file/file.module';
+import { ReportModule } from './apis/report/report.module';
 
 ///////////////////////////////////////////////////////////////////////////
 @Module({
@@ -136,6 +139,9 @@ import { FileModule } from './apis/file/file.module';
 
         PaymentPointModule,
         PaymentPointStatusModule,
+
+        ReportModule,
+        ReportEnumModule,
 
         FileModule,
     ],

@@ -236,6 +236,18 @@ type PaymentPointStatusEntity {
   description: String!
 }
 
+"""신고 Enum Entity"""
+type ReportEnumEntity {
+  """ID"""
+  id: ID!
+
+  """테이블 이름"""
+  table: String!
+
+  """설명"""
+  description: String!
+}
+
 """FileUpload Entity"""
 type FileEntity {
   id: ID!
