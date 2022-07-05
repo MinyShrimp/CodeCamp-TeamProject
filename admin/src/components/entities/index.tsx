@@ -31,6 +31,8 @@ import { QuestionIndex } from './question';
 /* 게시판 */
 import { EventIndex } from './event';
 import { NoticeIndex } from './notice';
+import { BoardIndex } from './board';
+import { CommentIndex } from './comment';
 
 /****************************************************************************/
 /* 소설 */
@@ -89,8 +91,8 @@ export function EntityMain() {
                     {/* 게시판 */}
                     <Route path="/notice/*" element={<NoticeIndex />} />
                     <Route path="/event/*" element={<EventIndex />} />
-                    <Route path="/board/*" element={<></>} />
-                    <Route path="/comment/*" element={<></>} />
+                    <Route path="/board/*" element={<BoardIndex />} />
+                    <Route path="/comment/*" element={<CommentIndex />} />
 
                     {/****************************************************************************/}
                     {/* 소설 */}

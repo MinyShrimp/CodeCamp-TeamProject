@@ -1,25 +1,26 @@
 import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
 import { IsInt, Min } from 'class-validator';
-import { BoardEntity } from 'src/apis/board/entities/board.entity';
-import { UserEntity } from 'src/apis/user/entities/user.entity';
 import {
-    Column,
-    CreateDateColumn,
-    DeleteDateColumn,
-    Entity,
-    JoinColumn,
-    ManyToOne,
-    PrimaryGeneratedColumn,
     Tree,
-    TreeChildren,
+    Entity,
+    Column,
+    ManyToOne,
+    JoinColumn,
     TreeParent,
+    TreeChildren,
+    CreateDateColumn,
     UpdateDateColumn,
+    DeleteDateColumn,
+    PrimaryGeneratedColumn,
 } from 'typeorm';
+
+import { UserEntity } from 'src/apis/user/entities/user.entity';
+import { BoardEntity } from 'src/apis/board/entities/board.entity';
 
 /* Comment Entity */
 @Entity({ name: 'comment' })
 @Tree('closure-table')
-@ObjectType({ description: 'Comment Entity' })
+@ObjectType({ description: '댓글 Entity' })
 export class CommentEntity {
     @PrimaryGeneratedColumn('uuid')
     @Field(() => ID, { description: 'UUID' })
