@@ -10,11 +10,15 @@ import {
     JoinColumn,
     ManyToOne,
     PrimaryGeneratedColumn,
+    Tree,
+    TreeChildren,
+    TreeParent,
     UpdateDateColumn,
 } from 'typeorm';
 
 /* Comment Entity */
 @Entity({ name: 'comment' })
+@Tree('closure-table')
 @ObjectType({ description: 'Comment Entity' })
 export class CommentEntity {
     @PrimaryGeneratedColumn('uuid')
@@ -63,4 +67,13 @@ export class CommentEntity {
     @JoinColumn()
     @Field(() => UserEntity)
     user: UserEntity;
+
+    // 댓글 부모
+    @TreeParent()
+    parent: CommentEntity;
+
+    // 댓글 자식 - 대댓글
+    @TreeChildren()
+    @Field(() => [CommentEntity], { description: '대댓글' })
+    children: CommentEntity[];
 }
