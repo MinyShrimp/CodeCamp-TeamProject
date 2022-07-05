@@ -8,7 +8,7 @@ export function getDate(time: string): Date {
 
 export function getDateFormatting(time: Date): string {
     const year = time.getFullYear();
-    const month = padding(time.getMonth());
+    const month = padding(time.getMonth() + 1);
     const date = padding(time.getDate());
     const hour = padding(time.getHours());
     const minute = padding(time.getMinutes());

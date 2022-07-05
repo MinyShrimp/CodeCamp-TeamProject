@@ -32,6 +32,8 @@ import { PaymentStatusModule } from './apis/paymentStatus/paymentStatus.module';
 
 import { EventModule } from './apis/event/event.module';
 import { NoticeModule } from './apis/notice/notice.module';
+import { BoardModule } from './apis/board/board.module';
+import { CommentModule } from './apis/comment/comment.module';
 
 import { AnswerModule } from './apis/answer/answer.module';
 import { QuestionModule } from './apis/question/question.module';
@@ -127,6 +129,8 @@ import { NovelCategoryModule } from './apis/novelCategory/novelCategory.module';
 
         EventModule,
         NoticeModule,
+        BoardModule,
+        CommentModule,
 
         NovelModule,
         NovelTagModule,

@@ -1,18 +1,19 @@
 import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
 import { IsInt, Min } from 'class-validator';
-import { CommentEntity } from 'src/apis/comment/entities/comment.entity';
-import { UserEntity } from 'src/apis/user/entities/user.entity';
 import {
-    Column,
-    CreateDateColumn,
-    DeleteDateColumn,
     Entity,
-    JoinColumn,
-    ManyToOne,
+    Column,
     OneToMany,
-    PrimaryGeneratedColumn,
+    ManyToOne,
+    JoinColumn,
+    CreateDateColumn,
     UpdateDateColumn,
+    DeleteDateColumn,
+    PrimaryGeneratedColumn,
 } from 'typeorm';
+
+import { UserEntity } from 'src/apis/user/entities/user.entity';
+import { CommentEntity } from 'src/apis/comment/entities/comment.entity';
 
 /* Board Entity */
 @Entity({ name: 'board' })
@@ -61,7 +62,10 @@ export class BoardEntity {
     @Field(() => UserEntity)
     user: UserEntity;
 
-    @OneToMany(() => CommentEntity, (comment) => comment.user)
+    @OneToMany(
+        () => CommentEntity, //
+        (comment) => comment.board,
+    )
     @Field(() => [CommentEntity])
-    comment: CommentEntity[];
+    comments: CommentEntity[];
 }

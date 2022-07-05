@@ -26,6 +26,7 @@ export class BoardAdminRepository {
             .createQueryBuilder('board')
             .select(this._selector)
             .withDeleted()
+            .leftJoin('board.user', 'user')
             .orderBy('board.createAt')
             .getMany();
     }
@@ -37,8 +38,12 @@ export class BoardAdminRepository {
             .createQueryBuilder('board')
             .select([
                 ...this._selector, //
+                'comment.id',
+                'comment.contents',
             ])
             .withDeleted()
+            .leftJoin('board.user', 'user')
+            .leftJoin('board.comment', 'comment')
             .where('board.id=:id', { id: id })
             .getOne();
     }

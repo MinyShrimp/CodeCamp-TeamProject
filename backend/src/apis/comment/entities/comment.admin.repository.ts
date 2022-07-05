@@ -14,13 +14,27 @@ export class CommentAdminRepository {
         private readonly commentRepository: Repository<CommentEntity>,
     ) {}
 
-    private readonly _selector = [];
+    private readonly _selector = [
+        'comment.id',
+        'comment.contents',
+        'comment.likeCount',
+        'comment.dislikeCount',
+        'comment.createAt',
+        'comment.updateAt',
+        'comment.deleteAt',
+        'user.id',
+        'user.email',
+        'board.id',
+        'board.title',
+    ];
 
     async findAll(): Promise<CommentEntity[]> {
         return await this.commentRepository
             .createQueryBuilder('comment')
             .select(this._selector)
             .withDeleted()
+            .leftJoin('comment.user', 'user')
+            .leftJoin('comment.board', 'board')
             .orderBy('comment.createAt')
             .getMany();
     }
@@ -32,8 +46,13 @@ export class CommentAdminRepository {
             .createQueryBuilder('comment')
             .select([
                 ...this._selector, //
+                'children.id',
+                'children.contents',
             ])
             .withDeleted()
+            .leftJoin('comment.user', 'user')
+            .leftJoin('comment.board', 'board')
+            .leftJoin('comment.children', 'children')
             .where('comment.id=:id', { id: id })
             .getOne();
     }

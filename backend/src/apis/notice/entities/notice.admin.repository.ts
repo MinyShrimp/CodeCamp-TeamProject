@@ -16,7 +16,7 @@ export class NoticeAdminRepository {
 
     // prettier-ignore
     private readonly _selector = [
-        'notice.id', 'notice.title', 'notice.contents', 
+        'notice.id', 'notice.title', 'notice.contents', 'notice.isTop',
         'notice.createAt', 'notice.updateAt', 'notice.deleteAt', 
     ];
 
