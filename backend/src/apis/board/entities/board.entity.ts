@@ -1,4 +1,6 @@
 import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
+import { IsInt, Min } from 'class-validator';
+import { CommentEntity } from 'src/apis/comment/entities/comment.entity';
 import { UserEntity } from 'src/apis/user/entities/user.entity';
 import {
     Column,
@@ -7,6 +9,7 @@ import {
     Entity,
     JoinColumn,
     ManyToOne,
+    OneToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm';
@@ -27,10 +30,14 @@ export class BoardEntity {
     @Field(() => String, { description: '내용' })
     contents: string;
 
+    @Min(0)
+    @IsInt()
     @Column()
     @Field(() => Int, { description: '좋아요 갯수' })
     likeCount: number;
 
+    @Min(0)
+    @IsInt()
     @Column()
     @Field(() => Int, { description: '싫어요 갯수' })
     dislikeCount: number;
@@ -53,4 +60,8 @@ export class BoardEntity {
     @JoinColumn()
     @Field(() => UserEntity)
     user: UserEntity;
+
+    @OneToMany(() => CommentEntity, (comment) => comment.user)
+    @Field(() => [CommentEntity])
+    comment: CommentEntity[];
 }

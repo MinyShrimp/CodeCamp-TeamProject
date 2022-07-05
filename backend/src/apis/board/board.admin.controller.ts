@@ -18,12 +18,6 @@ export class BoardAdminController {
         return this.boardAdminRepository.findAll();
     }
 
-    @Get('/names')
-    async findAllNames(): Promise<Array<string>> {
-        const results = await this.boardAdminRepository.findAllNames();
-        return results.map((r) => r.id);
-    }
-
     @Get('/:id')
     findOne(
         @Param('id') id: string, //

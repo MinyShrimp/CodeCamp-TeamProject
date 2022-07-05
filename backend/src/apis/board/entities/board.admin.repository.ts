@@ -30,14 +30,6 @@ export class BoardAdminRepository {
             .getMany();
     }
 
-    async findAllNames(): Promise<BoardEntity[]> {
-        return await this.boardRepository
-            .createQueryBuilder('board')
-            .select(['board.id', 'board.name'])
-            .orderBy('')
-            .getMany();
-    }
-
     async findOne(
         id: string, //
     ): Promise<BoardEntity> {
