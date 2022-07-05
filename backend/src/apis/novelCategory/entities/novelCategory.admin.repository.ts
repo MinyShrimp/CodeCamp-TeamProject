@@ -14,14 +14,16 @@ export class NovelCategoryAdminRepository {
         private readonly novelCategoryRepository: Repository<NovelCategoryEntity>,
     ) {}
 
-    private readonly _selector = [];
+    private readonly _selector = [
+        'novelCategory.id',
+        'novelCategory.name', //
+    ];
 
     async findAll(): Promise<NovelCategoryEntity[]> {
         return await this.novelCategoryRepository
             .createQueryBuilder('novelCategory')
             .select(this._selector)
             .withDeleted()
-            .orderBy('novelCategory.createAt')
             .getMany();
     }
 
@@ -29,7 +31,6 @@ export class NovelCategoryAdminRepository {
         return await this.novelCategoryRepository
             .createQueryBuilder('novelCategory')
             .select(['novelCategory.id', 'novelCategory.name'])
-            .orderBy('novelCategory.createAt')
             .getMany();
     }
 
@@ -56,7 +57,10 @@ export class NovelCategoryAdminRepository {
         input: UpdateNovelCategoryAdminInput, //
     ): Promise<UpdateResult> {
         const { originID, ...rest } = input;
-        return await this.novelCategoryRepository.update({ id: originID }, rest);
+        return await this.novelCategoryRepository.update(
+            { id: originID },
+            rest,
+        );
     }
 
     async bulkDelete(

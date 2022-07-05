@@ -53,6 +53,7 @@ import { ReportEnumModule } from './apis/reportEnum/reportEnum.module';
 
 import { FileModule } from './apis/file/file.module';
 import { ReportModule } from './apis/report/report.module';
+import { NovelCategoryModule } from './apis/novelCategory/novelCategory.module';
 
 ///////////////////////////////////////////////////////////////////////////
 @Module({
@@ -131,6 +132,7 @@ import { ReportModule } from './apis/report/report.module';
         NovelTagModule,
         NovelIndexModule,
         NovelReviewModule,
+        NovelCategoryModule,
         NovelIndexReviewModule,
 
         BookmarkModule,
