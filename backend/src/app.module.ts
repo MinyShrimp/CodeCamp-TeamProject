@@ -22,6 +22,8 @@ import { AuthModule } from './apis/auth/auth.module';
 import { UserModule } from './apis/user/user.module';
 import { EmailModule } from './apis/email/email.module';
 import { PhoneModule } from './apis/phone/phone.module';
+import { UserLikeModule } from './apis/userLike/userLike.module';
+import { UserBlockModule } from './apis/userBlock/userBlock.module';
 import { UserClassModule } from './apis/userClass/userClass.module';
 
 import { ProductModule } from './apis/product/product.module';
@@ -106,6 +108,8 @@ import { FileModule } from './apis/file/file.module';
         // Modules //
         AuthModule,
         UserModule,
+        UserLikeModule,
+        UserBlockModule,
         UserClassModule,
         PhoneModule,
         EmailModule,

@@ -32,6 +32,23 @@ type PhoneEntity {
   user: UserEntity!
 }
 
+"""선호 작가 Entity"""
+type UserLikeEntity {
+  id: ID!
+  createAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+"""차단 회원 Entity"""
+type UserBlockEntity {
+  id: ID!
+  createAt: DateTime!
+}
+
 """유저 Entity"""
 type UserEntity {
   id: ID!
@@ -52,12 +69,8 @@ type UserEntity {
   point: Int!
   authPhone: PhoneEntity!
   authEmail: EmailEntity!
-
-  """선호 회원 목록"""
-  likeUsers: [UserEntity!]!
-
-  """차단 회원 목록"""
-  dislikeUsers: [UserEntity!]!
+  userBlocks: [UserBlockEntity!]!
+  userLikes: [UserLikeEntity!]!
 }
 
 """결과 메세지"""
@@ -93,11 +106,6 @@ type QuestionEntity {
   updateAt: DateTime!
   user: UserEntity
 }
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
 
 """NovelTag Entity"""
 type NovelTagEntity {
