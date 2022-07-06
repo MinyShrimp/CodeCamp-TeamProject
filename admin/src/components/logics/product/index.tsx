@@ -3,24 +3,19 @@ import { v4 } from 'uuid';
 import { LogicHeader } from '../header';
 import { sendGraphQL } from '../sendGraphQL';
 import { ProductCard } from './card';
-import { IProduct, IProductInput } from './interface';
-import { TransforProduct } from './transfor';
+import { IProduct } from './interface';
 
 export function ProductIndex() {
     const [products, setProducts] = useState<Array<IProduct>>([]);
 
     async function getAllProducts() {
         const { data, message } = await sendGraphQL({
-            query: `query { fetchProducts { id, name, price, stock_count, book { description, publisher { name, description }, author { name, description }, book_images { isMain, file { url } } }, productCategory { name, parent { name, parent { name, parent { name } } } }, productTags { name } } }`,
+            query: `query { fetchProductsAll { id, name, price, point, description } }`,
         });
 
         if (data) {
-            if (data.fetchProducts) {
-                setProducts(
-                    data.fetchProducts.map((product: IProductInput) =>
-                        TransforProduct(product),
-                    ),
-                );
+            if (data.fetchProductsAll) {
+                setProducts(data.fetchProductsAll);
             }
         } else {
             console.log(message);

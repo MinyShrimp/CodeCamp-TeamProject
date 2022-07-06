@@ -91,11 +91,7 @@ export class UserCheckService {
         user: UserEntity, //
         currentUser: IPayload,
     ): UserEntity {
-        if (
-            currentUser.name !== user.name ||
-            currentUser.email !== user.email ||
-            currentUser.id !== user.id
-        ) {
+        if (currentUser.id !== user.id) {
             throw new UnprocessableEntityException(
                 MESSAGES.UNVLIAD_ACCESS, //
             );
