@@ -1,15 +1,13 @@
-import { Button, Card } from '@material-ui/core';
+import { Card } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import { numberWithCommas } from '../../../functions/functions';
 import { IUserInfo } from '../logout/interface';
 import { sendGraphQLWithAuth } from '../sendGraphQL';
-import { ProductCardStyle, Subtitle } from '../style';
 import { IPaymentInput, IProduct } from './interface';
 
 export function ProductCard(props: {
     product: IProduct; //
 }) {
-    const [show, setShow] = useState(false);
     const [user, setUser] = useState<IUserInfo>({
         id: '',
         name: '',
@@ -19,7 +17,7 @@ export function ProductCard(props: {
 
     async function getLoginUser() {
         const { data, status } = await sendGraphQLWithAuth({
-            query: `query { fetchLoginUser { id, email, name, phone } }`,
+            query: `query { fetchLoginUser { id, email, name, nickName, phone } }`,
         });
 
         if (status) {
@@ -41,7 +39,6 @@ export function ProductCard(props: {
                         impUid: "${rsp.imp_uid}",
                         merchantUid: "${rsp.merchant_uid}",
                         amount: ${rsp.paid_amount},
-                        status: ${rsp.status},
                         productID: "${props.product.id}"
                     } 
                 ) { id } 
@@ -104,69 +101,14 @@ export function ProductCard(props: {
                 cursor: 'pointer',
                 marginBottom: '1rem',
             }}
-            onClick={() => {
-                setShow(!show);
-            }}
+            onClick={payment}
         >
-            <div
-                style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'flex-end',
-                }}
-            >
-                <div>
-                    <h3>{props.product.name}</h3>
-                    <Subtitle>{props.product.categorys.join(' > ')}</Subtitle>
-                </div>
-                <div style={{ textAlign: 'right' }}>
-                    <Button
-                        color="primary"
-                        variant="contained"
-                        style={{ height: '20px' }}
-                        onClick={payment}
-                    >
-                        구매
-                    </Button>
-                    <div>
-                        재고량: {numberWithCommas(props.product.stock_count)}
-                    </div>
-                    <div>$ {numberWithCommas(props.product.price)}</div>
-                </div>
+            <div>
+                <h6>{numberWithCommas(props.product.price)} 원</h6>
+                <h3 className="mb-0">
+                    {numberWithCommas(props.product.point)} P
+                </h3>
             </div>
-
-            {show ? (
-                <>
-                    <hr />
-                    <ProductCardStyle>
-                        <div style={{ display: 'flex', marginBottom: '1rem' }}>
-                            <ProductCardStyle style={{ width: '100%' }}>
-                                <div style={{ color: 'gray' }}>출판사</div>
-                                <h4>{props.product.publisher.name}</h4>
-                                <div>
-                                    {props.product.publisher.description.slice(
-                                        0,
-                                        100,
-                                    )}
-                                </div>
-                            </ProductCardStyle>
-                            <ProductCardStyle style={{ width: '100%' }}>
-                                <div style={{ color: 'gray' }}>저자</div>
-                                <h4>{props.product.author.name}</h4>
-                                <div>
-                                    {props.product.author.description.slice(
-                                        0,
-                                        100,
-                                    )}
-                                </div>
-                            </ProductCardStyle>
-                        </div>
-                        <div>{props.product.description}</div>
-                    </ProductCardStyle>
-                </>
-            ) : (
-                <></>
-            )}
         </Card>
     );
 }

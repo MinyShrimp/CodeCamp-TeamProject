@@ -5,7 +5,6 @@ export const MESSAGES = {
 
     ///////////////////////////////////////////////////////////////////
     // 회원 //
-
     USER_OVERLAP_PHONE: '이미 인증이 완료된 번호입니다.',
     USER_UNVALID_PHONE: '존재하지 않는 번호입니다.',
 
@@ -37,52 +36,6 @@ export const MESSAGES = {
     USER_SOFT_DELETE_FAILED: '탈퇴가 실패되었습니다.',
 
     ///////////////////////////////////////////////////////////////////
-    // 저자 //
-    AUTHOR_FIND_ONE_FAILED: '저자 정보를 찾을 수 없습니다.',
-
-    AUTHOR_RESTORE_SUCCESSED: 'Completed Author Restore',
-    AUTHOR_RESTORE_FAILED: 'Failed Author Restore',
-
-    AUTHOR_DELETE_SUCCESSED: 'Completed Author Delete',
-    AUTHOR_DELETE_FAILED: 'Failed Author Delete',
-
-    AUTHOR_SOFT_DELETE_SUCCESSED: 'Completed Author Soft Delete',
-    AUTHOR_SOFT_DELETE_FAILED: 'Failed Author Soft Delete',
-
-    ///////////////////////////////////////////////////////////////////
-    // 출판사 //
-    PUBLISHER_FIND_ONE_FAILED: '출판사 정보를 찾을 수 없습니다.',
-
-    PUBLISHER_RESTORE_SUCCESSED: 'Completed Publisher Restore',
-    PUBLISHER_RESTORE_FAILED: 'Failed Publisher Restore',
-
-    PUBLISHER_DELETE_SUCCESSED: 'Completed Publisher Delete',
-    PUBLISHER_DELETE_FAILED: 'Failed Publisher Delete',
-
-    PUBLISHER_SOFT_DELETE_SUCCESSED: 'Completed Publisher Soft Delete',
-    PUBLISHER_SOFT_DELETE_FAILED: 'Failed Publisher Soft Delete',
-
-    ///////////////////////////////////////////////////////////////////
-    // 책 //
-    BOOK_FIND_ONE_FAILED: '책을 찾을 수 없습니다.',
-    BOOK_IMG_FINE_ONE_FAILED: '책 이미지를 찾을 수 없습니다.',
-
-    BOOK_RESTORE_SUCCESSED: 'Completed Book Restore',
-    BOOK_RESTORE_FAILED: 'Failed Book Restore',
-
-    BOOK_DELETE_ALL_SUCCESSED: 'Completed All Books Delete',
-    BOOK_DELETE_ALL_FAILED: 'Failed All Books Delete',
-
-    BOOK_SOFT_DELETE_ALL_SUCCESSED: 'Completed All Books Soft Delete',
-    BOOK_SOFT_DELETE_ALL_FAILED: 'Failed All Books Soft Delete',
-
-    BOOK_DELETE_SUCCESSED: 'Completed Book Delete',
-    BOOK_DELETE_FAILED: 'Failed Book Delete',
-
-    BOOK_SOFT_DELETE_SUCCESSED: 'Completed Book Soft Delete',
-    BOOK_SOFT_DELETE_FAILED: 'Failed Book Soft Delete',
-
-    ///////////////////////////////////////////////////////////////////
     // 결제 //
     PAYMENT_UNVALID: '결제 정보를 찾을 수 없습니다.',
     PAYMENT_OVERLAP_UID: '중복된 값입니다.',
@@ -99,7 +52,6 @@ export const MESSAGES = {
 
     ///////////////////////////////////////////////////////////////////
     // 상품 //
-    PRODUCT_SOLD_OUT: '상품 재고가 없습니다.',
     PRODUCT_FIND_ONE_FAILED: '상품을 찾을 수 없습니다.',
 
     PRODUCT_RESTORE_SUCCESSED: 'Completed Product Restore',
@@ -116,14 +68,6 @@ export const MESSAGES = {
 
     PRODUCT_SOFT_DELETE_SUCCESSED: 'Completed Product Soft Delete',
     PRODUCT_SOFT_DELETE_FAILED: 'Failed Product Soft Delete',
-
-    ///////////////////////////////////////////////////////////////////
-    // Category Trees //
-    CATEGORY_TREE_DELETE_ALL_SUCCESSED: 'Completed All Category Trees Delete',
-    CATEGORY_TREE_DELETE_ALL_FAILED: 'Failed All Category Trees Delete',
-
-    CATEGORY_TREE_DELETE_SUCCESSED: 'Completed Category Trees Delete',
-    CATEGORY_TREE_DELETE_FAILED: 'Failed Category Trees Delete',
 
     ///////////////////////////////////////////////////////////////////
     // 리뷰 //

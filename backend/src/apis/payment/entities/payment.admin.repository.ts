@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 import { PaymentEntity } from './payment.entity';
 
 @Injectable()
@@ -52,5 +52,17 @@ export class PaymentAdminRepository {
             .createQueryBuilder('p')
             .select(['p.id', 'p.name'])
             .getMany();
+    }
+
+    async bulkDelete(
+        IDs: Array<string>, //
+    ): Promise<DeleteResult[]> {
+        return await Promise.all(
+            IDs.map((id) =>
+                this.paymentRepository.delete({
+                    id: id,
+                }),
+            ),
+        );
     }
 }

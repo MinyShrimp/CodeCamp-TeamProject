@@ -33,9 +33,10 @@ export class PaymentAdminController {
     }
 
     @Delete('/bulk')
-    bulkDelete(
+    async bulkDelete(
         @Body() IDs: Array<string>, //
-    ) {
-        throw new ConflictException('결제 정보는 삭제할 수 없습니다.');
+    ): Promise<boolean[]> {
+        const results = await this.paymentAdminRepository.bulkDelete(IDs);
+        return results.map((r) => (r.affected ? true : false));
     }
 }
