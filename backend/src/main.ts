@@ -10,7 +10,7 @@ async function bootstrap() {
     app.enableCors({
         origin: [process.env.FE_URL],
         credentials: true,
-        exposedHeaders: ['Authorization', 'Set-Cookie'],
+        exposedHeaders: ['Authorization', 'Set-Cookie', 'Cookie'],
     });
     app.useGlobalPipes(new ValidationPipe());
     app.useGlobalFilters(new HttpExceptionFilter());

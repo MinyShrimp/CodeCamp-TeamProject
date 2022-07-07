@@ -1,13 +1,16 @@
+import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
 
-import { ResultMessage } from '../../commons/message/ResultMessage.dto';
+import { GqlJwtAccessGuard } from 'src/commons/auth/gql-auth.guard';
+import { ResultMessage } from 'src/commons/message/ResultMessage.dto';
 
 import { FileEntity } from './entities/file.entity';
 import { FileService } from './file.service';
 
 /* FileUpload API */
 @Resolver()
+@UseGuards(GqlJwtAccessGuard)
 export class FileResolver {
     private static readonly NAME = 'File';
 
