@@ -6,10 +6,9 @@ import {
     Injectable,
 } from '@nestjs/common';
 
-import { TEMP_TYPE } from './dto/type.enum';
+import { CacheValueDto } from './dto/cache.dto';
 import { TempStorageInput } from './dto/value.input';
 import { TempStorageOutput } from './dto/value.output';
-import { CacheValueDto } from './dto/cache.dto';
 
 @Injectable()
 export class TempStorageRedis {
