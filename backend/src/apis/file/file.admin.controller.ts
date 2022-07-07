@@ -1,30 +1,32 @@
 import { Body, Controller, Delete, Get, Param } from '@nestjs/common';
-import { FileAdminRepository } from './entities/file.admin.repository';
+
 import { FileEntity } from './entities/file.entity';
+import { FileAdminRepository } from './entities/file.admin.repository';
+import { FileAdminService } from './file.admin.service';
 
 @Controller('admin/file')
 export class FileAdminController {
     constructor(
-        private readonly fileRepository: FileAdminRepository, //
+        private readonly fileAdminService: FileAdminService, //
+        private readonly fileAdminRepository: FileAdminRepository,
     ) {}
 
     @Get('/all')
     findAll(): Promise<FileEntity[]> {
-        return this.fileRepository.findAll();
+        return this.fileAdminRepository.findAll();
     }
 
     @Get('/:id')
     findOne(
         @Param('id') fileID: string, //
     ): Promise<FileEntity> {
-        return this.fileRepository.findOne(fileID);
+        return this.fileAdminRepository.findOne(fileID);
     }
 
     @Delete('/bulk')
     async bulkDelete(
         @Body() IDs: Array<string>, //
-    ) {
-        await this.fileRepository.bulkDelete(IDs);
-        return 'file delete ok';
+    ): Promise<object> {
+        return await this.fileAdminService.bulkDelete(IDs);
     }
 }

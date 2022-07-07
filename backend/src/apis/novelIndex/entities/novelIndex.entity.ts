@@ -33,15 +33,21 @@ export class NovelIndexEntity {
 
     @Min(1)
     @IsInt()
-    @Column()
+    @Column({ unsigned: true })
     @Field(() => Int, { description: '몇 화' })
     index: number;
 
     @Min(0)
     @Max(5)
-    @Column()
+    @Column({ unsigned: true })
     @Field(() => Float, { description: '평균 별점' })
     star: number;
+
+    @Min(0)
+    @IsInt()
+    @Column({ unsigned: true })
+    @Field(() => Int, { description: '조회수' })
+    viewCount: number;
 
     @CreateDateColumn()
     @Field(() => Date, { description: '생성 시간' })

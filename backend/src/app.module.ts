@@ -80,7 +80,7 @@ import { TempStorageModule } from './apis/tempStorage/tempStorage.module';
             cors: {
                 origin: [process.env.FE_URL],
                 credentials: 'include',
-                exposedHeaders: ['Authorization', 'Set-Cookie'],
+                exposedHeaders: ['Authorization', 'Set-Cookie', 'Cookie'],
             },
         }),
 
