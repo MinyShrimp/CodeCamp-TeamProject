@@ -33,13 +33,13 @@ export class BoardEntity {
 
     @Min(0)
     @IsInt()
-    @Column()
+    @Column({ default: 0 })
     @Field(() => Int, { description: '좋아요 갯수' })
     likeCount: number;
 
     @Min(0)
     @IsInt()
-    @Column()
+    @Column({ default: 0 })
     @Field(() => Int, { description: '싫어요 갯수' })
     dislikeCount: number;
 
@@ -58,9 +58,9 @@ export class BoardEntity {
         () => UserEntity, //
         { cascade: true, onDelete: 'SET NULL' },
     )
-    @JoinColumn()
-    @Field(() => UserEntity)
-    user: UserEntity;
+    @JoinColumn({ name: 'userId' })
+    @Field(() => String)
+    userId: string;
 
     @OneToMany(
         () => CommentEntity, //

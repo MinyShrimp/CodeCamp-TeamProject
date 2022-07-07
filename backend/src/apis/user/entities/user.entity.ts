@@ -120,7 +120,7 @@ export class UserEntity {
     )
     @Field(() => [UserBlockEntity])
     userBlocks: UserBlockEntity[];
-    
+
     // 선호 회원
     @OneToMany(
         () => UserLikeEntity, //
@@ -128,9 +128,9 @@ export class UserEntity {
     )
     @Field(() => [UserLikeEntity])
     userLikes: UserLikeEntity[];
-    
+
     // 게시판
-    @OneToMany(() => BoardEntity, (board) => board.user)
+    @OneToMany(() => BoardEntity, (board) => board.userId)
     @Field(() => [BoardEntity])
     board: BoardEntity[];
 }
