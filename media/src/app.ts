@@ -1,3 +1,4 @@
+import * as fs from 'fs';
 import cors from 'cors';
 import morgan from 'morgan';
 import fileUpload from 'express-fileupload';
@@ -63,7 +64,7 @@ app.post(
 
             const datas = Array.isArray(files)
                 ? files.map((file) => saveImage(file, req.body.path))
-                : saveImage(files, req.body.path);
+                : [saveImage(files, req.body.path)];
 
             res.send({
                 status: true,
@@ -79,6 +80,8 @@ app.post(
     },
 );
 
+///////////////////////////////////////////////////////////////
+// 썸네일 업로드
 app.post(
     '/img/upload-thumb',
     (req: Request, res: Response, next) => {
@@ -109,11 +112,16 @@ app.post(
             const files = req.files[key];
 
             const datas = Array.isArray(files)
-                ? await Promise.all(
-                      files.map(
-                          async (file) => await makeThumbs(file, req.body.path),
-                      ),
-                  )
+                ? (
+                      await Promise.all(
+                          files.map(
+                              async (file) =>
+                                  await makeThumbs(file, req.body.path),
+                          ),
+                      )
+                  ).reduce((acc, cur) => {
+                      return acc.concat(cur);
+                  })
                 : await makeThumbs(files, req.body.path);
 
             res.send({
@@ -129,6 +137,30 @@ app.post(
         }
     },
 );
+
+///////////////////////////////////////////////////////////////
+// 삭제
+app.delete('/img/bulk', async (req: Request, res: Response) => {
+    const urls = req.body.urls as Array<string>;
+
+    const results = (
+        await Promise.all(
+            urls.map((url) => {
+                return new Promise((resolve, reject) => {
+                    fs.unlink(`./resource${url}`, (err) => {
+                        if (err) {
+                            reject('');
+                        } else {
+                            resolve(url);
+                        }
+                    });
+                });
+            }),
+        )
+    ).filter((v) => v !== '');
+
+    res.send(results);
+});
 
 ///////////////////////////////////////////////////////////////
 // 서버 열기

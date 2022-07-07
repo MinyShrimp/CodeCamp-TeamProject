@@ -10,6 +10,7 @@ import { FileResolver } from './file.resolver';
 import { FileAdminService } from './file.admin.service';
 import { FileAdminController } from './file.admin.controller';
 import { GoogleStorageSerivce } from './gStorage.service';
+import { MediaServerService } from './media.service';
 
 @Module({
     imports: [
@@ -27,6 +28,8 @@ import { GoogleStorageSerivce } from './gStorage.service';
         FileAdminService,
         FileAdminRepository,
         GoogleStorageSerivce,
+
+        MediaServerService,
     ],
 })
 export class FileModule {}

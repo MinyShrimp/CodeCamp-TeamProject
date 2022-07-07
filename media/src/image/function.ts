@@ -23,6 +23,7 @@ export function saveImage(
     file: fileUpload.UploadedFile, //
     path: string = '', //
 ): IImage {
+    path = path.toLowerCase();
     const suffix = getImageSuffix(file.name);
     const fileName = v4();
 
@@ -32,6 +33,7 @@ export function saveImage(
     return {
         name: fileName + suffix,
         url: url,
+        dir: `/img/${path}origin`,
         size: file.size,
         mimetype: file.mimetype,
     };
@@ -41,6 +43,7 @@ export async function makeThumbs(
     file: fileUpload.UploadedFile, //
     path: string = '', //
 ): Promise<IImage[]> {
+    path = path.toLowerCase();
     const origin = saveImage(file, path);
     const [fileName, suffix] = origin.name.split('.');
 
@@ -68,6 +71,7 @@ export async function makeThumbs(
                     resolve({
                         name: `${fileName}_${config.size}.${suffix}`,
                         url: url,
+                        dir: dir,
                         size: res.size,
                         mimetype: 'image/' + res.format,
                     });

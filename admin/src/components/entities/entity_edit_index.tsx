@@ -72,7 +72,8 @@ export function EntityEditIndex(props: {
         const frm = new FormData();
         frm.append(
             'operations',
-            `{ "query": "mutation uploadFile($files: [Upload!]!) {uploadFile(files: $files) { id }}", "variables": { "files": ${variables} } }`,
+            `{ "query": "mutation uploadFile($files: [Upload!]!) {uploadFile(FILE_TYPE: USER, files: $files) { id }}", "variables": { "files": ${variables} } }`,
+            // `{ "query": "mutation uploadFileWithThumb($files: [Upload!]!) {uploadFileWithThumb(FILE_TYPE: USER, files: $files) { id }}", "variables": { "files": ${variables} } }`,
         );
         frm.append('map', maps);
         Object.values(files).forEach((file, idx) => {
