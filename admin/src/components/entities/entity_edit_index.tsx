@@ -79,11 +79,17 @@ export function EntityEditIndex(props: {
             frm.append(`${idx}`, file);
         });
 
-        const res = await axios.post(`${process.env.BE_URL}/graphql`, frm, {
+        const _axios = axios.create({
+            withCredentials: true,
             headers: {
                 'Content-Type': 'multipart/form-data',
+                Authorization: `Bearer ${
+                    localStorage.getItem('access_token') ?? ''
+                }`,
             },
         });
+
+        const res = await _axios.post(`${process.env.BE_URL}/graphql`, frm);
 
         console.log(res);
         return res;
