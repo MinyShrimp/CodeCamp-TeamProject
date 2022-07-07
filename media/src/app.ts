@@ -1,54 +1,137 @@
+import cors from 'cors';
+import morgan from 'morgan';
+import fileUpload from 'express-fileupload';
+import bodyParser from 'body-parser';
 import express, { Request, Response } from 'express';
-import fs from 'fs';
 
+import { getImageSuffix, makeThumbs, saveImage } from './image/function';
+
+///////////////////////////////////////////////////////////////
+// Express 초기 세팅
 const app = express();
+app.use(
+    cors({
+        origin: ['localhost:3000', 'localhost:8081'],
+    }),
+);
+app.use(
+    fileUpload({
+        abortOnLimit: true,
+        responseOnLimit: '업로드 가능한 최대 파일 용량은 2MB입니다.',
+        createParentPath: true,
+        limits: {
+            fileSize: 2 * 1024 * 1024, // 2MB max file(s) size
+        },
+    }),
+);
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(morgan('dev'));
+app.use(express.static('resource'));
 
-app.set('view engine', 'ejs');
-app.use(express.static(__dirname + '/views'));
+///////////////////////////////////////////////////////////////
+// 이미지 업로드
+const key = 'uploadFile';
+app.post(
+    '/img/upload',
+    (req: Request, res: Response, next) => {
+        try {
+            if (!req.files) {
+                throw '파일이 없습니다.';
+            }
 
-app.get('/', (req: Request, res: Response) => {
-    res.send('hello');
-});
+            const files = req.files[key];
+            if (files === undefined) {
+                throw '파일이 없습니다.';
+            }
 
-app.get('/view/:name', (req: Request, res: Response) => {
-    const { name } = req.params;
+            Array.isArray(files)
+                ? files.map((file) => getImageSuffix(file.name))
+                : getImageSuffix(files.name);
 
-    res.render('video', {
-        title: name,
-        videoSource: `../video/${name}`,
-    });
-});
+            next();
+        } catch (e) {
+            res.status(400).send({
+                status: false,
+                message: e,
+            });
+        }
+    },
+    (req: Request, res: Response) => {
+        try {
+            const files = req.files[key];
 
-app.get('/video/:name', (req: Request, res: Response) => {
-    const { name } = req.params;
-    const fullPath = `video/${name}.mp4`;
-    const fileStat = fs.statSync(fullPath);
-    const { size } = fileStat;
-    const { range } = req.headers;
+            const datas = Array.isArray(files)
+                ? files.map((file) => saveImage(file, req.body.path))
+                : saveImage(files, req.body.path);
 
-    if (range) {
-        const parts = range.replace(/bytes=/, '').split('-');
-        const start = parseInt(parts[0]);
-        const end = parts[1] ? parseInt(parts[1]) : size - 1;
-        const chunk = end - start + 1;
-        const stream = fs.createReadStream(fullPath, { start, end });
+            res.send({
+                status: true,
+                message: '파일 업로드 성공',
+                data: datas,
+            });
+        } catch (e) {
+            res.status(500).send({
+                status: false,
+                message: e.message,
+            });
+        }
+    },
+);
 
-        res.writeHead(206, {
-            'Content-Range': `bytes ${start}-${end}/${size}`,
-            'Accept-Ranges': 'bytes',
-            'Content-Length': chunk,
-            'Content-Type': 'video/mp4',
-        });
-        stream.pipe(res);
-    } else {
-        res.writeHead(200, {
-            'Content-Length': size,
-            'Content-Type': 'video/mp4',
-        });
-        fs.createReadStream(fullPath).pipe(res);
-    }
-});
+app.post(
+    '/img/upload-thumb',
+    (req: Request, res: Response, next) => {
+        try {
+            if (!req.files) {
+                throw '파일이 없습니다.';
+            }
 
+            const files = req.files[key];
+            if (files === undefined) {
+                throw '파일이 없습니다.';
+            }
+
+            Array.isArray(files)
+                ? files.map((file) => getImageSuffix(file.name))
+                : getImageSuffix(files.name);
+
+            next();
+        } catch (e) {
+            res.status(400).send({
+                status: false,
+                message: e,
+            });
+        }
+    },
+    async (req: Request, res: Response) => {
+        try {
+            const files = req.files[key];
+
+            const datas = Array.isArray(files)
+                ? await Promise.all(
+                      files.map(
+                          async (file) => await makeThumbs(file, req.body.path),
+                      ),
+                  )
+                : await makeThumbs(files, req.body.path);
+
+            res.send({
+                status: true,
+                message: '파일 업로드 성공',
+                data: datas,
+            });
+        } catch (e) {
+            res.status(500).send({
+                status: false,
+                message: e.message,
+            });
+        }
+    },
+);
+
+///////////////////////////////////////////////////////////////
+// 서버 열기
 app.listen(8500, '0.0.0.0', () => {
     console.log(`
 ################################################
