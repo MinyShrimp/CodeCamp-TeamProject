@@ -42,6 +42,7 @@ import { NovelModule } from './apis/novel/novel.module';
 import { NovelTagModule } from './apis/novelTag/novelTag.module';
 import { NovelIndexModule } from './apis/novelIndex/novelIndex.module';
 import { NovelReviewModule } from './apis/novelReview/novelReview.module';
+import { NovelCategoryModule } from './apis/novelCategory/novelCategory.module';
 import { NovelIndexReviewModule } from './apis/novelIndexReview/novelIndexReview.module';
 
 import { BookmarkModule } from './apis/bookmark/bookmark.module';
@@ -51,11 +52,11 @@ import { NovelDonateModule } from './apis/novelDonate/novelDonate.module';
 import { PaymentPointModule } from './apis/paymentPoint/paymentPoint.module';
 import { PaymentPointStatusModule } from './apis/paymentPointStatus/paymentPointStatus.module';
 
+import { ReportModule } from './apis/report/report.module';
 import { ReportEnumModule } from './apis/reportEnum/reportEnum.module';
 
 import { FileModule } from './apis/file/file.module';
-import { ReportModule } from './apis/report/report.module';
-import { NovelCategoryModule } from './apis/novelCategory/novelCategory.module';
+import { TempStorageModule } from './apis/tempStorage/tempStorage.module';
 
 ///////////////////////////////////////////////////////////////////////////
 @Module({
@@ -150,6 +151,7 @@ import { NovelCategoryModule } from './apis/novelCategory/novelCategory.module';
         ReportEnumModule,
 
         FileModule,
+        TempStorageModule,
     ],
     controllers: [AppController],
     providers: [],
