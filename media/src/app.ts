@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import cors from 'cors';
 import morgan from 'morgan';
+import dotenv from 'dotenv';
 import fileUpload from 'express-fileupload';
 import bodyParser from 'body-parser';
 import express, { Request, Response } from 'express';
@@ -9,10 +10,13 @@ import { getImageSuffix, makeThumbs, saveImage } from './image/function';
 
 ///////////////////////////////////////////////////////////////
 // Express 초기 세팅
+
+dotenv.config();
+
 const app = express();
 app.use(
     cors({
-        origin: ['localhost:3000', 'localhost:8081'],
+        origin: [process.env.BE_URL, process.env.AD_URL, process.env.FE_URL],
     }),
 );
 app.use(

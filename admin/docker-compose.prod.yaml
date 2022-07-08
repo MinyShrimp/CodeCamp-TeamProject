@@ -1,15 +1,16 @@
 version: '3.7'
 
 services:
-    api-admin:
-        image: asia.gcr.io/emerald-diagram-352601/mainproject/admin:0.0.3
+    admin:
+        image: asia.gcr.io/emerald-diagram-352601/teamproject/admin:0.0.1
         platform: linux/x86_64
         # Dockerfile 설정
         build:
             # Dockerfile의 위치
             context: .
+            dockerfile: Dockerfile.prod
 
-        container_name: codecamp-mainproject-api-admin
+        container_name: codecamp-teamproject-admin
 
         # Container Port 연결
         #   - host:container
