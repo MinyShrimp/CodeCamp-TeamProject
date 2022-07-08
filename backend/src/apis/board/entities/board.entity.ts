@@ -1,5 +1,5 @@
 import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
-import { IsIn, IsInt, Min } from 'class-validator';
+import { IsInt, Min } from 'class-validator';
 import {
     Entity,
     Column,
@@ -45,7 +45,7 @@ export class BoardEntity {
 
     @Min(0)
     @IsInt()
-    @Column({ unsigned: true })
+    @Column({ default: 0, unsigned: true })
     @Field(() => Int, { description: '조회수' })
     viewCount: number;
 

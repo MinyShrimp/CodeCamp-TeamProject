@@ -32,13 +32,13 @@ export class CommentEntity {
 
     @Min(0)
     @IsInt()
-    @Column()
+    @Column({ default: 0, unsigned: true })
     @Field(() => Int, { description: '좋아요 갯수' })
     likeCount: number;
 
     @Min(0)
     @IsInt()
-    @Column()
+    @Column({ default: 0, unsigned: true })
     @Field(() => Int, { description: '싫어요 갯수' })
     dislikeCount: number;
 

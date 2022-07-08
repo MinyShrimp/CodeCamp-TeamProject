@@ -1,21 +1,22 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+import { UserModule } from '../user/user.module';
+
 import { BoardEntity } from './entities/board.entity';
 import { BoardAdminRepository } from './entities/board.admin.repository';
 
-import { BoardAdminController } from './board.admin.controller';
-import { BoardResolver } from './board.resolver';
 import { BoardService } from './board.service';
+import { BoardResolver } from './board.resolver';
 import { BoardRepository } from './entities/board.repository';
-import { UserEntity } from '../user/entities/user.entity';
+import { BoardAdminController } from './board.admin.controller';
 
 @Module({
     imports: [
         TypeOrmModule.forFeature([
             BoardEntity, //
-            UserEntity,
         ]),
+        UserModule,
     ],
     controllers: [
         BoardAdminController, //
