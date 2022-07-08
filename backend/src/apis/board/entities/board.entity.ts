@@ -59,8 +59,8 @@ export class BoardEntity {
         { cascade: true, onDelete: 'SET NULL' },
     )
     @JoinColumn({ name: 'userId' })
-    @Field(() => String)
-    userId: string;
+    @Field(() => UserEntity)
+    user: string;
 
     @OneToMany(
         () => CommentEntity, //

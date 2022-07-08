@@ -6,12 +6,26 @@ import { BoardEntity } from './entities/board.entity';
 import { BoardRepository } from './entities/board.repository';
 import { CreateBoardInput } from './dto/createBoardInput';
 import { UpdateBoardInput } from './dto/updateBoard.input';
+import { ResultMessage } from 'src/commons/message/ResultMessage.dto';
 
 @Injectable({})
 export class BoardService {
     constructor(
         private readonly boardRepository: BoardRepository, //
     ) {}
+
+    ///////////////////////////////////////////////////////////////////
+    // 조회 //
+
+    /* 모든 게시글 조회 */
+    find() {
+        return this.boardRepository.findAll();
+    }
+
+    /* 유저가 작성한 게시글 조회 */
+    async findBoard(currentUser) {
+        return await this.boardRepository.findByIDFromBoards(currentUser.id);
+    }
 
     ///////////////////////////////////////////////////////////////////
     // 생성
@@ -44,7 +58,7 @@ export class BoardService {
         const board = await this.boardRepository.findOneByBoard(
             updateInput.boardId,
         );
-        const user = await this.boardRepository.findOneByID(updateInput.userId);
+        const user = await this.boardRepository.findOneByID(updateInput.user);
 
         const checkValidUser = (board, user) => {
             if (!board || !user) {
@@ -60,5 +74,16 @@ export class BoardService {
             ...board,
             ...updateInput,
         });
+    }
+
+    ///////////////////////////////////////////////////////////////////
+    // 삭제 //
+    async softDelete(
+        boardID: string, //
+    ) {
+        const result = await this.boardRepository.softDelete(boardID);
+        return result.affected
+            ? MESSAGES.BOARD_SOFT_DELETE_SUCCESSED
+            : MESSAGES.BOARD_SOFT_DELETE_FAILED;
     }
 }
