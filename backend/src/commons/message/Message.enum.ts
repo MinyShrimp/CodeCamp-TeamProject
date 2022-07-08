@@ -81,6 +81,12 @@ export const MESSAGES = {
 
     REVIEW_SOFT_DELETE_SUCCESSED: 'Completed Review Soft Delete',
     REVIEW_SOFT_DELETE_FAILED: 'Failed Review Soft Delete',
+
+    ///////////////////////////////////////////////////////////////////
+    // 게시판 //
+    BOARD_FIND_ONE_FAILED: '게시글 정보를 찾을 수 없습니다.',
+    BOARD_SOFT_DELETE_SUCCESSED: 'Completed Board Soft Delete',
+    BOARD_SOFT_DELETE_FAILED: 'Failed Board Soft Delete',
 } as const;
 
 export type MESSAGES = typeof MESSAGES[keyof typeof MESSAGES];
