@@ -130,7 +130,7 @@ export class UserEntity {
     userLikes: UserLikeEntity[];
 
     // 게시판
-    @OneToMany(() => BoardEntity, (board) => board.userId)
+    @OneToMany(() => BoardEntity, (board) => board.user)
     @Field(() => [BoardEntity])
     board: BoardEntity[];
 }
