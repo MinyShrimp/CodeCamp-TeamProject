@@ -27,6 +27,16 @@ export class FileAdminRepository {
             .getMany();
     }
 
+    async findBulk(
+        fileIDs: Array<string>, //
+    ): Promise<FileEntity[]> {
+        return await Promise.all(
+            fileIDs.map((id) => {
+                return this.findOne(id);
+            }),
+        );
+    }
+
     async findOne(
         fileID: string, //
     ): Promise<FileEntity> {

@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { FileAdminRepository } from './entities/file.admin.repository';
 import { GoogleStorageSerivce } from './gStorage.service';
+import { MediaServerService } from './media.service';
 
 @Injectable()
 export class FileAdminService {
     constructor(
+        private readonly mediaService: MediaServerService,
         private readonly gStorageService: GoogleStorageSerivce,
         private readonly fileAdminRepository: FileAdminRepository, //
     ) {}
@@ -15,7 +17,14 @@ export class FileAdminService {
     async bulkDeleteInGoogleStorage(
         IDs: Array<string>, //
     ): Promise<Array<{ id: string; db: boolean }>> {
-        const gcp_result = await this.gStorageService.delete(IDs);
+        const finds = (await this.fileAdminRepository.findBulk(IDs)).filter(
+            (v) => v,
+        );
+
+        const noneSoftDeletes = finds
+            .filter((v) => v.deleteAt === null)
+            .map((v) => v.id);
+        const gcp_result = await this.gStorageService.delete(noneSoftDeletes);
         const delete_result = await this.fileAdminRepository.bulkDelete(
             gcp_result,
         );
@@ -34,7 +43,18 @@ export class FileAdminService {
     async bulkDelete(
         IDs: Array<string>, //
     ): Promise<Array<boolean>> {
-        const delete_result = await this.fileAdminRepository.bulkDelete(IDs);
+        const finds = (await this.fileAdminRepository.findBulk(IDs)).filter(
+            (v) => v,
+        );
+
+        const noneSoftDeletes = finds
+            .filter((v) => v.deleteAt === null)
+            .map((v) => v.url);
+        await this.mediaService.delete(noneSoftDeletes);
+
+        const delete_result = await this.fileAdminRepository.bulkDelete(
+            finds.map((v) => v.id),
+        );
         return delete_result.map((r) => (r.affected ? true : false));
     }
 }
