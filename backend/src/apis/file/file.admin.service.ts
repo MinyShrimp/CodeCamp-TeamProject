@@ -21,9 +21,7 @@ export class FileAdminService {
             (v) => v,
         );
 
-        const noneSoftDeletes = finds
-            .filter((v) => v.deleteAt === null)
-            .map((v) => v.id);
+        const noneSoftDeletes = finds.filter((v) => v.deleteAt === null);
         const gcp_result = await this.gStorageService.delete(noneSoftDeletes);
         const delete_result = await this.fileAdminRepository.bulkDelete(
             gcp_result,

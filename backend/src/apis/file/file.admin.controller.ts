@@ -27,6 +27,6 @@ export class FileAdminController {
     async bulkDelete(
         @Body() IDs: Array<string>, //
     ): Promise<object> {
-        return await this.fileAdminService.bulkDelete(IDs);
+        return await this.fileAdminService.bulkDeleteInGoogleStorage(IDs);
     }
 }

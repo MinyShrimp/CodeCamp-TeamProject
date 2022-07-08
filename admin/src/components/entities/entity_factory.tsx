@@ -154,7 +154,7 @@ export class EntityFactory {
                     return (
                         <>
                             <a
-                                href={`${process.env.MD_URL}${row[key]}`}
+                                href={`https://storage.googleapis.com/code-camp-main-project/${row[key]}`}
                                 target="_blank"
                             >
                                 {row[key]}

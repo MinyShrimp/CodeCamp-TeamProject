@@ -1,81 +1,136 @@
+import * as sharp from 'sharp';
 import { v4 } from 'uuid';
 import { Injectable } from '@nestjs/common';
 import { FileUpload } from 'graphql-upload';
 import { Storage } from '@google-cloud/storage';
 
-import { FileRepository } from './entities/file.repository';
+import { FILE_TYPE } from './entities/type.enum';
+import { FileEntity } from './entities/file.entity';
+import { UploadResult } from './dto/uploadResult.dto';
 
 @Injectable()
 export class GoogleStorageSerivce {
-    constructor(
-        private readonly fileRepository: FileRepository, //
-    ) {}
+    constructor() {}
+
+    private readonly key = `./key/${process.env.FILE_KEY}`;
 
     /**
      * GCP Storage Upload
      */
     async upload(
-        folderName: string, //
+        type: FILE_TYPE, //
         files: FileUpload[],
-    ): Promise<Array<string>> {
-        // 변수 초기화
-        const writeFiles = await Promise.all(files);
-        const key = `./key/${process.env.FILE_KEY}`;
-
+    ): Promise<Array<UploadResult>> {
         // 구글 Storage 연결
         const storage = new Storage({
             projectId: process.env.FILE_PROJECT_ID,
-            keyFilename: key,
+            keyFilename: this.key,
         }).bucket(process.env.FILE_BUCKET);
 
         // 업로드
         const storageUpload = (await Promise.all(
-            writeFiles.map((file) => {
+            files.map((file) => {
                 return new Promise((resolve, reject) => {
-                    if (file.filename !== '') {
-                        // 확장자 분리
-                        const [_, prefix, suffix, ...__] = file.filename
-                            .toLowerCase()
-                            .match(/^(.+).(png|jpe?g|gif|webp)$/);
+                    // 확장자 분리
+                    const [_, prefix, suffix, ...__] = file.filename
+                        .toLowerCase()
+                        .match(/^(.+).(png|jpe?g|gif|webp)$/);
 
-                        // 이름 Hashing
-                        file.filename = `${folderName}origin/${v4()}.${suffix}`;
+                    // 이름 Hashing
+                    const name = `${v4()}.${suffix}`;
+                    const path = `${type.toLowerCase()}/origin/`;
+                    const url = `${path}${name}`;
 
-                        file.createReadStream()
-                            .pipe(
-                                storage.file(file.filename).createWriteStream(),
-                            )
-                            .on('finish', () => {
-                                resolve(
-                                    `/${process.env.FILE_BUCKET}/${file.filename}`,
-                                );
-                            })
-                            .on('error', (e) => reject(e));
-                    } else {
-                        resolve('');
-                    }
+                    file.createReadStream()
+                        .pipe(storage.file(url).createWriteStream())
+                        .on('finish', () => {
+                            resolve({
+                                name: name,
+                                path: path,
+                                url: url,
+                            });
+                        })
+                        .on('error', (e) => reject(null));
                 });
             }),
-        )) as Array<string>;
+        )) as Array<UploadResult>;
 
-        return storageUpload.filter((v) => v !== '');
+        return storageUpload.filter((v) => v !== null);
+    }
+
+    /**
+     * GCP Storage Upload With Thumb
+     */
+    async uploadThumb(
+        type: FILE_TYPE, //
+        files: FileUpload[],
+    ): Promise<Array<UploadResult>> {
+        // 구글 Storage 연결
+        const storage = new Storage({
+            projectId: process.env.FILE_PROJECT_ID,
+            keyFilename: this.key,
+        }).bucket(process.env.FILE_BUCKET);
+
+        const configs = [
+            { size: 0, path: 'origin/' },
+            { size: 320, path: 'thumb/s/' },
+            { size: 640, path: 'thumb/m/' },
+            { size: 1280, path: 'thumb/l/' },
+        ];
+
+        const result = await Promise.all(
+            files.map(async (file) => {
+                // 확장자 분리
+                const [_, prefix, suffix, ...__] = file.filename
+                    .toLowerCase()
+                    .match(/^(.+).(png|jpe?g|gif|webp)$/);
+                const name = `${v4()}.${suffix}`;
+
+                return (await Promise.all(
+                    configs.map((c) => {
+                        return new Promise((resolve, reject) => {
+                            const path = `${type.toLowerCase()}/${c.path}`;
+                            const url = `${path}${name}`;
+
+                            const resizeStream =
+                                c.size === 0
+                                    ? file.createReadStream()
+                                    : file
+                                          .createReadStream()
+                                          .pipe(sharp().resize(c.size));
+
+                            resizeStream
+                                .pipe(storage.file(url).createWriteStream())
+                                .on('finish', () =>
+                                    resolve({
+                                        name: name,
+                                        path: path,
+                                        url: url,
+                                    }),
+                                )
+                                .on('error', (e) => reject(null));
+                        });
+                    }),
+                )) as UploadResult[];
+            }),
+        );
+
+        return result.reduce((acc, cur) => {
+            if (cur !== null) {
+                return acc;
+            } else {
+                return [...acc, ...cur];
+            }
+        });
     }
 
     /**
      * GCP Storage Delete
      */
     async delete(
-        IDs: Array<string>, //
+        files: Array<FileEntity>, //
     ): Promise<Array<string>> {
         const key = `./key/${process.env.FILE_KEY}`;
-
-        // DB에 저장되어있는지 확인
-        // DB에 저장되지 않은 것은 스킵
-        const dbFiles = (
-            await Promise.all(
-                IDs.map((fileID) => this.fileRepository.findOne(fileID)),
-            )
-        ).filter((file) => file);
 
         // 구글 Storage 연결
         const storage = new Storage({
@@ -86,11 +141,11 @@ export class GoogleStorageSerivce {
         // 구글 삭제
         return (
             (await Promise.all(
-                dbFiles.map((file) => {
+                files.map((file) => {
                     return new Promise((resolve, reject) => {
-                        storage.file(`${file.path}${file.name}`).delete((e) => {
+                        storage.file(`${file.url}`).delete((e) => {
                             if (e) {
-                                reject('');
+                                reject(null);
                             } else {
                                 resolve(file.id);
                             }
@@ -98,6 +153,6 @@ export class GoogleStorageSerivce {
                     });
                 }),
             )) as Array<string>
-        ).filter((file) => file !== '');
+        ).filter((file) => file !== null);
     }
 }
