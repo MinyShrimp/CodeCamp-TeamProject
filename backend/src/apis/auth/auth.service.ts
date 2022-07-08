@@ -99,17 +99,21 @@ export class AuthService {
             expiresIn: '2w',
         });
 
-        // 개발 환경
-        res.setHeader('Set-Cookie', `refreshToken=${refreshToken}; path=/;`);
+        if (process.env.MODE === 'PRODUCTION') {
+            // 배포 환경
+            res.setHeader(
+                'Set-Cookie',
+                `refreshToken=${refreshToken}; path=/; domain=.miny-shrimp.shop; SameSite=None; Secure; httpOnly;`,
+            );
+        } else {
+            // 개발 환경
+            res.setHeader(
+                'Set-Cookie',
+                `refreshToken=${refreshToken}; path=/;`,
+            );
+        }
 
         return refreshToken;
-
-        // 배포 환경
-        // res.setHeader('Access-Control-Allow-Origin', 'https://myfrontsite.com')
-        // res.setHeader(
-        //   'Set-Cookie',
-        //   `refreshToken=${refreshToken}; path=/; domain=.mybacksite.com; SameSite=None; Secure; httpOnly;`
-        // )
     }
 
     ///////////////////////////////////////////////////////////////////

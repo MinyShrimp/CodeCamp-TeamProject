@@ -13,6 +13,7 @@ coverage
 
 ngrok
 media/resource/
+admin/public/
 
 # compiled output
 dist

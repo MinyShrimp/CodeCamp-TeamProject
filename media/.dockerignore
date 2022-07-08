@@ -1,4 +1,5 @@
 node_modules
+resource
 .env
 .env.dev
 .env.prod
