@@ -9,9 +9,10 @@ key
 config.js
 backup
 product-updateat.txt
+coverage
 
 ngrok
-media/**/video/
+media/resource/
 
 # compiled output
 dist

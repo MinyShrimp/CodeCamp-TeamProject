@@ -72,18 +72,25 @@ export function EntityEditIndex(props: {
         const frm = new FormData();
         frm.append(
             'operations',
-            `{ "query": "mutation uploadFile($files: [Upload!]!) {uploadFile(files: $files) { id }}", "variables": { "files": ${variables} } }`,
+            // `{ "query": "mutation uploadFile($files: [Upload!]!) {uploadFile(FILE_TYPE: USER, files: $files) { id }}", "variables": { "files": ${variables} } }`,
+            `{ "query": "mutation uploadFileWithThumb($files: [Upload!]!) {uploadFileWithThumb(FILE_TYPE: USER, files: $files) { id }}", "variables": { "files": ${variables} } }`,
         );
         frm.append('map', maps);
         Object.values(files).forEach((file, idx) => {
             frm.append(`${idx}`, file);
         });
 
-        const res = await axios.post(`${process.env.BE_URL}/graphql`, frm, {
+        const _axios = axios.create({
+            withCredentials: true,
             headers: {
                 'Content-Type': 'multipart/form-data',
+                Authorization: `Bearer ${
+                    localStorage.getItem('access_token') ?? ''
+                }`,
             },
         });
+
+        const res = await _axios.post(`${process.env.BE_URL}/graphql`, frm);
 
         console.log(res);
         return res;

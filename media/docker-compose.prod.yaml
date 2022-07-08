@@ -1,9 +1,9 @@
 version: '3.7'
 
 services:
-    # NestJS
-    api:
-        image: asia.gcr.io/emerald-diagram-352601/teamproject/api:0.0.4
+    # Media Server
+    media:
+        image: asia.gcr.io/emerald-diagram-352601/teamproject/media:0.0.1
         platform: linux/x86_64
         # Dockerfile 설정
         build:
@@ -11,12 +11,12 @@ services:
             context: .
             dockerfile: Dockerfile.prod
 
-        container_name: codecamp-teamproject-api
+        container_name: codecamp-teamproject-media
 
         # Container Port 연결
         #   - host:container
         ports:
-            - 80:3000
+            - 80:8500
 
         # 재시작 설정
         restart: always

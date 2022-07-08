@@ -1,5 +1,5 @@
 import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
-import { IsInt, Min } from 'class-validator';
+import { IsIn, IsInt, Min } from 'class-validator';
 import {
     Entity,
     Column,
@@ -33,15 +33,21 @@ export class BoardEntity {
 
     @Min(0)
     @IsInt()
-    @Column({ default: 0 })
+    @Column({ default: 0, unsigned: true })
     @Field(() => Int, { description: '좋아요 갯수' })
     likeCount: number;
 
     @Min(0)
     @IsInt()
-    @Column({ default: 0 })
+    @Column({ default: 0, unsigned: true })
     @Field(() => Int, { description: '싫어요 갯수' })
     dislikeCount: number;
+
+    @Min(0)
+    @IsInt()
+    @Column({ unsigned: true })
+    @Field(() => Int, { description: '조회수' })
+    viewCount: number;
 
     @CreateDateColumn()
     @Field(() => Date, { description: '생성 시간' })

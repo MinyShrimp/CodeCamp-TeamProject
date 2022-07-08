@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository } from 'typeorm';
+import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { FileEntity } from './file.entity';
 
 @Injectable()
-export class FileAdminRepository {
+export class FileRepository {
     constructor(
         @InjectRepository(FileEntity)
         private readonly fileRepository: Repository<FileEntity>,
@@ -22,19 +22,8 @@ export class FileAdminRepository {
         return await this.fileRepository
             .createQueryBuilder('file')
             .select(this._selector)
-            .withDeleted()
             .orderBy('file.createAt')
             .getMany();
-    }
-
-    async findBulk(
-        fileIDs: Array<string>, //
-    ): Promise<FileEntity[]> {
-        return await Promise.all(
-            fileIDs.map((id) => {
-                return this.findOne(id);
-            }),
-        );
     }
 
     async findOne(
@@ -43,17 +32,28 @@ export class FileAdminRepository {
         return await this.fileRepository
             .createQueryBuilder('file')
             .select([...this._selector, 'file.deleteAt'])
-            .withDeleted()
             .where('file.id=:id', { id: fileID })
             .getOne();
     }
 
-    async bulkDelete(
+    create(
+        option?: Partial<FileEntity>, //
+    ): FileEntity {
+        return this.fileRepository.create(option);
+    }
+
+    async save(
+        option?: Partial<FileEntity>, //
+    ): Promise<FileEntity> {
+        return await this.fileRepository.save(option);
+    }
+
+    async softDelete(
         IDs: Array<string>, //
-    ): Promise<DeleteResult[]> {
+    ): Promise<UpdateResult[]> {
         return await Promise.all(
             IDs.map((id) => {
-                return this.fileRepository.delete({ id: id });
+                return this.fileRepository.softDelete({ id: id });
             }),
         );
     }
