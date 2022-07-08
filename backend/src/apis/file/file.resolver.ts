@@ -37,7 +37,8 @@ export class FileResolver {
         @Args({ name: 'files', type: () => [GraphQLUpload] })
         files: FileUpload[],
     ): Promise<FileEntity[]> {
-        return this.fileService.upload(type, files);
+        return this.fileService.uploadInGoogleStorage(type, files, false);
+        // return this.fileService.upload(type, files);
     }
 
     /**
@@ -53,7 +54,8 @@ export class FileResolver {
         @Args({ name: 'files', type: () => [GraphQLUpload] })
         files: FileUpload[],
     ): Promise<FileEntity[]> {
-        return this.fileService.uploadWithThumb(type, files);
+        return this.fileService.uploadInGoogleStorage(type, files, true);
+        // return this.fileService.uploadWithThumb(type, files);
     }
 
     ///////////////////////////////////////////////////////////////////
@@ -74,6 +76,7 @@ export class FileResolver {
     deleteFileUpload(
         @Args({ name: 'fileIDs', type: () => [String] }) fileIDs: string[], //
     ): Promise<boolean[]> {
-        return this.fileService.softDelete(fileIDs);
+        return this.fileService.softDeleteInGoogleStorage(fileIDs);
+        // return this.fileService.softDelete(fileIDs);
     }
 }

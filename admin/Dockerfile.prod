@@ -3,10 +3,11 @@ FROM node:16.15-alpine
 WORKDIR /app
 COPY ./package.json /app
 COPY ./yarn.lock /app
+
 RUN yarn install
 
 COPY . /app
 
-RUN yarn build
-CMD yarn start
-EXPOSE 8500
+EXPOSE 8080
+RUN yarn build:prod
+CMD ["yarn", "prod"]

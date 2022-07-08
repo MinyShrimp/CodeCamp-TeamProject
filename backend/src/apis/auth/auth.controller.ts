@@ -14,7 +14,7 @@ interface IOAuthRequest extends Request {
 
 @Controller()
 export class AuthController {
-    private readonly REDIRECT = `${process.env.FE_URL}/auth/token/oauth`;
+    private readonly REDIRECT = `${process.env.AD_URL}/auth/token/oauth`;
 
     constructor(
         private readonly userRepository: UserRepository,
