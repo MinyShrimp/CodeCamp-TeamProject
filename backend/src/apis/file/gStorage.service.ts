@@ -86,41 +86,39 @@ export class GoogleStorageSerivce {
                     .match(/^(.+).(png|jpe?g|gif|webp)$/);
                 const name = `${v4()}.${suffix}`;
 
-                return (await Promise.all(
-                    configs.map((c) => {
-                        return new Promise((resolve, reject) => {
-                            const path = `${type.toLowerCase()}/${c.path}`;
-                            const url = `${path}${name}`;
+                return (
+                    (await Promise.all(
+                        configs.map((c) => {
+                            return new Promise((resolve, reject) => {
+                                const path = `${type.toLowerCase()}/${c.path}`;
+                                const url = `${path}${name}`;
 
-                            const resizeStream =
-                                c.size === 0
-                                    ? file.createReadStream()
-                                    : file
-                                          .createReadStream()
-                                          .pipe(sharp().resize(c.size));
+                                const resizeStream =
+                                    c.size === 0
+                                        ? file.createReadStream()
+                                        : file
+                                              .createReadStream()
+                                              .pipe(sharp().resize(c.size));
 
-                            resizeStream
-                                .pipe(storage.file(url).createWriteStream())
-                                .on('finish', () =>
-                                    resolve({
-                                        name: name,
-                                        path: path,
-                                        url: url,
-                                    }),
-                                )
-                                .on('error', (e) => reject(null));
-                        });
-                    }),
-                )) as UploadResult[];
+                                resizeStream
+                                    .pipe(storage.file(url).createWriteStream())
+                                    .on('finish', () =>
+                                        resolve({
+                                            name: name,
+                                            path: path,
+                                            url: url,
+                                        }),
+                                    )
+                                    .on('error', (e) => reject(null));
+                            });
+                        }),
+                    )) as UploadResult[]
+                ).filter((v) => v !== null);
             }),
         );
 
         return result.reduce((acc, cur) => {
-            if (cur !== null) {
-                return acc;
-            } else {
-                return [...acc, ...cur];
-            }
+            return [...acc, ...cur];
         });
     }
 
