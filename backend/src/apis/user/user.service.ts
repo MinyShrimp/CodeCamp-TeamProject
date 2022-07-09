@@ -1,10 +1,10 @@
 import * as bcrypt from 'bcryptjs';
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { randomUUID } from 'crypto';
 
-import { ResultMessage } from '../../commons/message/ResultMessage.dto';
-import { MESSAGES } from '../../commons/message/Message.enum';
 import { IUser } from '../../commons/interfaces/User.interface';
+import { MESSAGES } from '../../commons/message/Message.enum';
+import { ResultMessage } from '../../commons/message/ResultMessage.dto';
 
 import { PhoneService } from '../phone/phone.service';
 import { EmailService } from '../email/email.service';
@@ -15,14 +15,12 @@ import { UpdateUserInput } from './dto/updateUser.input';
 
 import { UserEntity } from './entities/user.entity';
 import { UserRepository } from './entities/user.repository';
-import { UserCheckService } from './userCheck.service';
 
 @Injectable()
 export class UserService {
     constructor(
         private readonly userRepository: UserRepository, //
         private readonly userClassRepository: UserClassRepository,
-        private readonly userCheckService: UserCheckService,
         private readonly phoneService: PhoneService,
         private readonly emailService: EmailService,
     ) {}
@@ -42,26 +40,71 @@ export class UserService {
     }
 
     ///////////////////////////////////////////////////////////////////
-    // 조회 //
+    // 검사 //
+
+    async checkValid(
+        userID: string, //
+    ): Promise<UserEntity> {
+        const user = await this.userRepository.getOnlyID(userID);
+        if (user === undefined) {
+            throw new ConflictException(
+                MESSAGES.USER_FIND_ONE_FAILED, //
+            );
+        }
+        return user;
+    }
+
+    async checkOverlapEmail(
+        email: string, //
+    ): Promise<UserEntity> {
+        const user = await this.userRepository.getOnlyIDByEmail(email);
+        if (user !== undefined) {
+            throw new ConflictException(
+                MESSAGES.USER_OVERLAP_EMAIL, //
+            );
+        }
+        return user;
+    }
+
+    async checkOverlapNickName(
+        nickName: string, //
+    ): Promise<UserEntity> {
+        const user = await this.userRepository.getOnlyIDByNickName(nickName);
+        if (user !== undefined) {
+            throw new ConflictException(
+                MESSAGES.USER_OVERLAP_EMAIL, //
+            );
+        }
+        return user;
+    }
+
+    async checkOverlapEmailAndNickName(
+        email: string, //
+        nickName: string, //
+    ): Promise<UserEntity> {
+        const user = await this.userRepository.getOnlyIDByEmailOrNickName(
+            email,
+            nickName,
+        );
+        if (user !== undefined) {
+            throw new ConflictException(
+                MESSAGES.USER_OVERLAP_EMAIL, //
+            );
+        }
+        return user;
+    }
 
     ///////////////////////////////////////////////////////////////////
     // 생성 //
 
     /**
      * 회원가입
-     * @param input
-     * @returns 생성된 유저 정보
-     *
-     * 이메일 중복 검사
      */
     async createUser(
         input: CreateUserInput, //
     ): Promise<UserEntity> {
-        // 검색
-        const user = await this.userRepository.findOneByEmail(input.email);
-
-        // 이메일 중복 체크
-        this.userCheckService.checkOverlapEmail(user);
+        // 이메일, 닉네임 중복 체크
+        await this.checkOverlapEmailAndNickName(input.email, input.nickName);
 
         const newUser = this.userRepository.create({
             ...input,
@@ -89,14 +132,14 @@ export class UserService {
         return await this.userRepository.save(newUser);
     }
 
+    /**
+     * 소셜 로그인 회원가입
+     */
     async createUserOAuth(
         userInfo: IUser, //
     ): Promise<UserEntity> {
-        // 검색
-        const user = await this.userRepository.findOneByEmail(userInfo.email);
-
         // 이메일 중복 체크
-        this.userCheckService.checkOverlapEmail(user);
+        await this.checkOverlapEmail(userInfo.email);
 
         const newUser = this.userRepository.create({
             ...userInfo,
@@ -131,16 +174,13 @@ export class UserService {
 
     /**
      * 비밀번호 변경
-     * @param userID
-     * @param pwd
-     * @returns ResultMessage
      */
     async updatePwd(
         userID: string, //
         pwd: string,
     ): Promise<ResultMessage> {
-        // 검색
-        await this.userRepository.findOneByID(userID);
+        // 존재 여부 확인
+        await this.checkValid(userID);
 
         // 비밀번호 변경
         // + 로그아웃
@@ -162,31 +202,32 @@ export class UserService {
 
     /**
      * 회원 정보 수정
-     * @param userID
-     * @param updateInput
-     * @returns 수정된 회원 정보
      */
     async updateLoginUser(
         userID: string,
         updateInput: UpdateUserInput,
-    ): Promise<UserEntity> {
-        // 검색
-        const user = await this.userRepository.findOneByID(userID);
-
+    ): Promise<ResultMessage> {
         // 존재 여부 확인
-        this.userCheckService.checkValidUser(user);
+        await this.checkValid(userID);
 
         // 수정
-        return await this.userRepository.save({
-            ...user,
-            ...updateInput,
+        const result = await this.userRepository.updateInfo(
+            userID,
+            updateInput,
+        );
+        const isSuccess = result.affected ? true : false;
+
+        return new ResultMessage({
+            id: userID,
+            isSuccess,
+            contents: isSuccess
+                ? MESSAGES.USER_UPDATE_INFO_SUCCESSED
+                : MESSAGES.USER_UPDATE_INFO_FAILED,
         });
     }
 
     /**
      * 회원 탈퇴 취소
-     * @param userID
-     * @returns ResultMessage
      */
     async restore(
         userID: string, //

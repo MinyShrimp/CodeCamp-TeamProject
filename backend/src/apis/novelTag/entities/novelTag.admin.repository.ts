@@ -20,7 +20,6 @@ export class NovelTagAdminRepository {
         return await this.novelTagRepository
             .createQueryBuilder('t')
             .select(this._selector)
-            .withDeleted()
             .orderBy('t.createAt')
             .getMany();
     }
@@ -33,7 +32,6 @@ export class NovelTagAdminRepository {
             .select([
                 ...this._selector, //
             ])
-            .withDeleted()
             .where('t.id=:id', { id: id })
             .getOne();
     }

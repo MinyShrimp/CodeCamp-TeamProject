@@ -9,23 +9,25 @@ export const NovelIndex = EntityFactory.getEntity<INovelColumn>({
     baseURL: '/admin/entity/novel',
     list: {
         column: [
-            'id', 'user', 'title', 'subtitle', 'description',
+            'id', 'user', 'title', 'subtitle', 'description', 'novelCategory',
             'likeCount', 'createAt', 'updateAt', 'deleteAt',
         ],
         option: {
-            user: 'email'
+            user: 'email',
+            novelCategory: 'name',
         }
     },
     show: {
         column: [
-            'id', 'user', 'title', 'subtitle', 'description',
-            'likeCount', 'novelTags', 'novelIndexs', 'novelReviews',
+            'id', 'user', 'title', 'subtitle', 'description', 'likeCount',
+            'novelCategory', 'novelTags', 'novelIndexs', 'novelReviews',
             'createAt', 'updateAt', 'deleteAt',
         ],
         option: {
             user: 'email',
             novelTags: 'name',
             novelIndexs: 'title',
+            novelCategory: 'name',
             novelReviews: 'contents',
         }
     },

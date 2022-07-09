@@ -35,58 +35,59 @@ export const MESSAGES = {
     USER_SOFT_DELETE_SUCCESSED: '탈퇴가 완료되었습니다.',
     USER_SOFT_DELETE_FAILED: '탈퇴가 실패되었습니다.',
 
+    USER_UPDATE_INFO_SUCCESSED: '정보 수정이 완료되었습니다.',
+    USER_UPDATE_INFO_FAILED: '정부 수정이 실패되었습니다.',
+
     ///////////////////////////////////////////////////////////////////
     // 결제 //
     PAYMENT_UNVALID: '결제 정보를 찾을 수 없습니다.',
     PAYMENT_OVERLAP_UID: '중복된 값입니다.',
     PAYMENT_ALREADY_CANCEL: '이미 취소된 결제입니다.',
 
-    PAYMENT_RESTORE_SUCCESSED: 'Completed Payment Restore',
-    PAYMENT_RESTORE_FAILED: 'Failed Payment Restore',
-
-    PAYMENT_DELETE_SUCCESSED: 'Completed Payment Delete',
-    PAYMENT_DELETE_FAILED: 'Failed Payment Delete',
-
-    PAYMENT_SOFT_DELETE_SUCCESSED: 'Completed Payment Soft Delete',
-    PAYMENT_SOFT_DELETE_FAILED: 'Failed Payment Soft Delete',
-
     ///////////////////////////////////////////////////////////////////
     // 상품 //
     PRODUCT_FIND_ONE_FAILED: '상품을 찾을 수 없습니다.',
-
-    PRODUCT_RESTORE_SUCCESSED: 'Completed Product Restore',
-    PRODUCT_RESTORE_FAILED: 'Failed Product Restore',
-
-    PRODUCT_DELETE_ALL_SUCCESSED: 'Completed All Products Delete',
-    PRODUCT_DELETE_ALL_FAILED: 'Failed All Products Delete',
-
-    PRODUCT_SOFT_DELETE_ALL_SUCCESSED: 'Completed All Products Soft Delete',
-    PRODUCT_SOFT_DELETE_ALL_FAILED: 'Failed All Products Soft Delete',
-
-    PRODUCT_DELETE_SUCCESSED: 'Completed Product Delete',
-    PRODUCT_DELETE_FAILED: 'Failed Product Delete',
-
-    PRODUCT_SOFT_DELETE_SUCCESSED: 'Completed Product Soft Delete',
-    PRODUCT_SOFT_DELETE_FAILED: 'Failed Product Soft Delete',
 
     ///////////////////////////////////////////////////////////////////
     // 리뷰 //
     REVIEW_FIND_ONE_FAILED: '리뷰 정보를 찾을 수 없습니다.',
 
-    REVIEW_RESTORE_SUCCESSED: 'Completed Review Restore',
-    REVIEW_RESTORE_FAILED: 'Failed Review Restore',
-
-    REVIEW_DELETE_SUCCESSED: 'Completed Review Delete',
-    REVIEW_DELETE_FAILED: 'Failed Review Delete',
-
-    REVIEW_SOFT_DELETE_SUCCESSED: 'Completed Review Soft Delete',
-    REVIEW_SOFT_DELETE_FAILED: 'Failed Review Soft Delete',
-
     ///////////////////////////////////////////////////////////////////
     // 게시판 //
     BOARD_FIND_ONE_FAILED: '게시글 정보를 찾을 수 없습니다.',
-    BOARD_SOFT_DELETE_SUCCESSED: 'Completed Board Soft Delete',
-    BOARD_SOFT_DELETE_FAILED: 'Failed Board Soft Delete',
+
+    BOARD_SOFT_DELETE_SUCCESSED: '게시판 삭제 성공',
+    BOARD_SOFT_DELETE_FAILED: '게시판 삭제 실패',
+
+    ///////////////////////////////////////////////////////////////////
+    // 소설 카테고리 //
+    NOVEL_CATEGORY_FIND_ONE_FAILED: '소설 카테고리를 찾을 수 없습니다.',
+
+    ///////////////////////////////////////////////////////////////////
+    // 소설 //
+    NOVEL_UNVALID: '소설 정보를 찾을 수 없습니다.',
+
+    NOVEL_UPDATE_SUCCESSED: '소설 수정 성공',
+    NOVEL_UPDATE_FAILED: '소설 수정 실패',
+
+    NOVEL_RESTORE_SUCCESSED: '소설 삭제 취소 성공',
+    NOVEL_RESTORE_FAILED: '소설 삭제 취소 실패',
+
+    NOVEL_SOFT_DELETE_SUCCESSED: '소설 삭제 성공',
+    NOVEL_SOFT_DELETE_FAILED: '소설 삭제 실패',
+
+    ///////////////////////////////////////////////////////////////////
+    // 소설 인덱스 //
+    NOVEL_INDEX_UNVALID: '소설 인덱스 정보를 찾을 수 없습니다.',
+
+    NOVEL_INDEX_UPDATE_SUCCESSED: '소설 인덱스 수정 성공',
+    NOVEL_INDEX_UPDATE_FAILED: '소설 인덱스 수정 실패',
+
+    NOVEL_INDEX_RESTORE_SUCCESSED: '소설 인덱스 삭제 취소 성공',
+    NOVEL_INDEX_RESTORE_FAILED: '소설 인덱스 삭제 취소 실패',
+
+    NOVEL_INDEX_SOFT_DELETE_SUCCESSED: '소설 인덱스 삭제 성공',
+    NOVEL_INDEX_SOFT_DELETE_FAILED: '소설 인덱스 삭제 실패',
 } as const;
 
 export type MESSAGES = typeof MESSAGES[keyof typeof MESSAGES];
