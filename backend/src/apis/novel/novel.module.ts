@@ -23,6 +23,10 @@ import { NovelAdminController } from './novel.admin.controller';
         NovelTagModule,
         NovelCategoryModule,
     ],
+    exports: [
+        NovelService,
+        NovelRepository, //
+    ],
     controllers: [
         NovelAdminController, //
     ],

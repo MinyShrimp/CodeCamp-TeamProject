@@ -90,13 +90,13 @@ export class UserResolver {
      */
     @UseGuards(GqlJwtAccessGuard)
     @Mutation(
-        () => UserEntity, //
+        () => ResultMessage, //
         { description: '회원 정보 수정, Bearer JWT' },
     )
     async updateLoginUser(
         @CurrentUser() currentUser: IPayload,
         @Args('updateInput') updateInput: UpdateUserInput,
-    ): Promise<UserEntity> {
+    ): Promise<ResultMessage> {
         return this.userService.updateLoginUser(currentUser.id, updateInput);
     }
 

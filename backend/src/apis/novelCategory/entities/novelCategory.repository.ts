@@ -1,75 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
-
-import { CreateNovelCategoryAdminInput } from '../dto/createNovelCategory.admin.input';
-import { UpdateNovelCategoryAdminInput } from '../dto/updateNovelCategory.admin.input';
-
+import { Repository } from 'typeorm';
 import { NovelCategoryEntity } from './novelCategory.entity';
 
 @Injectable()
 export class NovelCategoryRepository {
     constructor(
         @InjectRepository(NovelCategoryEntity)
-        private readonly novelCategoryRepository: Repository<NovelCategoryEntity>,
+        private readonly categoryRepository: Repository<NovelCategoryEntity>,
     ) {}
 
-    private readonly _selector = [
-        'novelCategory.id',
-        'novelCategory.name', //
-    ];
-
-    async findAll(): Promise<NovelCategoryEntity[]> {
-        return await this.novelCategoryRepository
-            .createQueryBuilder('novelCategory')
-            .select(this._selector)
-            .getMany();
-    }
-
-    async findAllNames(): Promise<NovelCategoryEntity[]> {
-        return await this.novelCategoryRepository
-            .createQueryBuilder('novelCategory')
-            .select(['novelCategory.id', 'novelCategory.name'])
-            .getMany();
-    }
-
     async findOne(
-        id: string, //
+        categoryID: string, //
     ): Promise<NovelCategoryEntity> {
-        return await this.novelCategoryRepository
-            .createQueryBuilder('novelCategory')
-            .select([
-                ...this._selector, //
-            ])
-            .where('novelCategory.id=:id', { id: id })
+        return await this.categoryRepository
+            .createQueryBuilder('c')
+            .select(['c.id', 'c.name'])
+            .where('c.id=:id', { id: categoryID })
             .getOne();
-    }
-
-    async create(
-        input: CreateNovelCategoryAdminInput, //
-    ): Promise<NovelCategoryEntity> {
-        return await this.novelCategoryRepository.save(input);
-    }
-
-    async update(
-        input: UpdateNovelCategoryAdminInput, //
-    ): Promise<UpdateResult> {
-        const { originID, ...rest } = input;
-        return await this.novelCategoryRepository.update(
-            { id: originID },
-            rest,
-        );
-    }
-
-    async bulkDelete(
-        IDs: Array<string>, //
-    ): Promise<DeleteResult[]> {
-        return await Promise.all(
-            IDs.map((id) =>
-                this.novelCategoryRepository.delete({
-                    id: id,
-                }),
-            ),
-        );
     }
 }

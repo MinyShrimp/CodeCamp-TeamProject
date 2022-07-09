@@ -35,6 +35,9 @@ export const MESSAGES = {
     USER_SOFT_DELETE_SUCCESSED: '탈퇴가 완료되었습니다.',
     USER_SOFT_DELETE_FAILED: '탈퇴가 실패되었습니다.',
 
+    USER_UPDATE_INFO_SUCCESSED: '정보 수정이 완료되었습니다.',
+    USER_UPDATE_INFO_FAILED: '정부 수정이 실패되었습니다.',
+
     ///////////////////////////////////////////////////////////////////
     // 결제 //
     PAYMENT_UNVALID: '결제 정보를 찾을 수 없습니다.',
@@ -52,12 +55,39 @@ export const MESSAGES = {
     ///////////////////////////////////////////////////////////////////
     // 게시판 //
     BOARD_FIND_ONE_FAILED: '게시글 정보를 찾을 수 없습니다.',
+
     BOARD_SOFT_DELETE_SUCCESSED: '게시판 삭제 성공',
     BOARD_SOFT_DELETE_FAILED: '게시판 삭제 실패',
 
     ///////////////////////////////////////////////////////////////////
     // 소설 카테고리 //
     NOVEL_CATEGORY_FIND_ONE_FAILED: '소설 카테고리를 찾을 수 없습니다.',
+
+    ///////////////////////////////////////////////////////////////////
+    // 소설 //
+    NOVEL_UNVALID: '소설 정보를 찾을 수 없습니다.',
+
+    NOVEL_UPDATE_SUCCESSED: '소설 수정 성공',
+    NOVEL_UPDATE_FAILED: '소설 수정 실패',
+
+    NOVEL_RESTORE_SUCCESSED: '소설 삭제 취소 성공',
+    NOVEL_RESTORE_FAILED: '소설 삭제 취소 실패',
+
+    NOVEL_SOFT_DELETE_SUCCESSED: '소설 삭제 성공',
+    NOVEL_SOFT_DELETE_FAILED: '소설 삭제 실패',
+
+    ///////////////////////////////////////////////////////////////////
+    // 소설 인덱스 //
+    NOVEL_INDEX_UNVALID: '소설 인덱스 정보를 찾을 수 없습니다.',
+
+    NOVEL_INDEX_UPDATE_SUCCESSED: '소설 인덱스 수정 성공',
+    NOVEL_INDEX_UPDATE_FAILED: '소설 인덱스 수정 실패',
+
+    NOVEL_INDEX_RESTORE_SUCCESSED: '소설 인덱스 삭제 취소 성공',
+    NOVEL_INDEX_RESTORE_FAILED: '소설 인덱스 삭제 취소 실패',
+
+    NOVEL_INDEX_SOFT_DELETE_SUCCESSED: '소설 인덱스 삭제 성공',
+    NOVEL_INDEX_SOFT_DELETE_FAILED: '소설 인덱스 삭제 실패',
 } as const;
 
 export type MESSAGES = typeof MESSAGES[keyof typeof MESSAGES];

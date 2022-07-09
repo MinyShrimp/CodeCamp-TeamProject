@@ -40,7 +40,13 @@ export class NovelIndexReviewEntity {
 
     @Min(0)
     @Max(5)
-    @Column({ type: 'decimal', precision: 2, scale: 1 })
+    @Column({
+        type: 'decimal',
+        default: 0,
+        unsigned: true,
+        precision: 2,
+        scale: 1,
+    })
     @Field(() => Float, { description: '평점' })
     star: number;
 

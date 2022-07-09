@@ -3,8 +3,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { NovelCategoryEntity } from './entities/novelCategory.entity';
 import { NovelCategoryRepository } from './entities/novelCategory.repository';
+import { NovelCategoryAdminRepository } from './entities/novelCategory.admin.repository';
 
-import { NovelCategoryCheckService } from './novelCategoryCheck.service';
+import { NovelCategoryService } from './novelCategory.service';
 import { NovelCategoryAdminController } from './novelCategory.admin.controller';
 
 @Module({
@@ -14,15 +15,16 @@ import { NovelCategoryAdminController } from './novelCategory.admin.controller';
         ]),
     ],
     exports: [
-        NovelCategoryRepository, //
-        NovelCategoryCheckService,
+        NovelCategoryService, //
     ],
     controllers: [
         NovelCategoryAdminController, //
     ],
     providers: [
-        NovelCategoryRepository, //
-        NovelCategoryCheckService,
+        NovelCategoryAdminRepository, //
+
+        NovelCategoryService,
+        NovelCategoryRepository,
     ],
 })
 export class NovelCategoryModule {}

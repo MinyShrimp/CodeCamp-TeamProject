@@ -7,12 +7,12 @@ import { CreateNovelCategoryAdminInput } from './dto/createNovelCategory.admin.i
 import { UpdateNovelCategoryAdminInput } from './dto/updateNovelCategory.admin.input';
 
 import { NovelCategoryEntity } from './entities/novelCategory.entity';
-import { NovelCategoryRepository } from './entities/novelCategory.repository';
+import { NovelCategoryAdminRepository } from './entities/novelCategory.admin.repository';
 
 @Controller('admin/novel-category')
 export class NovelCategoryAdminController {
     constructor(
-        private readonly novelCategoryRepository: NovelCategoryRepository, //
+        private readonly novelCategoryRepository: NovelCategoryAdminRepository, //
     ) {}
 
     @Get('/all')

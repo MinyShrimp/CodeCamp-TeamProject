@@ -10,8 +10,8 @@ import { UserRepository } from './entities/user.repository';
 import { UserAdminRepository } from './entities/user.admin.repository';
 import { UserAdminController } from './user.admin.controller';
 
-import { UserResolver } from './user.resolver';
 import { UserService } from './user.service';
+import { UserResolver } from './user.resolver';
 import { UserCheckService } from './userCheck.service';
 
 @Module({
@@ -24,17 +24,17 @@ import { UserCheckService } from './userCheck.service';
         UserClassModule,
     ],
     exports: [
+        UserService,
         UserRepository,
-        UserService, //
-        UserCheckService,
+        UserCheckService, //
     ],
     controllers: [
         UserAdminController, //
     ],
     providers: [
-        UserResolver, //
-        UserRepository,
         UserService,
+        UserResolver,
+        UserRepository,
         UserCheckService,
 
         UserAdminRepository,
