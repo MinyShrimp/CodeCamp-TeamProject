@@ -41,52 +41,23 @@ export const MESSAGES = {
     PAYMENT_OVERLAP_UID: '중복된 값입니다.',
     PAYMENT_ALREADY_CANCEL: '이미 취소된 결제입니다.',
 
-    PAYMENT_RESTORE_SUCCESSED: 'Completed Payment Restore',
-    PAYMENT_RESTORE_FAILED: 'Failed Payment Restore',
-
-    PAYMENT_DELETE_SUCCESSED: 'Completed Payment Delete',
-    PAYMENT_DELETE_FAILED: 'Failed Payment Delete',
-
-    PAYMENT_SOFT_DELETE_SUCCESSED: 'Completed Payment Soft Delete',
-    PAYMENT_SOFT_DELETE_FAILED: 'Failed Payment Soft Delete',
-
     ///////////////////////////////////////////////////////////////////
     // 상품 //
     PRODUCT_FIND_ONE_FAILED: '상품을 찾을 수 없습니다.',
-
-    PRODUCT_RESTORE_SUCCESSED: 'Completed Product Restore',
-    PRODUCT_RESTORE_FAILED: 'Failed Product Restore',
-
-    PRODUCT_DELETE_ALL_SUCCESSED: 'Completed All Products Delete',
-    PRODUCT_DELETE_ALL_FAILED: 'Failed All Products Delete',
-
-    PRODUCT_SOFT_DELETE_ALL_SUCCESSED: 'Completed All Products Soft Delete',
-    PRODUCT_SOFT_DELETE_ALL_FAILED: 'Failed All Products Soft Delete',
-
-    PRODUCT_DELETE_SUCCESSED: 'Completed Product Delete',
-    PRODUCT_DELETE_FAILED: 'Failed Product Delete',
-
-    PRODUCT_SOFT_DELETE_SUCCESSED: 'Completed Product Soft Delete',
-    PRODUCT_SOFT_DELETE_FAILED: 'Failed Product Soft Delete',
 
     ///////////////////////////////////////////////////////////////////
     // 리뷰 //
     REVIEW_FIND_ONE_FAILED: '리뷰 정보를 찾을 수 없습니다.',
 
-    REVIEW_RESTORE_SUCCESSED: 'Completed Review Restore',
-    REVIEW_RESTORE_FAILED: 'Failed Review Restore',
-
-    REVIEW_DELETE_SUCCESSED: 'Completed Review Delete',
-    REVIEW_DELETE_FAILED: 'Failed Review Delete',
-
-    REVIEW_SOFT_DELETE_SUCCESSED: 'Completed Review Soft Delete',
-    REVIEW_SOFT_DELETE_FAILED: 'Failed Review Soft Delete',
-
     ///////////////////////////////////////////////////////////////////
     // 게시판 //
     BOARD_FIND_ONE_FAILED: '게시글 정보를 찾을 수 없습니다.',
-    BOARD_SOFT_DELETE_SUCCESSED: 'Completed Board Soft Delete',
-    BOARD_SOFT_DELETE_FAILED: 'Failed Board Soft Delete',
+    BOARD_SOFT_DELETE_SUCCESSED: '게시판 삭제 성공',
+    BOARD_SOFT_DELETE_FAILED: '게시판 삭제 실패',
+
+    ///////////////////////////////////////////////////////////////////
+    // 소설 카테고리 //
+    NOVEL_CATEGORY_FIND_ONE_FAILED: '소설 카테고리를 찾을 수 없습니다.',
 } as const;
 
 export type MESSAGES = typeof MESSAGES[keyof typeof MESSAGES];

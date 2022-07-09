@@ -8,7 +8,7 @@ import { UpdateNovelCategoryAdminInput } from '../dto/updateNovelCategory.admin.
 import { NovelCategoryEntity } from './novelCategory.entity';
 
 @Injectable()
-export class NovelCategoryAdminRepository {
+export class NovelCategoryRepository {
     constructor(
         @InjectRepository(NovelCategoryEntity)
         private readonly novelCategoryRepository: Repository<NovelCategoryEntity>,
@@ -23,7 +23,6 @@ export class NovelCategoryAdminRepository {
         return await this.novelCategoryRepository
             .createQueryBuilder('novelCategory')
             .select(this._selector)
-            .withDeleted()
             .getMany();
     }
 
@@ -42,7 +41,6 @@ export class NovelCategoryAdminRepository {
             .select([
                 ...this._selector, //
             ])
-            .withDeleted()
             .where('novelCategory.id=:id', { id: id })
             .getOne();
     }

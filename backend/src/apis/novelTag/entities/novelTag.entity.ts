@@ -16,12 +16,11 @@ export class NovelTagEntity {
     @Field(() => ID, { description: 'UUID' })
     id: string;
 
-    @Column()
+    @Column({ unique: true })
     @Field(() => String, { description: '이름' })
     name: string;
 
     @CreateDateColumn()
-    @Field(() => Date, { description: '생성 시간' })
     createAt: Date;
 
     @ManyToMany(
