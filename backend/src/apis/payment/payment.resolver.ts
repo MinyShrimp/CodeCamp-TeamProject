@@ -1,4 +1,5 @@
-import { UseGuards } from '@nestjs/common';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Post, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 
 import { IPayload } from 'src/commons/interfaces/Payload.interface';
@@ -11,6 +12,7 @@ import { CancelPaymentInput } from './dto/cancelPayment.input';
 
 import { PaymentService } from './payment.service';
 
+@ApiTags('결제')
 @Resolver()
 @UseGuards(GqlJwtAccessGuard)
 export class PaymentResolver {
@@ -18,6 +20,12 @@ export class PaymentResolver {
         private readonly paymentService: PaymentService, //
     ) {}
 
+    @ApiOperation({
+        summary: '결제 정보 저장',
+        requestBody: {
+            content: {},
+        },
+    })
     @Mutation(
         () => PaymentEntity, //
         { description: '결제 정보 저장' },

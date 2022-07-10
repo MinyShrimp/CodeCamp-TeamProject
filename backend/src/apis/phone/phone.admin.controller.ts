@@ -1,8 +1,10 @@
 import { Body, Controller, Delete, Get, Param } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
 import { PhoneEntity } from './entities/phone.entity';
 import { PhoneAdminRepository } from './entities/phone.admin.repository';
 
+@ApiTags('관리자/회원/핸드폰 인증')
 @Controller('admin/phone')
 export class PhoneAdminController {
     constructor(

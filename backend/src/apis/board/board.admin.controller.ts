@@ -1,23 +1,28 @@
 // prettier-ignore
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
-
-import { CreateBoardAdminInput } from './dto/createBoard.admin.input';
-import { UpdateBoardAdminInput } from './dto/updateBoard.admin.input';
+import { Body, Controller, Delete, Get, Param } from '@nestjs/common';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { BoardEntity } from './entities/board.entity';
 import { BoardAdminRepository } from './entities/board.admin.repository';
 
+@ApiTags('관리자/게시판')
 @Controller('admin/board')
 export class BoardAdminController {
     constructor(
         private readonly boardAdminRepository: BoardAdminRepository, //
     ) {}
 
+    @ApiOperation({
+        summary: '모든 게시판 목록 API',
+    })
     @Get('/all')
     findAll(): Promise<BoardEntity[]> {
         return this.boardAdminRepository.findAll();
     }
 
+    @ApiOperation({
+        summary: '단일 게시판 목록 API',
+    })
     @Get('/:id')
     findOne(
         @Param('id') id: string, //
@@ -25,21 +30,9 @@ export class BoardAdminController {
         return this.boardAdminRepository.findOne(id);
     }
 
-    @Post('/')
-    create(
-        @Body() input: CreateBoardAdminInput, //
-    ): Promise<BoardEntity> {
-        return this.boardAdminRepository.create(input);
-    }
-
-    @Patch('/')
-    async update(
-        @Body() input: UpdateBoardAdminInput, //
-    ): Promise<boolean> {
-        const result = await this.boardAdminRepository.update(input);
-        return result.affected ? true : false;
-    }
-
+    @ApiOperation({
+        summary: '게시판 글 삭제 API',
+    })
     @Delete('/bulk')
     async bulkDelete(
         @Body() IDs: Array<string>, //

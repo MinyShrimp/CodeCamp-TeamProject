@@ -1,17 +1,14 @@
-import {
-    Body,
-    Controller,
-    Delete,
-    Get,
-    Param,
-    Patch,
-    Post,
-} from '@nestjs/common';
+// prettier-ignore
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+
 import { CreateProductAdminInput } from './dto/createProduct.admin.input';
 import { UpdateProductAdminInput } from './dto/updateProduct.admin.input';
-import { ProductAdminRepository } from './entities/product.admin.repository';
-import { ProductEntity } from './entities/product.entity';
 
+import { ProductEntity } from './entities/product.entity';
+import { ProductAdminRepository } from './entities/product.admin.repository';
+
+@ApiTags('관리자/상품')
 @Controller('admin/product')
 export class ProductAdminController {
     constructor(

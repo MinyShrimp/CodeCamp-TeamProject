@@ -1,5 +1,6 @@
 // prettier-ignore
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
 import { NameOutput } from 'src/commons/dto/name.admin.output';
 
@@ -9,6 +10,7 @@ import { UpdateNovelCategoryAdminInput } from './dto/updateNovelCategory.admin.i
 import { NovelCategoryEntity } from './entities/novelCategory.entity';
 import { NovelCategoryAdminRepository } from './entities/novelCategory.admin.repository';
 
+@ApiTags('관리자/소설/카테고리')
 @Controller('admin/novel-category')
 export class NovelCategoryAdminController {
     constructor(

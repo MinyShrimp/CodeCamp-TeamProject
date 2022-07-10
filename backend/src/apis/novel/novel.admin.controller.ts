@@ -1,11 +1,11 @@
 // prettier-ignore
 import { Body, Controller, Delete, Get, Param } from '@nestjs/common';
-
-import { NameOutput } from 'src/commons/dto/name.admin.output';
+import { ApiTags } from '@nestjs/swagger';
 
 import { NovelEntity } from './entities/novel.entity';
 import { NovelAdminRepository } from './entities/novel.admin.repository';
 
+@ApiTags('관리자/소설')
 @Controller('admin/novel')
 export class NovelAdminController {
     constructor(

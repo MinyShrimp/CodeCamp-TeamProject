@@ -1,9 +1,11 @@
 // prettier-ignore
 import { Body, Controller, Delete, Get, Param } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
 import { PaymentPointEntity } from './entities/paymentPoint.entity';
 import { PaymentPointAdminRepository } from './entities/paymentPoint.admin.repository';
 
+@ApiTags('관리자/결제/포인트')
 @Controller('admin/payment-point')
 export class PaymentPointAdminController {
     constructor(

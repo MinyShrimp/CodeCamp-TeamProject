@@ -1,5 +1,6 @@
 // prettier-ignore
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
 import { CreateNoticeAdminInput } from './dto/createNotice.admin.input';
 import { UpdateNoticeAdminInput } from './dto/updateNotice.admin.input';
@@ -7,6 +8,7 @@ import { UpdateNoticeAdminInput } from './dto/updateNotice.admin.input';
 import { NoticeEntity } from './entities/notice.entity';
 import { NoticeAdminRepository } from './entities/notice.admin.repository';
 
+@ApiTags('관리자/공지')
 @Controller('admin/notice')
 export class NoticeAdminController {
     constructor(
