@@ -4,7 +4,6 @@ import { Cache } from 'cache-manager';
 
 import { IPayload } from '../../commons/interfaces/Payload.interface';
 import { CurrentUser } from '../../commons/auth/gql-user.param';
-import { ResultMessage } from '../../commons/message/ResultMessage.dto';
 import {
     GqlJwtAccessGuard,
     GqlJwtRefreshGuard,
@@ -13,6 +12,7 @@ import {
 import { LoginInput } from './dto/login.input';
 
 import { AuthService } from './auth.service';
+import { MESSAGES } from 'src/commons/message/Message.enum';
 
 /* Auth API */
 @Resolver()
@@ -57,6 +57,11 @@ export class AuthResolver {
     ///////////////////////////////////////////////////////////////////
     // 수정 //
 
+    /**
+     * 소셜 로그인
+     * @param currentUser
+     * @response Message, Set-Cookie: Refresh Token
+     */
     @Mutation(
         () => String, //
         { description: 'OAuth 로그인' },
@@ -64,8 +69,9 @@ export class AuthResolver {
     @UseGuards(GqlJwtAccessGuard)
     async LoginOAuth(
         @CurrentUser() currentUser: IPayload, //
-    ) {
-        return await this.authService.OAuthLogin(currentUser.id);
+    ): Promise<string> {
+        const result = await this.authService.OAuthLogin(currentUser.id);
+        return result ? '소셜 로그인 완료' : '소셜 로그인 실패';
     }
 
     /**
@@ -88,17 +94,17 @@ export class AuthResolver {
     /**
      * POST /api/logout
      * - Bearer JWT
-     * @response ResultMessage
+     * @response Message
      */
     @UseGuards(GqlJwtAccessGuard)
     @Mutation(
-        () => ResultMessage, //
+        () => String, //
         { description: '로그아웃, Bearer JWT' },
     )
     async Logout(
         @Context() context: any,
         @CurrentUser() currentUser: IPayload, //
-    ): Promise<ResultMessage> {
+    ): Promise<string> {
         // 로그아웃
         const result = this.authService.Logout(context, currentUser.id);
 
@@ -114,7 +120,9 @@ export class AuthResolver {
             { ttl: currentUser.refresh_exp },
         );
 
-        return result;
+        return result
+            ? MESSAGES.USER_LOGOUT_SUCCESSED
+            : MESSAGES.USER_LOGOUT_FAILED;
     }
 
     ///////////////////////////////////////////////////////////////////

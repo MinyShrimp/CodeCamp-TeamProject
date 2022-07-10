@@ -52,7 +52,7 @@ export class PhoneService {
                 phone: phoneNumber,
                 token: result.token,
             });
-            return process.env.MODE === 'LOCAL' ? result.token : '';
+            return process.env.MODE === 'LOCAL' ? result.token : 'send ok';
         } else {
             throw new ConflictException(MESSAGES.UNVLIAD_ACCESS);
         }
