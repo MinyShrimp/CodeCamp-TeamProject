@@ -4,7 +4,6 @@ import { randomUUID } from 'crypto';
 
 import { IUser } from '../../commons/interfaces/User.interface';
 import { MESSAGES } from '../../commons/message/Message.enum';
-import { ResultMessage } from '../../commons/message/ResultMessage.dto';
 
 import { PhoneService } from '../phone/phone.service';
 import { EmailService } from '../email/email.service';
@@ -143,6 +142,7 @@ export class UserService {
 
         const newUser = this.userRepository.create({
             ...userInfo,
+            nickName: userInfo.name,
             phone: null,
             pwd: this.createPassword(randomUUID()),
         });
@@ -178,7 +178,7 @@ export class UserService {
     async updatePwd(
         userID: string, //
         pwd: string,
-    ): Promise<ResultMessage> {
+    ): Promise<boolean> {
         // 존재 여부 확인
         await this.checkValid(userID);
 
@@ -188,16 +188,9 @@ export class UserService {
             userID,
             this.createPassword(pwd),
         );
-        const isSuccess = result.affected ? true : false;
 
         // 메세지 반환
-        return new ResultMessage({
-            id: userID,
-            isSuccess,
-            contents: isSuccess
-                ? MESSAGES.USER_UPDATE_PWD_SUCCESSED
-                : MESSAGES.USER_UPDATE_PWD_FAILED,
-        });
+        return result.affected ? true : false;
     }
 
     /**
@@ -206,7 +199,7 @@ export class UserService {
     async updateLoginUser(
         userID: string,
         updateInput: UpdateUserInput,
-    ): Promise<ResultMessage> {
+    ): Promise<boolean> {
         // 존재 여부 확인
         await this.checkValid(userID);
 
@@ -215,15 +208,7 @@ export class UserService {
             userID,
             updateInput,
         );
-        const isSuccess = result.affected ? true : false;
-
-        return new ResultMessage({
-            id: userID,
-            isSuccess,
-            contents: isSuccess
-                ? MESSAGES.USER_UPDATE_INFO_SUCCESSED
-                : MESSAGES.USER_UPDATE_INFO_FAILED,
-        });
+        return result.affected ? true : false;
     }
 
     /**
@@ -231,17 +216,9 @@ export class UserService {
      */
     async restore(
         userID: string, //
-    ): Promise<ResultMessage> {
+    ): Promise<boolean> {
         const result = await this.userRepository.restore(userID);
-        const isSuccess = result.affected ? true : false;
-
-        return new ResultMessage({
-            id: userID,
-            isSuccess,
-            contents: isSuccess
-                ? MESSAGES.USER_RESTORE_SUCCESSED
-                : MESSAGES.USER_RESTORE_FAILED,
-        });
+        return result.affected ? true : false;
     }
 
     ///////////////////////////////////////////////////////////////////
@@ -254,15 +231,8 @@ export class UserService {
      */
     async softDelete(
         userID: string, //
-    ): Promise<ResultMessage> {
+    ): Promise<boolean> {
         const result = await this.userRepository.softDelete(userID);
-
-        return new ResultMessage({
-            id: userID,
-            isSuccess: result.affected ? true : false,
-            contents: result.affected
-                ? MESSAGES.USER_SOFT_DELETE_SUCCESSED
-                : MESSAGES.USER_SOFT_DELETE_FAILED,
-        });
+        return result.affected ? true : false;
     }
 }

@@ -13,6 +13,7 @@ import { LoginInput } from './dto/login.input';
 
 import { AuthService } from './auth.service';
 import { MESSAGES } from 'src/commons/message/Message.enum';
+import { ResultMessage } from 'src/commons/message/ResultMessage.dto';
 
 /* Auth API */
 @Resolver()
@@ -63,15 +64,20 @@ export class AuthResolver {
      * @response Message, Set-Cookie: Refresh Token
      */
     @Mutation(
-        () => String, //
+        () => ResultMessage, //
         { description: 'OAuth 로그인' },
     )
     @UseGuards(GqlJwtAccessGuard)
     async LoginOAuth(
         @CurrentUser() currentUser: IPayload, //
-    ): Promise<string> {
+    ): Promise<ResultMessage> {
         const result = await this.authService.OAuthLogin(currentUser.id);
-        return result ? '소셜 로그인 완료' : '소셜 로그인 실패';
+        return new ResultMessage({
+            isSuccess: result,
+            contents: result
+                ? MESSAGES.USER_OAUTH_LOGIN_SUCCESS
+                : MESSAGES.USER_OAUTH_LOGIN_FAILED,
+        });
     }
 
     /**
@@ -98,15 +104,15 @@ export class AuthResolver {
      */
     @UseGuards(GqlJwtAccessGuard)
     @Mutation(
-        () => String, //
+        () => ResultMessage, //
         { description: '로그아웃, Bearer JWT' },
     )
     async Logout(
         @Context() context: any,
         @CurrentUser() currentUser: IPayload, //
-    ): Promise<string> {
+    ): Promise<ResultMessage> {
         // 로그아웃
-        const result = this.authService.Logout(context, currentUser.id);
+        const result = await this.authService.Logout(context, currentUser.id);
 
         // Redis 저장
         await this.cacheManage.set(
@@ -120,9 +126,12 @@ export class AuthResolver {
             { ttl: currentUser.refresh_exp },
         );
 
-        return result
-            ? MESSAGES.USER_LOGOUT_SUCCESSED
-            : MESSAGES.USER_LOGOUT_FAILED;
+        return new ResultMessage({
+            isSuccess: result,
+            contents: result
+                ? MESSAGES.USER_LOGOUT_SUCCESSED
+                : MESSAGES.USER_LOGOUT_FAILED,
+        });
     }
 
     ///////////////////////////////////////////////////////////////////

@@ -8,14 +8,12 @@ export class ResultMessage {
     /**
      * Message {
      *   id?: string;
-     *   status?: number;
      *   contents: string;
      *   isSuccess: boolean;
      * }
      */
     constructor(msg: Message) {
         this.id = msg.id ?? null;
-        this.status = msg.status ?? 200;
         this.msg = msg.contents;
         this.isSuccess = msg.isSuccess;
     }
@@ -25,12 +23,6 @@ export class ResultMessage {
         { nullable: true, description: '대상 ID' },
     )
     id?: string;
-
-    @Field(
-        () => Int, //
-        { description: '상태 코드' },
-    )
-    status: number;
 
     @Field(
         () => String, //

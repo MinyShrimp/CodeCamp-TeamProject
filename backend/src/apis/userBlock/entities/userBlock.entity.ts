@@ -20,7 +20,7 @@ export class UserBlockEntity {
     id: string;
 
     @CreateDateColumn()
-    @Field(() => Date)
+    @Field(() => Date, { description: '등록한 시간' })
     createAt: Date;
 
     @ManyToOne(
@@ -29,13 +29,11 @@ export class UserBlockEntity {
     )
     from: UserEntity;
 
-    @OneToOne(
+    @ManyToOne(
         () => UserEntity, //
         { onDelete: 'SET NULL' },
     )
     @JoinColumn()
+    @Field(() => UserEntity, { description: '대상 회원' })
     to: UserEntity;
-
-    @Column({ name: 'toId', nullable: true })
-    toID: string;
 }

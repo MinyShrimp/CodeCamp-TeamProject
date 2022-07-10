@@ -8,7 +8,7 @@ export function LoginIndex() {
     useEffect(() => {
         (async () => {
             const { status } = await sendGraphQLWithAuth({
-                query: `mutation { LoginOAuth }`,
+                query: `mutation { LoginOAuth { isSuccess, msg } }`,
             });
 
             if (status) {

@@ -193,9 +193,6 @@ export class AuthService {
         // 존재 여부 검사
         this.userCheckService.checkValidUser(user);
 
-        // 로그아웃 여부 검사
-        this.userCheckService.checkLogout(user);
-
         // 로그아웃 시도
         const result = await this.userRepository.logout(userID);
         context.res.setHeader('Set-Cookie', `refreshToken=; path=/;`);

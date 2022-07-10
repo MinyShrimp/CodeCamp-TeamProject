@@ -77,9 +77,44 @@ export class UserRepository {
     async findOneByID(
         userID: string, //
     ): Promise<UserEntity> {
-        return await this.userRepository.findOne({
-            where: { id: userID },
-        });
+        return await this.userRepository
+            .createQueryBuilder('user')
+            .select([
+                'user.id',
+                'user.name',
+                'user.nickName',
+                'user.email',
+                'user.phone',
+                'user.point',
+                'uc.id',
+                'ap.isAuth',
+                'ap.updateAt',
+                'ae.isAuth',
+                'ae.updateAt',
+                'ul.createAt',
+                'ult.nickName',
+                'ult.email',
+                'ub.createAt',
+                'ubt.nickName',
+                'ubt.email',
+                'board.id',
+                'board.title',
+                'board.likeCount',
+                'board.dislikeCount',
+                'board.viewCount',
+                'board.createAt',
+                'board.updateAt',
+            ])
+            .where('user.id=:id', { id: userID })
+            .leftJoin('user.userClass', 'uc')
+            .leftJoin('user.authPhone', 'ap')
+            .leftJoin('user.authEmail', 'ae')
+            .leftJoin('user.userLikes', 'ul')
+            .leftJoin('user.userBlocks', 'ub')
+            .leftJoin('ul.to', 'ult')
+            .leftJoin('ub.to', 'ubt')
+            .leftJoin('user.boards', 'board')
+            .getOne();
     }
 
     /**

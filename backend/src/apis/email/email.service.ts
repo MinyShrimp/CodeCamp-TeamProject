@@ -1,8 +1,10 @@
 import { ConflictException, Injectable } from '@nestjs/common';
+
 import { MESSAGES } from 'src/commons/message/Message.enum';
-import { ResultMessage } from 'src/commons/message/ResultMessage.dto';
 import { EmailUtil } from 'src/commons/utils/email.util';
+
 import { UserEntity } from '../user/entities/user.entity';
+
 import { EmailDto } from './dto/email.dto';
 import { EmailEntity } from './entities/email.entity';
 import { EmailRepository } from './entities/email.repository';

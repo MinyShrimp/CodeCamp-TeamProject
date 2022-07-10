@@ -1,17 +1,19 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
-import { IPayload } from '../../commons/interfaces/Payload.interface';
-import { CurrentUser } from '../../commons/auth/gql-user.param';
-import { ResultMessage } from '../../commons/message/ResultMessage.dto';
-import { GqlJwtAccessGuard } from '../../commons/auth/gql-auth.guard';
+import { IPayload } from 'src/commons/interfaces/Payload.interface';
+import { MESSAGES } from 'src/commons/message/Message.enum';
+import { ResultMessage } from 'src/commons/message/ResultMessage.dto';
+import { CurrentUser } from 'src/commons/auth/gql-user.param';
+import { GqlJwtAccessGuard } from 'src/commons/auth/gql-auth.guard';
 
-import { UpdateUserInput } from './dto/updateUser.input';
-
-import { UserEntity } from './entities/user.entity';
-import { UserService } from './user.service';
+import { UserOutput } from './dto/user.output';
 import { CreateUserInput } from './dto/createUser.input';
+import { UpdateUserInput } from './dto/updateUser.input';
 import { UserRepository } from './entities/user.repository';
+
+import { UserService } from './user.service';
+import { CreateUserOutput } from './dto/createUser.output';
 
 /* 유저 API */
 @Resolver()
@@ -30,16 +32,15 @@ export class UserResolver {
     /**
      * GET /api/user
      * - Bearer JWT
-     * @response 회원 단일 조회
      */
     @UseGuards(GqlJwtAccessGuard)
     @Query(
-        () => UserEntity, //
+        () => UserOutput, //
         { description: '회원 단일 조회, Bearer JWT', nullable: true },
     )
     fetchLoginUser(
         @CurrentUser() currentUser: IPayload, //
-    ): Promise<UserEntity> {
+    ): Promise<UserOutput> {
         return this.userRepository.findOneByID(currentUser.id);
     }
 
@@ -48,16 +49,14 @@ export class UserResolver {
 
     /**
      * POST /api/signup
-     * @param input
-     * @response 생성된 회원 정보
      */
     @Mutation(
-        () => UserEntity, //
+        () => CreateUserOutput, //
         { description: '회원가입' },
     )
-    async createUser(
+    createUser(
         @Args('createUserInput') input: CreateUserInput, //
-    ): Promise<UserEntity> {
+    ): Promise<CreateUserOutput> {
         return this.userService.createUser(input);
     }
 
@@ -66,8 +65,6 @@ export class UserResolver {
 
     /**
      * PATCH /api/user/pwd
-     * @param pwd
-     * @response ResultMessage
      */
     @UseGuards(GqlJwtAccessGuard)
     @Mutation(
@@ -79,14 +76,18 @@ export class UserResolver {
         @Args('pwd') pwd: string,
     ): Promise<ResultMessage> {
         // 비밀번호 변경 + 로그아웃
-        return this.userService.updatePwd(currentUser.id, pwd);
+        const result = await this.userService.updatePwd(currentUser.id, pwd);
+        return new ResultMessage({
+            isSuccess: result,
+            contents: result
+                ? MESSAGES.USER_UPDATE_PWD_SUCCESSED
+                : MESSAGES.USER_UPDATE_PWD_FAILED,
+        });
     }
 
     /**
      * PATCH /api/user
      * - Bearer JWT
-     * @param currentUser
-     * @response 수정된 회원 정보
      */
     @UseGuards(GqlJwtAccessGuard)
     @Mutation(
@@ -97,7 +98,16 @@ export class UserResolver {
         @CurrentUser() currentUser: IPayload,
         @Args('updateInput') updateInput: UpdateUserInput,
     ): Promise<ResultMessage> {
-        return this.userService.updateLoginUser(currentUser.id, updateInput);
+        const result = await this.userService.updateLoginUser(
+            currentUser.id,
+            updateInput,
+        );
+        return new ResultMessage({
+            isSuccess: result,
+            contents: result
+                ? MESSAGES.USER_UPDATE_INFO_SUCCESSED
+                : MESSAGES.USER_UPDATE_INFO_FAILED,
+        });
     }
 
     ///////////////////////////////////////////////////////////////////
@@ -106,16 +116,21 @@ export class UserResolver {
     /**
      * DELETE /api/user
      * - Bearer JWT
-     * @response ResultMessage
      */
     @UseGuards(GqlJwtAccessGuard)
     @Mutation(
         () => ResultMessage, //
         { description: '회원 탈퇴 ( Soft ), Bearer JWT' },
     )
-    deleteLoginUser(
+    async deleteLoginUser(
         @CurrentUser() currentUser: IPayload, //
     ): Promise<ResultMessage> {
-        return this.userService.softDelete(currentUser.id);
+        const result = await this.userService.softDelete(currentUser.id);
+        return new ResultMessage({
+            isSuccess: result,
+            contents: result
+                ? MESSAGES.USER_SOFT_DELETE_SUCCESSED
+                : MESSAGES.USER_SOFT_DELETE_FAILED,
+        });
     }
 }

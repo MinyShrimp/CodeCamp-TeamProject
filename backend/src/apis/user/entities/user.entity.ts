@@ -1,10 +1,5 @@
-/**
- * 유저 Entity
- */
-
 import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
 import { IsEmail } from 'class-validator';
-
 import {
     Entity,
     Column,
@@ -92,6 +87,7 @@ export class UserEntity {
         { cascade: true, onDelete: 'SET NULL' },
     )
     @JoinColumn()
+    @Field(() => UserClassEntity)
     userClass: UserClassEntity;
 
     @Column({ name: 'userClassId', unique: true, nullable: true })
@@ -132,5 +128,5 @@ export class UserEntity {
     // 게시판
     @OneToMany(() => BoardEntity, (board) => board.user)
     @Field(() => [BoardEntity])
-    board: BoardEntity[];
+    boards: BoardEntity[];
 }

@@ -7,11 +7,15 @@ export const MESSAGES = {
     // 회원 //
     USER_OVERLAP_PHONE: '이미 인증이 완료된 번호입니다.',
     USER_UNVALID_PHONE: '존재하지 않는 번호입니다.',
+    USER_UNVALID_TOKEN: '토큰이 정확하지 않습니다.',
 
     USER_OVERLAP_EMAIL: '중복된 이메일입니다.',
     USER_UNVALID_EMAIL: '존재하지 않는 이메일입니다.',
     USER_ALREADY_EMAIL: '이미 인증이 완료된 이메일입니다.',
     USER_SUCCESS_EMAIL: '인증이 완료되었습니다.',
+
+    USER_OAUTH_LOGIN_SUCCESS: '소셜 로그인 완료',
+    USER_OAUTH_LOGIN_FAILED: '소셜 로그인 실패',
 
     ///////////////////////////////////////////////////////////////////
     // 회원 //
