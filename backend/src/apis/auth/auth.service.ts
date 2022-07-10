@@ -134,9 +134,12 @@ export class AuthService {
     ///////////////////////////////////////////////////////////////////
     // 인증 //
 
+    /**
+     * 소셜 로그인
+     */
     async OAuthLogin(
         userID: string, //
-    ) {
+    ): Promise<boolean> {
         const result = await this.userRepository.login(userID);
         return result.affected ? true : false;
     }
@@ -183,30 +186,19 @@ export class AuthService {
     async Logout(
         context: any,
         userID: string, //
-    ): Promise<ResultMessage> {
+    ): Promise<boolean> {
         // 검색
         const user = await this.userRepository.findOneByID(userID);
 
         // 존재 여부 검사
         this.userCheckService.checkValidUser(user);
 
-        // 로그아웃 여부 검사
-        this.userCheckService.checkLogout(user);
-
         // 로그아웃 시도
         const result = await this.userRepository.logout(userID);
-        const isSuccess = result.affected ? true : false;
-
         context.res.setHeader('Set-Cookie', `refreshToken=; path=/;`);
 
         // 메세지 반환
-        return new ResultMessage({
-            id: userID,
-            isSuccess,
-            contents: isSuccess
-                ? MESSAGES.USER_LOGOUT_SUCCESSED
-                : MESSAGES.USER_LOGOUT_FAILED,
-        });
+        return result.affected ? true : false;
     }
 
     ///////////////////////////////////////////////////////////////////

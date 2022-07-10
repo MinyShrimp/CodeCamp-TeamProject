@@ -6,7 +6,9 @@ import { UpdateNovelLikeAdminInput } from './dto/updateNovelLike.admin.input';
 
 import { NovelLikeEntity } from './entities/novelLike.entity';
 import { NovelLikeAdminRepository } from './entities/novelLike.admin.repository';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('관리자/회원/선호작')
 @Controller('admin/novel-like')
 export class NovelLikeAdminController {
     constructor(

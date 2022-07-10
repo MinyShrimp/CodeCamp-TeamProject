@@ -1,8 +1,10 @@
 import { Body, Controller, Delete, Get, Param } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
 import { EmailEntity } from './entities/email.entity';
 import { EmailAdminRepository } from './entities/email.admin.repository';
 
+@ApiTags('관리자/회원/이메일 인증')
 @Controller('admin/email')
 export class EmailAdminController {
     constructor(

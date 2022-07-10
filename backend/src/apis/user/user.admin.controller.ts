@@ -1,8 +1,12 @@
 import { Body, Controller, Delete, Get, Param, Patch } from '@nestjs/common';
-import { UpdateUserAdminInput } from './dto/updateUser.admin.input';
-import { UserAdminRepository } from './entities/user.admin.repository';
-import { UserEntity } from './entities/user.entity';
+import { ApiTags } from '@nestjs/swagger';
 
+import { UpdateUserAdminInput } from './dto/updateUser.admin.input';
+
+import { UserEntity } from './entities/user.entity';
+import { UserAdminRepository } from './entities/user.admin.repository';
+
+@ApiTags('관리자/회원')
 @Controller('admin/user')
 export class UserAdminController {
     constructor(

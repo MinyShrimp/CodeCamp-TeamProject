@@ -1,5 +1,6 @@
 // prettier-ignore
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
 import { CreateReportEnumAdminInput } from './dto/createReportEnum.admin.input';
 import { UpdateReportEnumAdminInput } from './dto/updateReportEnum.admin.input';
@@ -7,6 +8,7 @@ import { UpdateReportEnumAdminInput } from './dto/updateReportEnum.admin.input';
 import { ReportEnumEntity } from './entities/reportEnum.entity';
 import { ReportEnumAdminRepository } from './entities/reportEnum.admin.repository';
 
+@ApiTags('관리자/신고/Enum')
 @Controller('admin/report-enum')
 export class ReportEnumAdminController {
     constructor(

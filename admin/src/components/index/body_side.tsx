@@ -370,23 +370,21 @@ export function IndexBodySide() {
 
                         <NavCollapse
                             id="page-collapse"
-                            title="Redis"
-                            items={<></>}
-                        ></NavCollapse>
-
-                        <NavCollapse
-                            id="page-collapse"
-                            title="Pages"
+                            title="외부 링크"
                             items={
                                 <>
-                                    <Nav.Link as={Link} to="/admin/401">
-                                        401 Page
+                                    <Nav.Link
+                                        href={`${process.env.BE_URL}/api-docs`}
+                                        target="_blank"
+                                    >
+                                        Swagger
                                     </Nav.Link>
-                                    <Nav.Link as={Link} to="/admin/404">
-                                        404 Page
-                                    </Nav.Link>
-                                    <Nav.Link as={Link} to="/admin/500">
-                                        500 Page
+
+                                    <Nav.Link
+                                        href={`${process.env.BE_URL}/graphql`}
+                                        target="_blank"
+                                    >
+                                        GraphQL
                                     </Nav.Link>
                                 </>
                             }

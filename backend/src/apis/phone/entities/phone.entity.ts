@@ -34,6 +34,7 @@ export class PhoneEntity extends BaseEntity {
     createAt: Date;
 
     @UpdateDateColumn()
+    @Field(() => Date, { description: '인증 완료 시간' })
     updateAt: Date;
 
     @OneToOne(

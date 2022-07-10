@@ -1,6 +1,8 @@
 import { Controller, Get, Query } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { EmailService } from './email.service';
 
+@ApiTags('인증')
 @Controller('auth')
 export class EmailController {
     constructor(

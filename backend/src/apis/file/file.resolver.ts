@@ -10,10 +10,8 @@ import { FileService } from './file.service';
 
 /* FileUpload API */
 @Resolver()
-@UseGuards(GqlJwtAccessGuard)
+// @UseGuards(GqlJwtAccessGuard)
 export class FileResolver {
-    private static readonly NAME = 'File';
-
     constructor(
         private readonly fileService: FileService, //
     ) {}
@@ -30,9 +28,9 @@ export class FileResolver {
      */
     @Mutation(
         () => [FileEntity], //
-        { description: `${FileResolver.NAME}` },
+        { description: `파일 업로드` },
     )
-    async uploadFile(
+    uploadFile(
         @Args({ name: 'FILE_TYPE', type: () => FILE_TYPE }) type: FILE_TYPE,
         @Args({ name: 'files', type: () => [GraphQLUpload] })
         files: FileUpload[],
@@ -47,9 +45,9 @@ export class FileResolver {
      */
     @Mutation(
         () => [FileEntity], //
-        { description: `${FileResolver.NAME}` },
+        { description: `파일 업로드 ( 썸네일 제작 )` },
     )
-    async uploadFileWithThumb(
+    uploadFileWithThumb(
         @Args({ name: 'FILE_TYPE', type: () => FILE_TYPE }) type: FILE_TYPE,
         @Args({ name: 'files', type: () => [GraphQLUpload] })
         files: FileUpload[],
@@ -71,7 +69,7 @@ export class FileResolver {
      */
     @Mutation(
         () => [Boolean], //
-        { description: `${FileResolver.NAME} 삭제 ( Real )` },
+        { description: `파일 삭제` },
     )
     deleteFileUpload(
         @Args({ name: 'fileIDs', type: () => [String] }) fileIDs: string[], //

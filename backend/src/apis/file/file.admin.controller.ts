@@ -1,9 +1,11 @@
 import { Body, Controller, Delete, Get, Param } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
 import { FileEntity } from './entities/file.entity';
 import { FileAdminRepository } from './entities/file.admin.repository';
 import { FileAdminService } from './file.admin.service';
 
+@ApiTags('관리자/파일')
 @Controller('admin/file')
 export class FileAdminController {
     constructor(

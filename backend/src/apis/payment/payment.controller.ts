@@ -2,7 +2,9 @@ import { Body, Controller, Post } from '@nestjs/common';
 
 import { IWebhook } from './interface/payment';
 import { IMPService } from './imp.service';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('결제')
 @Controller('api/payment')
 export class PaymentController {
     constructor(
