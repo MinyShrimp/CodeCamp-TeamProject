@@ -14,8 +14,8 @@ import { UpdateBoardInput } from './dto/updateBoard.input';
 @Injectable()
 export class BoardService {
     constructor(
-        private readonly boardRepository: BoardRepository, //
         private readonly userRepository: UserRepository,
+        private readonly boardRepository: BoardRepository, //
         private readonly userCheckService: UserCheckService,
     ) {}
 
