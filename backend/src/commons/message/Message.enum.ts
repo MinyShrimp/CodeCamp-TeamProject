@@ -87,6 +87,12 @@ export const MESSAGES = {
     BOARD_FIND_ONE_FAILED: '게시글 정보를 찾을 수 없습니다.',
     BOARD_SOFT_DELETE_SUCCESSED: 'Completed Board Soft Delete',
     BOARD_SOFT_DELETE_FAILED: 'Failed Board Soft Delete',
+
+    ///////////////////////////////////////////////////////////////////
+    // 댓글 //
+    COMMENT_UPDATE_FAILED: 'Failed Comment Update',
+    COMMENT_SOFT_DELETE_SUCCESSED: 'Completed Comment Soft Delete',
+    COMMENT_SOFT_DELETE_FAILED: 'Failed Comment Soft Delete',
 } as const;
 
 export type MESSAGES = typeof MESSAGES[keyof typeof MESSAGES];
