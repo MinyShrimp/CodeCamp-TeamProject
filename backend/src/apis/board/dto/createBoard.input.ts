@@ -1,4 +1,4 @@
-import { InputType, PickType } from '@nestjs/graphql';
+import { Field, InputType, PickType } from '@nestjs/graphql';
 import { BoardEntity } from '../entities/board.entity';
 
 @InputType()
