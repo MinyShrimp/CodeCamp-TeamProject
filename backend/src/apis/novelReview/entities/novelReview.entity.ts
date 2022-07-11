@@ -1,7 +1,7 @@
 import { Field, Float, ID, Int, ObjectType } from '@nestjs/graphql';
 import { Max, Min } from 'class-validator';
-import { NovelEntity } from 'src/apis/novel/entities/novel.entity';
 import { UserEntity } from 'src/apis/user/entities/user.entity';
+import { NovelEntity } from 'src/apis/novel/entities/novel.entity';
 import {
     Entity,
     Column,

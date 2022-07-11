@@ -1,12 +1,14 @@
-import { ConflictException, Injectable, Query } from '@nestjs/common';
-import { IPayload } from 'src/commons/interfaces/Payload.interface';
+import { ConflictException, Injectable } from '@nestjs/common';
+
 import { MESSAGES } from 'src/commons/message/Message.enum';
-import { NovelRepository } from '../novel/entities/novel.repository';
+import { IPayload } from 'src/commons/interfaces/Payload.interface';
 import { UserRepository } from '../user/entities/user.repository';
-import { CreateNovelReviewInput } from './dto/createNovelReview.input';
-import { UpdateNovelReviewInput } from './dto/updateNovelReview.input';
+import { NovelRepository } from '../novel/entities/novel.repository';
+
 import { NovelReviewEntity } from './entities/novelReview.entity';
 import { NovelReviewRepository } from './entities/novelReview.repository';
+import { CreateNovelReviewInput } from './dto/createNovelReview.input';
+import { UpdateNovelReviewInput } from './dto/updateNovelReview.input';
 
 @Injectable()
 export class NovelReviewService {

@@ -1,4 +1,5 @@
-import { extend, InputType, PickType } from '@nestjs/graphql';
+import { InputType, PickType } from '@nestjs/graphql';
+
 import { NovelReviewEntity } from '../entities/novelReview.entity';
 
 @InputType()
