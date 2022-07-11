@@ -36,6 +36,7 @@ export class BoardService {
 
     ///////////////////////////////////////////////////////////////////
     // 생성
+
     async createBoard(
         userID: string,
         input: CreateBoardInput, //
@@ -45,7 +46,10 @@ export class BoardService {
         this.userCheckService.checkValidUser(user);
 
         // 게시글 생성
-        return await this.boardRepository.save(input);
+        return await this.boardRepository.save({
+            user,
+            ...input,
+        });
     }
 
     ///////////////////////////////////////////////////////////////////

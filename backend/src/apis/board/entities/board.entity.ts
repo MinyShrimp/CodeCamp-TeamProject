@@ -66,7 +66,7 @@ export class BoardEntity {
     )
     @JoinColumn({ name: 'userId' })
     @Field(() => UserEntity)
-    user: string;
+    user: UserEntity;
 
     @OneToMany(
         () => CommentEntity, //
