@@ -81,6 +81,9 @@ export const MESSAGES = {
     NOVEL_SOFT_DELETE_FAILED: '소설 삭제 실패',
 
     ///////////////////////////////////////////////////////////////////
+    // 소설 리뷰 //
+
+    ///////////////////////////////////////////////////////////////////
     // 댓글 //
     COMMENT_UPDATE_FAILED: 'Failed Comment Update',
     COMMENT_SOFT_DELETE_SUCCESSED: 'Completed Comment Soft Delete',
