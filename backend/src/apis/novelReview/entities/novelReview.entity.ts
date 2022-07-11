@@ -14,7 +14,7 @@ import {
 } from 'typeorm';
 
 /* NovelReview Entity */
-@Entity({ name: 'nove_review' })
+@Entity({ name: 'novel_review' })
 @ObjectType({ description: '소설 리뷰 Entity' })
 export class NovelReviewEntity {
     @PrimaryGeneratedColumn('uuid')
@@ -26,12 +26,12 @@ export class NovelReviewEntity {
     contents: string;
 
     @Min(0)
-    @Column()
+    @Column({ default: 0, unsigned: true })
     @Field(() => Int, { description: '좋아요 갯수' })
     likeCount: number;
 
     @Min(0)
-    @Column()
+    @Column({ default: 0, unsigned: true })
     @Field(() => Int, { description: '싫어요 갯수' })
     dislikeCount: number;
 
