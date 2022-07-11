@@ -2,6 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { EntityTable } from './entity_table';
+import { getAxios } from './getAxios';
 import { IColumn } from './interface';
 import { IEntityConfig } from './types';
 
@@ -26,14 +27,7 @@ export function EntityListIndex(props: {
         setDatas([]);
         props.setDeleteRows([]);
 
-        const _axios = axios.create({
-            withCredentials: true,
-            headers: {
-                'Content-Type': 'application/json; charset=UTF-8',
-            },
-        });
-
-        _axios
+        getAxios()
             .get(`${process.env.BE_URL}${props.beURL}/all`)
             .then((res: AxiosResponse) => {
                 setDatas(res.data);
@@ -48,7 +42,7 @@ export function EntityListIndex(props: {
     const _delete = async () => {
         setPending(true);
 
-        axios
+        getAxios()
             .delete(`${process.env.BE_URL}${props.beURL}/bulk`, {
                 data: props.deleteRows,
             })

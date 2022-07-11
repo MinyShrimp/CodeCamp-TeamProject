@@ -1,4 +1,4 @@
-import { Args, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { PhoneInput } from './dto/phone.input';
 import { PhoneService } from './phone.service';
 
@@ -11,7 +11,7 @@ export class PhoneResolver {
     ///////////////////////////////////////////////////////////////////
     // Util //
 
-    @Query(
+    @Mutation(
         () => String, //
         { description: '핸드폰 인증' },
     )
@@ -21,7 +21,7 @@ export class PhoneResolver {
         return this.phoneService.SendPhone(phone);
     }
 
-    @Query(
+    @Mutation(
         () => String, //
         { description: '핸드폰 인증 확인' },
     )

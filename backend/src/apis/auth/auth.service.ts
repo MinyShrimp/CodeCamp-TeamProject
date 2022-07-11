@@ -53,11 +53,10 @@ export class AuthService {
             email: user.email,
         };
 
-        // TODO:
         // 권한 처리
-        // if (user.isAdmin) {
-        //     payload['isAdmin'] = true;
-        // }
+        if (user.userClass.id === 'ADMIN') {
+            payload['isAdmin'] = true;
+        }
 
         return payload;
     }
@@ -109,6 +108,7 @@ export class AuthService {
             res.setHeader(
                 'Set-Cookie',
                 `refreshToken=${refreshToken}; path=/; domain=.jp.ngrok.io; SameSite=None; Secure; httpOnly;`,
+                // `refreshToken=${refreshToken}; path=/; `,
             );
         }
 
@@ -125,7 +125,7 @@ export class AuthService {
      */
     async restoreToken(
         userID: string, //
-    ) {
+    ): Promise<string> {
         const user = await this.userRepository.findOneByID(userID);
         return this.getAccessToken(user);
     }
