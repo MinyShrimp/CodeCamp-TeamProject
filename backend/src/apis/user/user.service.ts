@@ -162,6 +162,7 @@ export class UserService {
 
         newUser.authPhone = authPhone;
         newUser.authEmail = authEmail;
+        newUser.userClass = await this.userClassRepository.getClass();
 
         // 회원가입
         const result = await this.userRepository.save(newUser);

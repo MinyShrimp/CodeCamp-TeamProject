@@ -74,6 +74,9 @@ export class NovelIndexService {
     ): Promise<NovelIndexEntity> {
         const { novelID, ...input } = createInput;
 
+        // 검사
+        await this.novelService.checkValidWithUser(userID, novelID);
+
         // 회원 찾기
         const user = await this.userService.checkValid(userID);
 

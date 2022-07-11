@@ -11,6 +11,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { getLastPath } from '../../functions/functions';
 import { IEntityConfig } from './types';
+import { getAxios } from './getAxios';
 
 export function EntityShowIndex(props: {
     beURL: string;
@@ -35,7 +36,7 @@ export function EntityShowIndex(props: {
         setPending(true);
 
         setData(undefined);
-        axios
+        getAxios()
             .get(`${process.env.BE_URL}${props.beURL}/${entityID}`)
             .then((res: AxiosResponse) => {
                 if (res.data === '') {
@@ -51,7 +52,7 @@ export function EntityShowIndex(props: {
     }, []);
 
     const _delete = useCallback(async () => {
-        axios
+        getAxios()
             .delete(`${process.env.BE_URL}${props.beURL}/bulk`, {
                 data: props.deleteRows,
             })

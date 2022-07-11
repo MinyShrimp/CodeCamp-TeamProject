@@ -127,6 +127,7 @@ export class UserRepository {
     ): Promise<UserEntity> {
         return await this.userRepository.findOne({
             where: { email: email },
+            relations: ['userClass'],
         });
     }
 

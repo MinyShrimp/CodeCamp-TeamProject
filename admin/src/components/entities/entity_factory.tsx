@@ -18,6 +18,7 @@ import { EntityIndexHeader } from './header';
 import { SimpleDummyBoard } from './board/interface';
 import { SimpleDummyNovel } from './novel/interface';
 import { SimpleDummyNovelIndex } from './novelIndex/interface';
+import { getAxios } from './getAxios';
 
 export class EntityFactory {
     private static createColumn<T>(
@@ -108,7 +109,7 @@ export class EntityFactory {
                     const [items, setItems] = useState([]);
 
                     useEffect(() => {
-                        axios
+                        getAxios()
                             .get(
                                 `${process.env.BE_URL}${
                                     (config.url as { [K in string]: string })[

@@ -112,7 +112,7 @@ export class NovelService {
         await this.checkValidWithUser(userID, updateNovelInput.id);
 
         // 소설 찾기
-        const novel = await this.novelRepository.getOne(updateNovelInput.id);
+        const novel = await this.novelRepository.getOnlyID(updateNovelInput.id);
 
         // 카테고리 찾기
         const category =
