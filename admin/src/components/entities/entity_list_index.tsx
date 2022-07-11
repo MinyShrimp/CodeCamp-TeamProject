@@ -25,7 +25,15 @@ export function EntityListIndex(props: {
 
         setDatas([]);
         props.setDeleteRows([]);
-        axios
+
+        const _axios = axios.create({
+            withCredentials: true,
+            headers: {
+                'Content-Type': 'application/json; charset=UTF-8',
+            },
+        });
+
+        _axios
             .get(`${process.env.BE_URL}${props.beURL}/all`)
             .then((res: AxiosResponse) => {
                 setDatas(res.data);

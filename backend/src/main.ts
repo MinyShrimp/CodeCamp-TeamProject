@@ -9,7 +9,10 @@ async function bootstrap() {
     const app = await NestFactory.create(AppModule);
     ///////////////////////////////////////////////////////////////////////////
     app.enableCors({
-        origin: '*', // FE가 배포하면 FE 주소를 여기에 넣어야함
+        origin: [
+            'http://localhost:8080',
+            'http://localhost:3000', //
+        ], // FE가 배포하면 FE 주소를 여기에 넣어야함
         credentials: true,
         exposedHeaders: ['Authorization', 'Set-Cookie', 'Cookie'],
     });

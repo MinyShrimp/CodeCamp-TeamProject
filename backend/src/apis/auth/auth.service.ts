@@ -108,7 +108,7 @@ export class AuthService {
             // 개발 환경
             res.setHeader(
                 'Set-Cookie',
-                `refreshToken=${refreshToken}; path=/;`,
+                `refreshToken=${refreshToken}; path=/; domain=.jp.ngrok.io; SameSite=None; Secure; httpOnly;`,
             );
         }
 
