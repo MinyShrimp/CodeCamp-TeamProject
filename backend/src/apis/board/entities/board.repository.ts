@@ -26,7 +26,9 @@ export class BoardRepository {
     /**
      * 유저 ID 기반 조회
      */
-    async findByIDFromBoards(userID: string): Promise<BoardEntity[]> {
+    async findByIDFromBoards(
+        userID: string, //
+    ): Promise<BoardEntity[]> {
         return await this.boardRepository.find({
             relations: ['user', 'comments'],
             where: { user: userID },
@@ -36,7 +38,9 @@ export class BoardRepository {
     /**
      * boardID 기반 조회
      */
-    async findOneByBoard(boardID: string): Promise<BoardEntity> {
+    async findOneByBoard(
+        boardID: string, //
+    ): Promise<BoardEntity> {
         return await this.boardRepository.findOne({
             relations: ['user', 'comments'],
             where: { id: boardID },
@@ -45,12 +49,6 @@ export class BoardRepository {
 
     ///////////////////////////////////////////////////////////////////
     // 생성 //
-
-    create(
-        entity: Partial<BoardEntity>, //
-    ): BoardEntity {
-        return this.boardRepository.create(entity);
-    }
 
     async save(
         entity: Partial<BoardEntity>, //
