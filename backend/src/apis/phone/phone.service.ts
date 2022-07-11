@@ -44,6 +44,10 @@ export class PhoneService {
     async SendPhone(
         phoneNumber: string, //
     ): Promise<string> {
+        if (phoneNumber === 'undefined') {
+            throw new ConflictException(MESSAGES.UNVLIAD_ACCESS);
+        }
+
         await this.isAlreadyAuthPhone(phoneNumber);
 
         const result = await PhoneUtil.sendSMS(phoneNumber);
@@ -66,6 +70,13 @@ export class PhoneService {
     async AuthPhoneOK(
         phoneInput: PhoneInput, //
     ): Promise<string> {
+        if (
+            phoneInput.phone === 'undefined' ||
+            phoneInput.token === 'undefined'
+        ) {
+            throw new ConflictException(MESSAGES.UNVLIAD_ACCESS);
+        }
+
         await this.isAlreadyAuthPhone(phoneInput.phone);
 
         const redisToken = await this.phoneRedis.getTokenByRedis(

@@ -86,7 +86,6 @@ export const MESSAGES = {
     COMMENT_SOFT_DELETE_SUCCESSED: 'Completed Comment Soft Delete',
     COMMENT_SOFT_DELETE_FAILED: 'Failed Comment Soft Delete',
 
-    ///////////////////////////////////////////////////////////////////
     // 소설 인덱스 //
     NOVEL_INDEX_UNVALID: '소설 인덱스 정보를 찾을 수 없습니다.',
 

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { UserClassRepository } from 'src/apis/userClass/entities/userClass.repository';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { UpdateUserAdminInput } from '../dto/updateUser.admin.input';
 import { UserEntity } from './user.entity';
@@ -9,6 +10,8 @@ export class UserAdminRepository {
     constructor(
         @InjectRepository(UserEntity)
         private readonly userRepository: Repository<UserEntity>,
+
+        private readonly userClassRepository: UserClassRepository,
     ) {}
 
     // prettier-ignore
@@ -49,8 +52,16 @@ export class UserAdminRepository {
     async update(
         input: UpdateUserAdminInput, //
     ): Promise<UpdateResult> {
-        const { originID, ...rest } = input;
-        return await this.userRepository.update({ id: originID }, rest);
+        const { originID, userClassID, ...rest } = input;
+        const userClass = await this.userClassRepository.getClass(userClassID);
+
+        return await this.userRepository.update(
+            { id: originID },
+            {
+                ...rest,
+                userClass,
+            },
+        );
     }
 
     async bulkDelete(

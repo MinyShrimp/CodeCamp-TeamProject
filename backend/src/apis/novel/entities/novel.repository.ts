@@ -30,13 +30,17 @@ export class NovelRepository {
                 'novel.createAt',
                 'novel.updateAt',
                 'user.id',
-                'user.email',
+                'user.nickName',
+                'class.id',
+                'category.id',
+                'category.name',
+                'tags.id',
+                'tags.name',
             ])
             .leftJoin('novel.user', 'user')
-            .leftJoinAndSelect('novel.novelCategory', 'category')
-            .leftJoinAndSelect('novel.novelTags', 'tags')
-            .leftJoinAndSelect('novel.novelIndexs', 'indexs')
-            .leftJoinAndSelect('novel.novelReviews', 'reviews')
+            .leftJoin('user.userClass', 'class')
+            .leftJoin('novel.novelCategory', 'category')
+            .leftJoin('novel.novelTags', 'tags')
             .where('novel.user is not NULL')
             .orderBy('novel.createAt', 'DESC')
             .getMany();

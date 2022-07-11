@@ -12,7 +12,7 @@ export class NovelTagResolver {
         () => [NovelTagEntity], //
         { description: '태그로 소설 찾기' },
     )
-    findNovelTagsAll(): Promise<Array<NovelTagEntity>> {
+    fetchNovelTagsAll(): Promise<Array<NovelTagEntity>> {
         return this.tagRepository.findAll();
     }
 }

@@ -3,6 +3,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Button } from '@material-ui/core';
 import { IEntityConfig } from './types';
 import { useNavigate } from 'react-router-dom';
+import { getAxios } from './getAxios';
 
 export function EntityEditIndex(props: {
     beURL: string;
@@ -40,14 +41,9 @@ export function EntityEditIndex(props: {
     };
 
     const submitInput = async (input: any) => {
-        const res = await axios.post(
+        const res = await getAxios().post(
             `${process.env.BE_URL}${props.beURL}`,
             input,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            },
         );
         console.log(res);
 
@@ -72,7 +68,6 @@ export function EntityEditIndex(props: {
         const frm = new FormData();
         frm.append(
             'operations',
-            // `{ "query": "mutation uploadFile($files: [Upload!]!) {uploadFile(FILE_TYPE: USER, files: $files) { id }}", "variables": { "files": ${variables} } }`,
             `{ "query": "mutation uploadFileWithThumb($files: [Upload!]!) {uploadFileWithThumb(FILE_TYPE: USER, files: $files) { id }}", "variables": { "files": ${variables} } }`,
         );
         frm.append('map', maps);
@@ -91,8 +86,6 @@ export function EntityEditIndex(props: {
         });
 
         const res = await _axios.post(`${process.env.BE_URL}/graphql`, frm);
-
-        console.log(res);
         return res;
     };
 

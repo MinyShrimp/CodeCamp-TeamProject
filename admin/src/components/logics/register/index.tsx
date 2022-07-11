@@ -77,7 +77,7 @@ export function LogicRegisterIndex() {
         try {
             const phone = input.current.phone.join('');
             const { data, message } = await sendGraphQL({
-                query: `query { SendPhone( phone: "${phone}" ) }`,
+                query: `mutation { SendPhone( phone: "${phone}" ) }`,
             });
             console.log(data, message);
 
@@ -94,7 +94,7 @@ export function LogicRegisterIndex() {
         try {
             const phone = input.current.phone.join('');
             const { data, message } = await sendGraphQL({
-                query: `query { AuthPhoneOK( phoneInput: { phone: "${phone}", token: "${phoneToken.current}" } ) }`,
+                query: `mutation { AuthPhoneOK( phoneInput: { phone: "${phone}", token: "${phoneToken.current}" } ) }`,
             });
             console.log(data, message);
             if (data) {
