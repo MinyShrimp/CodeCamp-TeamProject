@@ -1,10 +1,10 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { GqlJwtAccessGuard } from 'src/commons/auth/gql-auth.guard';
 
 import { MESSAGES } from 'src/commons/message/Message.enum';
 import { IPayload } from 'src/commons/interfaces/Payload.interface';
 import { CurrentUser } from 'src/commons/auth/gql-user.param';
+import { GqlJwtAccessGuard } from 'src/commons/auth/gql-auth.guard';
 
 import { NovelEntity } from './entities/novel.entity';
 import { NovelRepository } from './entities/novel.repository';

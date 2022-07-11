@@ -68,7 +68,6 @@ export function EntityEditIndex(props: {
         const frm = new FormData();
         frm.append(
             'operations',
-            // `{ "query": "mutation uploadFile($files: [Upload!]!) {uploadFile(FILE_TYPE: USER, files: $files) { id }}", "variables": { "files": ${variables} } }`,
             `{ "query": "mutation uploadFileWithThumb($files: [Upload!]!) {uploadFileWithThumb(FILE_TYPE: USER, files: $files) { id }}", "variables": { "files": ${variables} } }`,
         );
         frm.append('map', maps);
@@ -87,8 +86,6 @@ export function EntityEditIndex(props: {
         });
 
         const res = await _axios.post(`${process.env.BE_URL}/graphql`, frm);
-
-        console.log(res);
         return res;
     };
 
