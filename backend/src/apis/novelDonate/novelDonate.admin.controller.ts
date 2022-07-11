@@ -1,12 +1,11 @@
 // prettier-ignore
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
-
-import { CreateNovelDonateAdminInput } from './dto/createNovelDonate.admin.input';
-import { UpdateNovelDonateAdminInput } from './dto/updateNovelDonate.admin.input';
+import { Body, Controller, Delete, Get, Param } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
 import { NovelDonateEntity } from './entities/novelDonate.entity';
 import { NovelDonateAdminRepository } from './entities/novelDonate.admin.repository';
 
+@ApiTags('관리자/회원/후원작')
 @Controller('admin/novel-donate')
 export class NovelDonateAdminController {
     constructor(
@@ -23,21 +22,6 @@ export class NovelDonateAdminController {
         @Param('id') id: string, //
     ): Promise<NovelDonateEntity> {
         return this.novelDonateAdminRepository.findOne(id);
-    }
-
-    @Post('/')
-    create(
-        @Body() input: CreateNovelDonateAdminInput, //
-    ): Promise<NovelDonateEntity> {
-        return this.novelDonateAdminRepository.create(input);
-    }
-
-    @Patch('/')
-    async update(
-        @Body() input: UpdateNovelDonateAdminInput, //
-    ): Promise<boolean> {
-        const result = await this.novelDonateAdminRepository.update(input);
-        return result.affected ? true : false;
     }
 
     @Delete('/bulk')

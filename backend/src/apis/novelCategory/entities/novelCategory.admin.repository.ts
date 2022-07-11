@@ -23,7 +23,6 @@ export class NovelCategoryAdminRepository {
         return await this.novelCategoryRepository
             .createQueryBuilder('novelCategory')
             .select(this._selector)
-            .withDeleted()
             .getMany();
     }
 
@@ -42,7 +41,6 @@ export class NovelCategoryAdminRepository {
             .select([
                 ...this._selector, //
             ])
-            .withDeleted()
             .where('novelCategory.id=:id', { id: id })
             .getOne();
     }

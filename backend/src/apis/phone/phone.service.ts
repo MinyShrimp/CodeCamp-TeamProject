@@ -52,7 +52,7 @@ export class PhoneService {
                 phone: phoneNumber,
                 token: result.token,
             });
-            return process.env.MODE === 'LOCAL' ? result.token : '';
+            return process.env.MODE === 'LOCAL' ? result.token : 'send ok';
         } else {
             throw new ConflictException(MESSAGES.UNVLIAD_ACCESS);
         }
@@ -78,9 +78,12 @@ export class PhoneService {
                     token: redisToken,
                 });
                 return 'auth ok';
+            } else {
+                throw new ConflictException(MESSAGES.USER_UNVALID_TOKEN);
             }
+        } else {
+            throw new ConflictException(MESSAGES.UNVLIAD_ACCESS);
         }
-        throw new ConflictException(MESSAGES.UNVLIAD_ACCESS);
     }
 
     async create(

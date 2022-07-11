@@ -15,6 +15,9 @@ import { getDate, getDateFormatting } from '../../functions/times';
 import { IEntityConfig } from './types';
 import { EntityIndex } from './entity_index';
 import { EntityIndexHeader } from './header';
+import { SimpleDummyBoard } from './board/interface';
+import { SimpleDummyNovel } from './novel/interface';
+import { SimpleDummyNovelIndex } from './novelIndex/interface';
 
 export class EntityFactory {
     private static createColumn<T>(
@@ -50,6 +53,19 @@ export class EntityFactory {
                 },
                 minWidth: `calc((100% - 50px) / ${config.column.length})`,
             };
+
+            if (tmp.type === 'Undefined') {
+                tmp.type = 'Object';
+                if (tmp.name === 'board') {
+                    tmp.data = SimpleDummyBoard;
+                }
+                if (tmp.name === 'novel') {
+                    tmp.data = SimpleDummyNovel;
+                }
+                if (tmp.name === 'novelIndex') {
+                    tmp.data = SimpleDummyNovelIndex;
+                }
+            }
 
             if (tmp.name === 'pwd') {
                 tmp.type = 'password';
@@ -154,7 +170,7 @@ export class EntityFactory {
                     return (
                         <>
                             <a
-                                href={`${process.env.MD_URL}${row[key]}`}
+                                href={`https://storage.googleapis.com/code-camp-main-project/${row[key]}`}
                                 target="_blank"
                             >
                                 {row[key]}

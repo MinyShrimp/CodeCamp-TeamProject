@@ -20,7 +20,7 @@ export class UserLikeEntity {
     id: string;
 
     @CreateDateColumn()
-    @Field(() => Date)
+    @Field(() => Date, { description: '등록한 시간' })
     createAt: Date;
 
     @ManyToOne(
@@ -29,11 +29,12 @@ export class UserLikeEntity {
     )
     from: UserEntity;
 
-    @OneToOne(
+    @ManyToOne(
         () => UserEntity, //
         { onDelete: 'SET NULL' },
     )
     @JoinColumn()
+    @Field(() => UserEntity, { description: '대상 회원' })
     to: UserEntity;
 
     @Column({ name: 'toId', nullable: true })

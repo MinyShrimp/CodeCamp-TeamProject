@@ -14,7 +14,7 @@ export const SimpleDummyNovelIndex = {
 // prettier-ignore
 export const DummyNovelIndexColumn = {
     ...SimpleDummyNovelIndex, contents: '', index: 1,
-    star: 0, createAt: now, updateAt: now, deleteAt: now,
+    star: '', createAt: now, updateAt: now, deleteAt: now,
     user: SimpleDummyUser, 
     novel: SimpleDummyNovel,
     novelIndexReviews: [SimpleDummyNovelIndexReview],

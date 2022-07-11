@@ -10,9 +10,11 @@ config.js
 backup
 product-updateat.txt
 coverage
+media
 
 ngrok
 media/resource/
+admin/public/
 
 # compiled output
 dist

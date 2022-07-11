@@ -6,7 +6,6 @@ import { FileUpload } from 'graphql-upload';
 import axios, { Axios, AxiosResponse } from 'axios';
 
 import { FILE_TYPE } from './entities/type.enum';
-import { FileRepository } from './entities/file.repository';
 
 @Injectable()
 export class MediaServerService {
@@ -15,7 +14,7 @@ export class MediaServerService {
     /**
      * Form Data 생성
      */
-    private async __makeForm(
+    async makeForm(
         type: FILE_TYPE,
         files: FileUpload[], //
     ): Promise<{ _axios: Axios; form: FormData; tmpFileNames: Array<String> }> {
@@ -24,37 +23,39 @@ export class MediaServerService {
         const form = new FormData();
         form.append('path', `${type}/`);
 
-        const tmpFileNames = [];
+        const tmpFileNames = (
+            (await Promise.all(
+                writeFiles.map((file) => {
+                    return new Promise((resolve, reject) => {
+                        const fileName = v4();
+                        const [suffix, ..._] =
+                            file.filename.match(/.(png|svg|jpe?g)/);
 
-        await Promise.all(
-            writeFiles.map((file) => {
-                return new Promise((resolve, reject) => {
-                    const fileName = v4();
-                    const [suffix, ..._] =
-                        file.filename.match(/.(png|svg|jpe?g)/);
-
-                    file.createReadStream()
-                        .pipe(
-                            fs.createWriteStream(`./tmp/${fileName}${suffix}`),
-                        )
-                        .on('finish', () => {
-                            form.append(
-                                'uploadFile',
-                                fs.readFileSync(`./tmp/${fileName}${suffix}`),
-                                {
-                                    filename: `${fileName}${suffix}`,
-                                },
-                            );
-                            tmpFileNames.push(`${fileName}${suffix}`);
-
-                            resolve('ok');
-                        })
-                        .on('error', () => {
-                            reject('');
-                        });
-                });
-            }),
-        );
+                        file.createReadStream()
+                            .pipe(
+                                fs.createWriteStream(
+                                    `./tmp/${fileName}${suffix}`,
+                                ),
+                            )
+                            .on('finish', () => {
+                                form.append(
+                                    'uploadFile',
+                                    fs.readFileSync(
+                                        `./tmp/${fileName}${suffix}`,
+                                    ),
+                                    {
+                                        filename: `${fileName}${suffix}`,
+                                    },
+                                );
+                                resolve(`${fileName}${suffix}`);
+                            })
+                            .on('error', () => {
+                                reject(null);
+                            });
+                    });
+                }),
+            )) as string[]
+        ).filter((v) => v !== null);
 
         const _axios = axios.create({
             withCredentials: true,
@@ -73,10 +74,7 @@ export class MediaServerService {
         type: FILE_TYPE,
         files: FileUpload[], //
     ) {
-        const { _axios, form, tmpFileNames } = await this.__makeForm(
-            type,
-            files,
-        );
+        const { _axios, form, tmpFileNames } = await this.makeForm(type, files);
 
         let res: AxiosResponse;
         try {
@@ -99,10 +97,7 @@ export class MediaServerService {
         type: FILE_TYPE,
         files: FileUpload[], //
     ) {
-        const { _axios, form, tmpFileNames } = await this.__makeForm(
-            type,
-            files,
-        );
+        const { _axios, form, tmpFileNames } = await this.makeForm(type, files);
 
         let res: AxiosResponse;
         try {

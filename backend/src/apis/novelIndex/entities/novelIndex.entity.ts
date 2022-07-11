@@ -39,13 +39,19 @@ export class NovelIndexEntity {
 
     @Min(0)
     @Max(5)
-    @Column({ unsigned: true })
+    @Column({
+        type: 'decimal',
+        default: 0,
+        unsigned: true,
+        precision: 2,
+        scale: 1,
+    })
     @Field(() => Float, { description: '평균 별점' })
     star: number;
 
     @Min(0)
     @IsInt()
-    @Column({ unsigned: true })
+    @Column({ default: 0, unsigned: true })
     @Field(() => Int, { description: '조회수' })
     viewCount: number;
 
@@ -62,7 +68,7 @@ export class NovelIndexEntity {
 
     @ManyToOne(
         () => UserEntity, //
-        { cascade: true, onDelete: 'SET NULL' },
+        { cascade: ['remove'], onDelete: 'SET NULL' },
     )
     @JoinColumn()
     @Field(() => UserEntity, { nullable: true })
@@ -70,7 +76,7 @@ export class NovelIndexEntity {
 
     @ManyToOne(
         () => NovelEntity, //
-        { cascade: true, onDelete: 'CASCADE' },
+        { cascade: ['remove'], onDelete: 'CASCADE' },
     )
     @JoinColumn()
     @Field(() => NovelEntity)

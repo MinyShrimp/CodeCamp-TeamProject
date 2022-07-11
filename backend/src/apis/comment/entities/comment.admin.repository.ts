@@ -1,9 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
-
-import { CreateCommentAdminInput } from '../dto/createComment.admin.input';
-import { UpdateCommentAdminInput } from '../dto/updateComment.admin.input';
+import { DeleteResult, Repository } from 'typeorm';
 
 import { CommentEntity } from './comment.entity';
 
@@ -55,19 +52,6 @@ export class CommentAdminRepository {
             .leftJoin('comment.children', 'children')
             .where('comment.id=:id', { id: id })
             .getOne();
-    }
-
-    async create(
-        input: CreateCommentAdminInput, //
-    ): Promise<CommentEntity> {
-        return await this.commentRepository.save(input);
-    }
-
-    async update(
-        input: UpdateCommentAdminInput, //
-    ): Promise<UpdateResult> {
-        const { originID, ...rest } = input;
-        return await this.commentRepository.update({ id: originID }, rest);
     }
 
     async bulkDelete(

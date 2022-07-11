@@ -1,17 +1,14 @@
-import {
-    Body,
-    Controller,
-    Delete,
-    Get,
-    Param,
-    Patch,
-    Post,
-} from '@nestjs/common';
+// prettier-ignore
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+
 import { CreateUserClassInput } from './dto/createUserClass.input';
 import { UpdateUserClassInput } from './dto/updateUserClass.input';
-import { UserClassAdminRepository } from './entities/userClass.admin.repository';
-import { UserClassEntity } from './entities/userClass.entity';
 
+import { UserClassEntity } from './entities/userClass.entity';
+import { UserClassAdminRepository } from './entities/userClass.admin.repository';
+
+@ApiTags('관리자/회원/등급')
 @Controller('admin/user-class')
 export class UserClassAdminController {
     constructor(

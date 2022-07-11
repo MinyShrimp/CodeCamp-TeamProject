@@ -4,7 +4,6 @@ import { JwtService } from '@nestjs/jwt';
 import { ConflictException, Injectable } from '@nestjs/common';
 
 import { IPayloadSub } from '../../commons/interfaces/Payload.interface';
-import { ResultMessage } from '../../commons/message/ResultMessage.dto';
 import { MESSAGES } from '../../commons/message/Message.enum';
 
 import { UserEntity } from '../user/entities/user.entity';
@@ -99,17 +98,21 @@ export class AuthService {
             expiresIn: '2w',
         });
 
-        // 개발 환경
-        res.setHeader('Set-Cookie', `refreshToken=${refreshToken}; path=/;`);
+        if (process.env.MODE === 'PRODUCTION') {
+            // 배포 환경
+            res.setHeader(
+                'Set-Cookie',
+                `refreshToken=${refreshToken}; path=/; domain=.miny-shrimp.shop; SameSite=None; Secure; httpOnly;`,
+            );
+        } else {
+            // 개발 환경
+            res.setHeader(
+                'Set-Cookie',
+                `refreshToken=${refreshToken}; path=/;`,
+            );
+        }
 
         return refreshToken;
-
-        // 배포 환경
-        // res.setHeader('Access-Control-Allow-Origin', 'https://myfrontsite.com')
-        // res.setHeader(
-        //   'Set-Cookie',
-        //   `refreshToken=${refreshToken}; path=/; domain=.mybacksite.com; SameSite=None; Secure; httpOnly;`
-        // )
     }
 
     ///////////////////////////////////////////////////////////////////
@@ -130,9 +133,12 @@ export class AuthService {
     ///////////////////////////////////////////////////////////////////
     // 인증 //
 
+    /**
+     * 소셜 로그인
+     */
     async OAuthLogin(
         userID: string, //
-    ) {
+    ): Promise<boolean> {
         const result = await this.userRepository.login(userID);
         return result.affected ? true : false;
     }
@@ -179,30 +185,19 @@ export class AuthService {
     async Logout(
         context: any,
         userID: string, //
-    ): Promise<ResultMessage> {
+    ): Promise<boolean> {
         // 검색
         const user = await this.userRepository.findOneByID(userID);
 
         // 존재 여부 검사
         this.userCheckService.checkValidUser(user);
 
-        // 로그아웃 여부 검사
-        this.userCheckService.checkLogout(user);
-
         // 로그아웃 시도
         const result = await this.userRepository.logout(userID);
-        const isSuccess = result.affected ? true : false;
-
         context.res.setHeader('Set-Cookie', `refreshToken=; path=/;`);
 
         // 메세지 반환
-        return new ResultMessage({
-            id: userID,
-            isSuccess,
-            contents: isSuccess
-                ? MESSAGES.USER_LOGOUT_SUCCESSED
-                : MESSAGES.USER_LOGOUT_FAILED,
-        });
+        return result.affected ? true : false;
     }
 
     ///////////////////////////////////////////////////////////////////

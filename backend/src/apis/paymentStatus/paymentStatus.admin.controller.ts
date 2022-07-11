@@ -1,17 +1,14 @@
-import {
-    Body,
-    Controller,
-    Delete,
-    Get,
-    Param,
-    Patch,
-    Post,
-} from '@nestjs/common';
+// prettier-ignore
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+
 import { CreatePaymentStatusInput } from './dto/createPaymentStatus.input';
 import { UpdatePaymentStatusInput } from './dto/updatePaymentStatus.input';
-import { PaymentStatusAdminRepository } from './entities/paymentStatus.admin.repository';
-import { PaymentStatusEntity } from './entities/paymentStatus.entity';
 
+import { PaymentStatusEntity } from './entities/paymentStatus.entity';
+import { PaymentStatusAdminRepository } from './entities/paymentStatus.admin.repository';
+
+@ApiTags('관리자/결제/상태')
 @Controller('admin/payment-status')
 export class PaymentStatusAdminController {
     constructor(

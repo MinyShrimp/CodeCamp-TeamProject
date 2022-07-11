@@ -1,12 +1,11 @@
 // prettier-ignore
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
-
-import { CreateCommentAdminInput } from './dto/createComment.admin.input';
-import { UpdateCommentAdminInput } from './dto/updateComment.admin.input';
+import { Body, Controller, Delete, Get, Param } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
 import { CommentEntity } from './entities/comment.entity';
 import { CommentAdminRepository } from './entities/comment.admin.repository';
 
+@ApiTags('관리자/게시판/댓글')
 @Controller('admin/comment')
 export class CommentAdminController {
     constructor(
@@ -23,21 +22,6 @@ export class CommentAdminController {
         @Param('id') id: string, //
     ): Promise<CommentEntity> {
         return this.commentAdminRepository.findOne(id);
-    }
-
-    @Post('/')
-    create(
-        @Body() input: CreateCommentAdminInput, //
-    ): Promise<CommentEntity> {
-        return this.commentAdminRepository.create(input);
-    }
-
-    @Patch('/')
-    async update(
-        @Body() input: UpdateCommentAdminInput, //
-    ): Promise<boolean> {
-        const result = await this.commentAdminRepository.update(input);
-        return result.affected ? true : false;
     }
 
     @Delete('/bulk')

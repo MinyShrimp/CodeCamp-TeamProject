@@ -1,9 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
-
-import { CreateBoardAdminInput } from '../dto/createBoard.admin.input';
-import { UpdateBoardAdminInput } from '../dto/updateBoard.admin.input';
+import { DeleteResult, Repository } from 'typeorm';
 
 import { BoardEntity } from './board.entity';
 
@@ -46,19 +43,6 @@ export class BoardAdminRepository {
             .leftJoin('board.comment', 'comment')
             .where('board.id=:id', { id: id })
             .getOne();
-    }
-
-    async create(
-        input: CreateBoardAdminInput, //
-    ): Promise<BoardEntity> {
-        return await this.boardRepository.save(input);
-    }
-
-    async update(
-        input: UpdateBoardAdminInput, //
-    ): Promise<UpdateResult> {
-        const { originID, ...rest } = input;
-        return await this.boardRepository.update({ id: originID }, rest);
     }
 
     async bulkDelete(

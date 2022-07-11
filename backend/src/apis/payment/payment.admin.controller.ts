@@ -1,14 +1,11 @@
-import {
-    Body,
-    ConflictException,
-    Controller,
-    Delete,
-    Get,
-    Param,
-} from '@nestjs/common';
+// prettier-ignore
+import { Body, Controller, Delete, Get, Param } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { PaymentAdminRepository } from './entities/payment.admin.repository';
 import { PaymentEntity } from './entities/payment.entity';
 
+@ApiBearerAuth()
+@ApiTags('관리자/결제')
 @Controller('admin/payment')
 export class PaymentAdminController {
     constructor(

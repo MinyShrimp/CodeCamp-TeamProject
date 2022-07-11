@@ -1,5 +1,6 @@
 import { Response } from 'express';
 import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 
 import { IUser } from '../../commons/interfaces/User.interface';
@@ -12,9 +13,10 @@ interface IOAuthRequest extends Request {
     user: IUser;
 }
 
+@ApiTags('인증')
 @Controller()
 export class AuthController {
-    private readonly REDIRECT = `${process.env.FE_URL}/auth/token/oauth`;
+    private readonly REDIRECT = `${process.env.AD_URL}/auth/token/oauth`;
 
     constructor(
         private readonly userRepository: UserRepository,
@@ -49,6 +51,8 @@ export class AuthController {
      * @param req
      * @param res
      */
+    @ApiOperation({ summary: '구글 소셜 로그인' })
+    @ApiOkResponse({ description: 'FE로 Redirect' })
     @Get('/login/google')
     @UseGuards(AuthGuard('google'))
     async LoginGoogle(
@@ -70,6 +74,8 @@ export class AuthController {
      * @param req
      * @param res
      */
+    @ApiOperation({ summary: '카카오 소셜 로그인' })
+    @ApiOkResponse({ description: 'FE로 Redirect' })
     @Get('/login/kakao')
     @UseGuards(AuthGuard('kakao'))
     async LoginKakao(
@@ -91,6 +97,8 @@ export class AuthController {
      * @param req
      * @param res
      */
+    @ApiOperation({ summary: '네이버 소셜 로그인' })
+    @ApiOkResponse({ description: 'FE로 Redirect' })
     @Get('/login/naver')
     @UseGuards(AuthGuard('naver'))
     async LoginNaver(

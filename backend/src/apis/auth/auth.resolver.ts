@@ -2,13 +2,14 @@ import { UseGuards, CACHE_MANAGER, Inject } from '@nestjs/common';
 import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import { Cache } from 'cache-manager';
 
-import { IPayload } from '../../commons/interfaces/Payload.interface';
-import { CurrentUser } from '../../commons/auth/gql-user.param';
-import { ResultMessage } from '../../commons/message/ResultMessage.dto';
+import { MESSAGES } from 'src/commons/message/Message.enum';
+import { IPayload } from 'src/commons/interfaces/Payload.interface';
+import { CurrentUser } from 'src/commons/auth/gql-user.param';
+import { ResultMessage } from 'src/commons/message/ResultMessage.dto';
 import {
     GqlJwtAccessGuard,
     GqlJwtRefreshGuard,
-} from '../../commons/auth/gql-auth.guard';
+} from 'src/commons/auth/gql-auth.guard';
 
 import { LoginInput } from './dto/login.input';
 
@@ -57,15 +58,26 @@ export class AuthResolver {
     ///////////////////////////////////////////////////////////////////
     // 수정 //
 
+    /**
+     * 소셜 로그인
+     * @param currentUser
+     * @response Message, Set-Cookie: Refresh Token
+     */
     @Mutation(
-        () => String, //
+        () => ResultMessage, //
         { description: 'OAuth 로그인' },
     )
     @UseGuards(GqlJwtAccessGuard)
     async LoginOAuth(
         @CurrentUser() currentUser: IPayload, //
-    ) {
-        return await this.authService.OAuthLogin(currentUser.id);
+    ): Promise<ResultMessage> {
+        const result = await this.authService.OAuthLogin(currentUser.id);
+        return new ResultMessage({
+            isSuccess: result,
+            contents: result
+                ? MESSAGES.USER_OAUTH_LOGIN_SUCCESS
+                : MESSAGES.USER_OAUTH_LOGIN_FAILED,
+        });
     }
 
     /**
@@ -88,7 +100,7 @@ export class AuthResolver {
     /**
      * POST /api/logout
      * - Bearer JWT
-     * @response ResultMessage
+     * @response Message
      */
     @UseGuards(GqlJwtAccessGuard)
     @Mutation(
@@ -100,7 +112,7 @@ export class AuthResolver {
         @CurrentUser() currentUser: IPayload, //
     ): Promise<ResultMessage> {
         // 로그아웃
-        const result = this.authService.Logout(context, currentUser.id);
+        const result = await this.authService.Logout(context, currentUser.id);
 
         // Redis 저장
         await this.cacheManage.set(
@@ -114,8 +126,19 @@ export class AuthResolver {
             { ttl: currentUser.refresh_exp },
         );
 
-        return result;
+        return new ResultMessage({
+            isSuccess: result,
+            contents: result
+                ? MESSAGES.USER_LOGOUT_SUCCESSED
+                : MESSAGES.USER_LOGOUT_FAILED,
+        });
     }
+
+    @Mutation(
+        () => ResultMessage,
+        { description: '강제 로그아웃' }, //
+    )
+    async LogoutForce() {}
 
     ///////////////////////////////////////////////////////////////////
     // 삭제 //

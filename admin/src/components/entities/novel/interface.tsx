@@ -4,6 +4,7 @@ import { SimpleDummyUser } from '../user/interface';
 import { SimpleDummyNovelTag } from '../novelTag/interface';
 import { SimpleDummyNovelReview } from '../novelReview/interface';
 import { SimpleDummyNovelIndex } from '../novelIndex/interface';
+import { DummyNovelCategoryColumn } from '../novelCategory/interface';
 
 const now = getDefaultDate();
 
@@ -17,6 +18,7 @@ export const DummyNovelColumn = {
     ...SimpleDummyNovel, subtitle: '', description: '',
     likeCount: 0, createAt: now, updateAt: now, deleteAt: now,
     user: SimpleDummyUser, 
+    novelCategory: DummyNovelCategoryColumn,
     novelTags: [SimpleDummyNovelTag],
     novelIndexs: [SimpleDummyNovelIndex],
     novelReviews: [SimpleDummyNovelReview],

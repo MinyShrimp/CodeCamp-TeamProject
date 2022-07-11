@@ -1,5 +1,6 @@
 // prettier-ignore
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
 import { CreatePaymentPointStatusAdminInput } from './dto/createPaymentPointStatus.admin.input';
 import { UpdatePaymentPointStatusAdminInput } from './dto/updatePaymentPointStatus.admin.input';
@@ -7,6 +8,7 @@ import { UpdatePaymentPointStatusAdminInput } from './dto/updatePaymentPointStat
 import { PaymentPointStatusEntity } from './entities/paymentPointStatus.entity';
 import { PaymentPointStatusAdminRepository } from './entities/paymentPointStatus.admin.repository';
 
+@ApiTags('관리자/결제/포인트/상태')
 @Controller('admin/payment-point-status')
 export class PaymentPointStatusAdminController {
     constructor(

@@ -32,9 +32,9 @@ export class NovelEntity {
     @Field(() => String, { description: '제목' })
     title: string;
 
-    @Column()
-    @Field(() => String, { description: '소제목' })
-    subtitle: string;
+    @Column({ nullable: true })
+    @Field(() => String, { description: '소제목', nullable: true })
+    subtitle?: string;
 
     @Column({ type: 'text' })
     @Field(() => String, { description: '설명' })
@@ -42,9 +42,15 @@ export class NovelEntity {
 
     @Min(0)
     @IsInt()
-    @Column({ unsigned: true })
+    @Column({ unsigned: true, default: 0 })
     @Field(() => Int, { description: '좋아요 갯수' })
     likeCount: number;
+
+    @Min(0)
+    @IsInt()
+    @Column({ unsigned: true, default: 0 })
+    @Field(() => Int, { description: '전체 조회수' })
+    viewCount: number;
 
     @CreateDateColumn()
     @Field(() => Date, { description: '시작 시간' })
