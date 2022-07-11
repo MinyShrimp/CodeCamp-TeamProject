@@ -3,7 +3,7 @@ version: '3.7'
 services:
     # NestJS
     api:
-        image: asia.gcr.io/emerald-diagram-352601/teamproject/api:0.0.5
+        image: asia.gcr.io/emerald-diagram-352601/teamproject/api:0.0.6
         platform: linux/x86_64
         # Dockerfile 설정
         build:

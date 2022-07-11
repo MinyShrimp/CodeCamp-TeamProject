@@ -4,7 +4,6 @@ import { JwtService } from '@nestjs/jwt';
 import { ConflictException, Injectable } from '@nestjs/common';
 
 import { IPayloadSub } from '../../commons/interfaces/Payload.interface';
-import { ResultMessage } from '../../commons/message/ResultMessage.dto';
 import { MESSAGES } from '../../commons/message/Message.enum';
 
 import { UserEntity } from '../user/entities/user.entity';

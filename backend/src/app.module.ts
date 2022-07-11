@@ -78,7 +78,7 @@ import { TempStorageModule } from './apis/tempStorage/tempStorage.module';
                 return { req, res };
             },
             cors: {
-                origin: [process.env.AD_URL],
+                origin: '*', // FE가 배포하면 FE 주소를 여기에 넣어야함
                 credentials: 'include',
                 exposedHeaders: ['Authorization', 'Set-Cookie', 'Cookie'],
             },
