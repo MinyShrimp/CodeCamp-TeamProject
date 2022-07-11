@@ -2,18 +2,18 @@ import { UseGuards, CACHE_MANAGER, Inject } from '@nestjs/common';
 import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import { Cache } from 'cache-manager';
 
-import { IPayload } from '../../commons/interfaces/Payload.interface';
-import { CurrentUser } from '../../commons/auth/gql-user.param';
+import { MESSAGES } from 'src/commons/message/Message.enum';
+import { IPayload } from 'src/commons/interfaces/Payload.interface';
+import { CurrentUser } from 'src/commons/auth/gql-user.param';
+import { ResultMessage } from 'src/commons/message/ResultMessage.dto';
 import {
     GqlJwtAccessGuard,
     GqlJwtRefreshGuard,
-} from '../../commons/auth/gql-auth.guard';
+} from 'src/commons/auth/gql-auth.guard';
 
 import { LoginInput } from './dto/login.input';
 
 import { AuthService } from './auth.service';
-import { MESSAGES } from 'src/commons/message/Message.enum';
-import { ResultMessage } from 'src/commons/message/ResultMessage.dto';
 
 /* Auth API */
 @Resolver()
@@ -133,6 +133,12 @@ export class AuthResolver {
                 : MESSAGES.USER_LOGOUT_FAILED,
         });
     }
+
+    @Mutation(
+        () => ResultMessage,
+        { description: '강제 로그아웃' }, //
+    )
+    async LogoutForce() {}
 
     ///////////////////////////////////////////////////////////////////
     // 삭제 //
