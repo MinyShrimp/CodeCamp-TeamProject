@@ -89,7 +89,7 @@ export class CommentService {
 
     async updateComment(
         input: UpdateCommentInput, //
-    ) {
+    ): Promise<CommentEntity> {
         const comment = await this.commentRepository.findOneByComment(input.id);
         if (!comment) {
             throw new ConflictException(
