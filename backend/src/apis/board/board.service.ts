@@ -22,6 +22,13 @@ export class BoardService {
     ///////////////////////////////////////////////////////////////////
     // 조회 //
 
+    /* 특정 키워드로 게시글 조회 */
+    async findTarget(
+        keyword: string, //
+    ): Promise<BoardEntity[]> {
+        return await this.boardRepository.search(keyword);
+    }
+
     /* 모든 게시글 조회 */
     async findAll(): Promise<BoardEntity[]> {
         return await this.boardRepository.findAll();
