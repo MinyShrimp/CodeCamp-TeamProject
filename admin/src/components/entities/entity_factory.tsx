@@ -170,12 +170,18 @@ export class EntityFactory {
                 tmp.cell = (row: any) => {
                     return (
                         <>
-                            <a
-                                href={`https://storage.googleapis.com/code-camp-main-project/${row[key]}`}
-                                target="_blank"
-                            >
-                                {row[key]}
-                            </a>
+                            <div>
+                                <a
+                                    href={`https://storage.googleapis.com/code-camp-main-project/${row[key]}`}
+                                    target="_blank"
+                                >
+                                    {row[key]}
+                                </a>
+                            </div>
+                            <img
+                                width={'100px'}
+                                src={`https://storage.googleapis.com/code-camp-main-project/${row[key]}`}
+                            />
                         </>
                     );
                 };

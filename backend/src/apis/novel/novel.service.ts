@@ -82,7 +82,7 @@ export class NovelService {
         userID: string,
         createNovelInput: CreateNovelInput, //
     ): Promise<NovelEntity> {
-        const { categoryID, tags, fileIDs, ...input } = createNovelInput;
+        const { categoryID, tags, fileURLs, ...input } = createNovelInput;
 
         // 유저 찾기
         const user = await this.userService.checkValid(userID);
@@ -94,7 +94,7 @@ export class NovelService {
         const tagEntities = await this.novelTagService.create(tags);
 
         // 이미지 업로드
-        const uploadFiles = await this.fileRepository.findBulk(fileIDs);
+        const uploadFiles = await this.fileRepository.findBulkByUrl(fileURLs);
 
         // 저장
         return await this.novelRepository.save({
@@ -113,7 +113,7 @@ export class NovelService {
         userID: string,
         updateNovelInput: UpdateNovelInput, //
     ): Promise<NovelEntity> {
-        const { categoryID, tags, fileIDs, ...input } = updateNovelInput;
+        const { categoryID, tags, fileURLs, ...input } = updateNovelInput;
 
         // 검사
         await this.checkValidWithUser(userID, updateNovelInput.id);
@@ -135,8 +135,8 @@ export class NovelService {
 
         // 이미지 업로드
         const uploadFiles =
-            fileIDs !== undefined
-                ? await this.fileRepository.findBulk(fileIDs)
+            fileURLs !== undefined
+                ? await this.fileRepository.findBulkByUrl(fileURLs)
                 : novel.files;
 
         // 수정
