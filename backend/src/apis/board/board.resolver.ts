@@ -21,6 +21,17 @@ export class BoardResolver {
     ///////////////////////////////////////////////////////////////////
     // 조회 //
 
+    // 키워드로 조회
+    @Query(
+        () => [BoardEntity], //
+        { description: '키워드로 게시글 조회' },
+    )
+    fetchTargetBoards(
+        @Args('keyword') keyword: string,
+    ): Promise<BoardEntity[]> {
+        return this.boardService.findTarget(keyword);
+    }
+
     // 게시글 전체 조회
     @Query(
         () => [BoardEntity], //
@@ -42,7 +53,7 @@ export class BoardResolver {
         return this.boardService.findBoard(currentUser);
     }
 
-    ///////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////q
     // 생성 //
 
     @UseGuards(GqlJwtAccessGuard)

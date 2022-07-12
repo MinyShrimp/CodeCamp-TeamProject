@@ -14,6 +14,7 @@ import { UserRepository } from './entities/user.repository';
 
 import { UserService } from './user.service';
 import { CreateUserOutput } from './dto/createUser.output';
+import { PaymentEntity } from '../payment/entities/payment.entity';
 
 /* 유저 API */
 @Resolver()
@@ -42,6 +43,17 @@ export class UserResolver {
         @CurrentUser() currentUser: IPayload, //
     ): Promise<UserOutput> {
         return this.userRepository.findOneByID(currentUser.id);
+    }
+
+    @UseGuards(GqlJwtAccessGuard)
+    @Query(
+        () => [PaymentEntity], //
+        { description: '회원 결제 목록' },
+    )
+    fetchPaymentsInUser(
+        @CurrentUser() currentUser: IPayload, //
+    ): Promise<PaymentEntity[]> {
+        return this.userRepository.findPayments(currentUser.id);
     }
 
     ///////////////////////////////////////////////////////////////////

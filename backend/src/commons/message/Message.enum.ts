@@ -81,11 +81,20 @@ export const MESSAGES = {
     NOVEL_SOFT_DELETE_FAILED: '소설 삭제 실패',
 
     ///////////////////////////////////////////////////////////////////
-    // 댓글 //
-    COMMENT_UPDATE_FAILED: 'Failed Comment Update',
-    COMMENT_SOFT_DELETE_SUCCESSED: 'Completed Comment Soft Delete',
-    COMMENT_SOFT_DELETE_FAILED: 'Failed Comment Soft Delete',
+    // 소설 리뷰 //
+    NOVEL_REVIEW_UNVALID: '해당 리뷰를 찾을 수 없습니다.',
 
+    NOVEL_REVIEW_SOFT_DELETE_SUCCESSED: '소설 리뷰 삭제 성공',
+    NOVEL_REVIEW_SOFT_DELETE_FAILED: '소설 리뷰 삭제 실패',
+
+    ///////////////////////////////////////////////////////////////////
+    // 댓글 //
+    COMMENT_UPDATE_FAILED: '댓글 수정에 실패했습니다.',
+
+    COMMENT_SOFT_DELETE_SUCCESSED: '댓글 삭제 성공',
+    COMMENT_SOFT_DELETE_FAILED: '댓글 삭제 실패',
+
+    ///////////////////////////////////////////////////////////////////
     // 소설 인덱스 //
     NOVEL_INDEX_UNVALID: '소설 인덱스 정보를 찾을 수 없습니다.',
 
@@ -97,6 +106,11 @@ export const MESSAGES = {
 
     NOVEL_INDEX_SOFT_DELETE_SUCCESSED: '소설 인덱스 삭제 성공',
     NOVEL_INDEX_SOFT_DELETE_FAILED: '소설 인덱스 삭제 실패',
+
+    ///////////////////////////////////////////////////////////////////
+    // 소설 인덱스 리뷰
+    NOVEL_INDEX_REVIEW_SOFT_DELETE_SUCCESSED: '소설 인덱스 삭제 성공',
+    NOVEL_INDEX_REVIEW_SOFT_DELETE_FAILED: '소설 인덱스 삭제 실패',
 } as const;
 
 export type MESSAGES = typeof MESSAGES[keyof typeof MESSAGES];

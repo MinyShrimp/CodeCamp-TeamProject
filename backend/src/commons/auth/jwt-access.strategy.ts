@@ -49,6 +49,7 @@ export class JwtAccessStrategy extends PassportStrategy(
             id: payload.sub,
             name: payload.name,
             email: payload.email,
+            nickName: payload.nickName,
             isAdmin: payload.isAdmin ?? false,
             access_exp: payload.exp - payload.iat,
             access_token: access_token,

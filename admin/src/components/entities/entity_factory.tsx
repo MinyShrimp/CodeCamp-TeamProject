@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import axios from 'axios';
 import { v4 } from 'uuid';
 import { Switch, TextareaAutosize, TextField } from '@material-ui/core';
 import { CancelOutlined, CheckCircleOutlined } from '@material-ui/icons';
@@ -12,13 +11,13 @@ import 'react-datalist-input/dist/styles.css';
 import { getType } from '../../functions/functions';
 import { getDate, getDateFormatting } from '../../functions/times';
 
+import { getAxios } from './getAxios';
 import { IEntityConfig } from './types';
 import { EntityIndex } from './entity_index';
 import { EntityIndexHeader } from './header';
 import { SimpleDummyBoard } from './board/interface';
 import { SimpleDummyNovel } from './novel/interface';
 import { SimpleDummyNovelIndex } from './novelIndex/interface';
-import { getAxios } from './getAxios';
 
 export class EntityFactory {
     private static createColumn<T>(
@@ -170,12 +169,18 @@ export class EntityFactory {
                 tmp.cell = (row: any) => {
                     return (
                         <>
-                            <a
-                                href={`https://storage.googleapis.com/code-camp-main-project/${row[key]}`}
-                                target="_blank"
-                            >
-                                {row[key]}
-                            </a>
+                            <div>
+                                <a
+                                    href={`https://storage.googleapis.com/code-camp-main-project/${row[key]}`}
+                                    target="_blank"
+                                >
+                                    {row[key]}
+                                </a>
+                            </div>
+                            <img
+                                width={'100px'}
+                                src={`https://storage.googleapis.com/code-camp-main-project/${row[key]}`}
+                            />
                         </>
                     );
                 };
@@ -262,8 +267,10 @@ export class EntityFactory {
                                                     book_images: 'book/image',
                                                     productTags: 'product/tag',
                                                     products: 'product',
+                                                    novelTags: 'novelTag',
+                                                    files: 'file',
                                                 }[key as string]
-                                            }/${v.id}`}
+                                            }/show/${v.id}`}
                                             key={v4()}
                                         >
                                             {v.name ?? v.id}

@@ -1,6 +1,6 @@
 import * as sharp from 'sharp';
 import { v4 } from 'uuid';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { FileUpload } from 'graphql-upload';
 import { Storage } from '@google-cloud/storage';
 
@@ -12,6 +12,7 @@ import { UploadResult } from './dto/uploadResult.dto';
 export class GoogleStorageSerivce {
     constructor() {}
 
+    private readonly logger = new Logger('Google Storage');
     private readonly key = `./key/${process.env.FILE_KEY}`;
 
     /**
@@ -28,34 +29,40 @@ export class GoogleStorageSerivce {
         }).bucket(process.env.FILE_BUCKET);
 
         // 업로드
-        const storageUpload = (await Promise.all(
-            files.map((file) => {
-                return new Promise((resolve, reject) => {
-                    // 확장자 분리
-                    const [_, prefix, suffix, ...__] = file.filename
-                        .toLowerCase()
-                        .match(/^(.+).(png|jpe?g|gif|webp)$/);
+        const storageUpload = (
+            (await Promise.all(
+                files.map((file) => {
+                    return new Promise((resolve, reject) => {
+                        // 확장자 분리
+                        const [_, prefix, suffix, ...__] = file.filename
+                            .toLowerCase()
+                            .match(/^(.+).(png|jpe?g|gif|webp)$/);
 
-                    // 이름 Hashing
-                    const name = `${v4()}.${suffix}`;
-                    const path = `${type.toLowerCase()}/origin/`;
-                    const url = `${path}${name}`;
+                        // 이름 Hashing
+                        const name = `${v4()}.${suffix}`;
+                        const path = `${type.toLowerCase()}/origin/`;
+                        const url = `${path}${name}`;
 
-                    file.createReadStream()
-                        .pipe(storage.file(url).createWriteStream())
-                        .on('finish', () => {
-                            resolve({
-                                name: name,
-                                path: path,
-                                url: url,
-                            });
-                        })
-                        .on('error', (e) => reject(null));
-                });
-            }),
-        )) as Array<UploadResult>;
+                        file.createReadStream()
+                            .pipe(storage.file(url).createWriteStream())
+                            .on('finish', () => {
+                                resolve({
+                                    name: name,
+                                    path: path,
+                                    url: url,
+                                });
+                            })
+                            .on('error', (e) => reject(null));
+                    });
+                }),
+            )) as Array<UploadResult>
+        ).filter((v) => v !== null);
 
-        return storageUpload.filter((v) => v !== null);
+        storageUpload.forEach((file) => {
+            this.logger.log(`[Upload] ${file.url}`);
+        });
+
+        return storageUpload;
     }
 
     /**
@@ -78,7 +85,7 @@ export class GoogleStorageSerivce {
             { size: 1280, path: 'thumb/l/' },
         ];
 
-        const result = await Promise.all(
+        const storageUploads = await Promise.all(
             files.map(async (file) => {
                 // 확장자 분리
                 const [_, prefix, suffix, ...__] = file.filename
@@ -117,9 +124,15 @@ export class GoogleStorageSerivce {
             }),
         );
 
-        return result.reduce((acc, cur) => {
+        const _storageUploads = storageUploads.reduce((acc, cur) => {
             return [...acc, ...cur];
         });
+
+        _storageUploads.forEach((file) => {
+            this.logger.log(`[Upload Thumb] ${file.url}`);
+        });
+
+        return _storageUploads;
     }
 
     /**
@@ -127,7 +140,7 @@ export class GoogleStorageSerivce {
      */
     async delete(
         files: Array<FileEntity>, //
-    ): Promise<Array<string>> {
+    ): Promise<Array<FileEntity>> {
         const key = `./key/${process.env.FILE_KEY}`;
 
         // 구글 Storage 연결
@@ -137,7 +150,7 @@ export class GoogleStorageSerivce {
         }).bucket(process.env.FILE_BUCKET);
 
         // 구글 삭제
-        return (
+        const result = (
             (await Promise.all(
                 files.map((file) => {
                     return new Promise((resolve, reject) => {
@@ -145,12 +158,23 @@ export class GoogleStorageSerivce {
                             if (e) {
                                 reject(null);
                             } else {
-                                resolve(file.id);
+                                resolve({
+                                    id: file.id,
+                                    url: file.url,
+                                    name: file.name,
+                                    path: file.path,
+                                });
                             }
                         });
                     });
                 }),
-            )) as Array<string>
+            )) as Array<FileEntity>
         ).filter((file) => file !== null);
+
+        result.forEach((r) => {
+            this.logger.log(`[Delete] ${r.url}`);
+        });
+
+        return result;
     }
 }

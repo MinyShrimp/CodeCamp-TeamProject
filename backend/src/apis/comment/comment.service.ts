@@ -16,7 +16,7 @@ import { InjectEntityManager } from '@nestjs/typeorm';
 @Injectable()
 export class CommentService {
     constructor(
-        private readonly commentRepository: CommentRepository, // // private readonly boardRepository: BoardRepository,
+        private readonly commentRepository: CommentRepository, //
         private readonly boardRepository: BoardRepository,
         private readonly userRepository: UserRepository,
 
@@ -89,7 +89,7 @@ export class CommentService {
 
     async updateComment(
         input: UpdateCommentInput, //
-    ) {
+    ): Promise<CommentEntity> {
         const comment = await this.commentRepository.findOneByComment(input.id);
         if (!comment) {
             throw new ConflictException(

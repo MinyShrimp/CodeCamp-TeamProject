@@ -1,7 +1,7 @@
 import { Field, Float, ID, Int, ObjectType } from '@nestjs/graphql';
 import { Max, Min } from 'class-validator';
-import { NovelEntity } from 'src/apis/novel/entities/novel.entity';
 import { UserEntity } from 'src/apis/user/entities/user.entity';
+import { NovelEntity } from 'src/apis/novel/entities/novel.entity';
 import {
     Entity,
     Column,
@@ -14,7 +14,7 @@ import {
 } from 'typeorm';
 
 /* NovelReview Entity */
-@Entity({ name: 'nove_review' })
+@Entity({ name: 'novel_review' })
 @ObjectType({ description: '소설 리뷰 Entity' })
 export class NovelReviewEntity {
     @PrimaryGeneratedColumn('uuid')
@@ -26,12 +26,12 @@ export class NovelReviewEntity {
     contents: string;
 
     @Min(0)
-    @Column()
+    @Column({ default: 0, unsigned: true })
     @Field(() => Int, { description: '좋아요 갯수' })
     likeCount: number;
 
     @Min(0)
-    @Column()
+    @Column({ default: 0, unsigned: true })
     @Field(() => Int, { description: '싫어요 갯수' })
     dislikeCount: number;
 

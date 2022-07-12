@@ -103,7 +103,7 @@ import { TempStorageModule } from './apis/tempStorage/tempStorage.module';
             charset: 'utf8mb4',
             collaction: 'utf8mb4_general_ci',
             synchronize: true,
-            logging: true,
+            // logging: true,
         }),
 
         ///////////////////////////////////////////////////////////////////////////

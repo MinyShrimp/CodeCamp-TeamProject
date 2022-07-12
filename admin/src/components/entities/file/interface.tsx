@@ -6,9 +6,14 @@ export const DummyFile = {
 };
 export type IFile = typeof DummyFile;
 
+export const SimpleDummyFile = {
+    id: '',
+    url: '',
+};
+
 // prettier-ignore
 export const DummyFileColumn = {
-    id: '', name: '', path: '', url: '',
+    ...SimpleDummyFile, name: '', path: '', 
     createAt: getDefaultDate(), deleteAt: getDefaultDate(),
     files: [DummyFile]
 };

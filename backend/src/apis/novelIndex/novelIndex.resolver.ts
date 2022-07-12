@@ -4,6 +4,7 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { MESSAGES } from 'src/commons/message/Message.enum';
 import { IPayload } from 'src/commons/interfaces/Payload.interface';
 import { CurrentUser } from 'src/commons/auth/gql-user.param';
+import { ResultMessage } from 'src/commons/message/ResultMessage.dto';
 import { GqlJwtAccessGuard } from 'src/commons/auth/gql-auth.guard';
 
 import { NovelIndexEntity } from './entities/novelIndex.entity';
@@ -56,31 +57,37 @@ export class NovelIndexResolver {
 
     @UseGuards(GqlJwtAccessGuard)
     @Mutation(
-        () => String, //
+        () => ResultMessage, //
         { description: '소설 인덱스 삭제 취소' },
     )
     async restoreNovelIndex(
         @CurrentUser() user: IPayload,
         @Args('novelIndexID') id: string,
-    ): Promise<string> {
+    ): Promise<ResultMessage> {
         const result = await this.novelIndexService.restore(user.id, id);
-        return result
-            ? MESSAGES.NOVEL_INDEX_RESTORE_SUCCESSED
-            : MESSAGES.NOVEL_INDEX_RESTORE_FAILED;
+        return new ResultMessage({
+            isSuccess: result,
+            contents: result
+                ? MESSAGES.NOVEL_INDEX_RESTORE_SUCCESSED
+                : MESSAGES.NOVEL_INDEX_RESTORE_FAILED,
+        });
     }
 
     @UseGuards(GqlJwtAccessGuard)
     @Mutation(
-        () => String, //
+        () => ResultMessage, //
         { description: '소설 인덱스 삭제' },
     )
     async deleteNovelIndex(
         @CurrentUser() user: IPayload,
         @Args('novelIndexID') id: string,
-    ): Promise<string> {
+    ): Promise<ResultMessage> {
         const result = await this.novelIndexService.delete(user.id, id);
-        return result
-            ? MESSAGES.NOVEL_INDEX_SOFT_DELETE_SUCCESSED
-            : MESSAGES.NOVEL_INDEX_SOFT_DELETE_FAILED;
+        return new ResultMessage({
+            isSuccess: result,
+            contents: result
+                ? MESSAGES.NOVEL_INDEX_SOFT_DELETE_SUCCESSED
+                : MESSAGES.NOVEL_INDEX_SOFT_DELETE_FAILED,
+        });
     }
 }

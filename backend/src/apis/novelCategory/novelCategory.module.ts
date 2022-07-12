@@ -7,6 +7,7 @@ import { NovelCategoryAdminRepository } from './entities/novelCategory.admin.rep
 
 import { NovelCategoryService } from './novelCategory.service';
 import { NovelCategoryAdminController } from './novelCategory.admin.controller';
+import { NovelCategoryResolver } from './novelCategory.resolver';
 
 @Module({
     imports: [
@@ -24,6 +25,7 @@ import { NovelCategoryAdminController } from './novelCategory.admin.controller';
         NovelCategoryAdminRepository, //
 
         NovelCategoryService,
+        NovelCategoryResolver,
         NovelCategoryRepository,
     ],
 })

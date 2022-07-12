@@ -19,6 +19,7 @@ import { PhoneEntity } from 'src/apis/phone/entities/phone.entity';
 import { UserLikeEntity } from 'src/apis/userLike/entities/userLike.entity';
 import { UserBlockEntity } from 'src/apis/userBlock/entities/userBlock.entity';
 import { UserClassEntity } from 'src/apis/userClass/entities/userClass.entity';
+import { PaymentEntity } from 'src/apis/payment/entities/payment.entity';
 
 @Entity({ name: 'user' })
 @ObjectType({ description: '유저 Entity' })
@@ -121,6 +122,14 @@ export class UserEntity {
     )
     @Field(() => [UserLikeEntity])
     userLikes: UserLikeEntity[];
+
+    // 결제 목록
+    @OneToMany(
+        () => PaymentEntity,
+        (payment) => payment.user, //
+    )
+    @Field(() => [PaymentEntity])
+    payments: PaymentEntity[];
 
     // 게시판
     @OneToMany(() => BoardEntity, (board) => board.user)
