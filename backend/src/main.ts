@@ -1,12 +1,20 @@
 import { ValidationPipe } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
 import { graphqlUploadExpress } from 'graphql-upload';
+import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+
 import { HttpExceptionFilter } from './commons/filters/http-exception.filter';
 import { setupSwagger } from './commons/utils/swaggerSetup.util';
+import { AppLoggerService } from './logger.service';
+import { createLogger } from './winston.config';
 
 async function bootstrap() {
-    const app = await NestFactory.create(AppModule);
+    createLogger();
+
+    const app = await NestFactory.create(AppModule, {
+        logger: new AppLoggerService(),
+    });
+
     ///////////////////////////////////////////////////////////////////////////
     app.enableCors({
         origin: [

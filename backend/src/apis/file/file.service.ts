@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 
 import { FileUpload } from 'graphql-upload';
 
@@ -16,6 +16,8 @@ export class FileService {
         private readonly mediaService: MediaServerService,
         private readonly gStorageService: GoogleStorageSerivce,
     ) {}
+
+    private logger = new Logger('File');
 
     ///////////////////////////////////////////////////////////////////
     // 구글 Storage //
@@ -37,8 +39,20 @@ export class FileService {
             ? await this.gStorageService.uploadThumb(type, writeFiles)
             : await this.gStorageService.upload(type, writeFiles);
 
+        tmps.forEach((tmp) => {
+            this.logger.log(`[Google Storage Upload] ${tmp.url}`);
+        });
+
         // DB Table에 추가 후 반환
-        return await Promise.all(tmps.map((v) => this.fileRepository.save(v)));
+        const dbs = await Promise.all(
+            tmps.map((v) => this.fileRepository.save(v)),
+        );
+
+        dbs.forEach((db) => {
+            this.logger.log(`[DB] ${db.id} | ${db.url}`);
+        });
+
+        return dbs;
     }
 
     /**

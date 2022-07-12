@@ -18,6 +18,7 @@ admin/public/
 
 # compiled output
 dist
+log
 
 # Logs
 logs
