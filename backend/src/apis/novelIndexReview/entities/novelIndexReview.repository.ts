@@ -11,6 +11,30 @@ export class NovelIndexReviewRepository {
     ) {}
 
     ///////////////////////////////////////////////////////////////////
+    // 조회 //
+
+    /** 전체 조회 */
+
+    async findAll(
+        episodeID: string, //
+    ): Promise<NovelIndexReviewEntity[]> {
+        return await this.episodeRepository.find({
+            relations: ['novelIndex', 'user'],
+            where: { novelIndex: episodeID },
+        });
+    }
+
+    /** 리뷰ID 기반 조회 */
+    async findOneByReview(
+        reviewID: string, //
+    ): Promise<NovelIndexReviewEntity> {
+        return await this.episodeRepository.findOne({
+            relations: ['user', 'novelIndex'],
+            where: { id: reviewID },
+        });
+    }
+
+    ///////////////////////////////////////////////////////////////////
     // 생성 //
 
     async save(
