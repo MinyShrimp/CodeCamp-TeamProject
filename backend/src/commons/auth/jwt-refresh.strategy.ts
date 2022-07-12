@@ -50,6 +50,7 @@ export class JwtRefreshStrategy extends PassportStrategy(
             id: payload.sub,
             name: payload.name,
             email: payload.email,
+            nickName: payload.nickName,
             isAdmin: payload.isAdmin ?? false,
             access_exp: 0,
             access_token: '',

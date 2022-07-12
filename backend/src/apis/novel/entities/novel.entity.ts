@@ -14,12 +14,12 @@ import {
     PrimaryGeneratedColumn,
 } from 'typeorm';
 
+import { FileEntity } from 'src/apis/file/entities/file.entity';
 import { UserEntity } from 'src/apis/user/entities/user.entity';
 import { NovelTagEntity } from 'src/apis/novelTag/entities/novelTag.entity';
 import { NovelIndexEntity } from 'src/apis/novelIndex/entities/novelIndex.entity';
 import { NovelReviewEntity } from 'src/apis/novelReview/entities/novelReview.entity';
 import { NovelCategoryEntity } from 'src/apis/novelCategory/entities/novelCategory.entity';
-import { FileEntity } from 'src/apis/file/entities/file.entity';
 
 /* Novel Entity */
 @Entity({ name: 'novel' })
@@ -32,10 +32,6 @@ export class NovelEntity {
     @Column()
     @Field(() => String, { description: '제목' })
     title: string;
-
-    @Column({ nullable: true })
-    @Field(() => String, { description: '소제목', nullable: true })
-    subtitle?: string;
 
     @Column({ type: 'text' })
     @Field(() => String, { description: '설명' })

@@ -14,6 +14,16 @@ export class NovelRepository {
         private readonly connection: Connection,
     ) {}
 
+    private readonly _selector = [
+        'novel.id',
+        'novel.title',
+        'novel.description',
+        'novel.likeCount',
+        'novel.viewCount',
+        'novel.createAt',
+        'novel.updateAt',
+    ];
+
     /**
      * 전체 조회
      */
@@ -21,14 +31,7 @@ export class NovelRepository {
         return await this.novelRepository
             .createQueryBuilder('novel')
             .select([
-                'novel.id',
-                'novel.title',
-                'novel.subtitle',
-                'novel.description',
-                'novel.likeCount',
-                'novel.viewCount',
-                'novel.createAt',
-                'novel.updateAt',
+                ...this._selector,
                 'user.id',
                 'user.nickName',
                 'class.id',
@@ -36,11 +39,45 @@ export class NovelRepository {
                 'category.name',
                 'tags.id',
                 'tags.name',
+                'files.id',
+                'files.url',
             ])
             .leftJoin('novel.user', 'user')
             .leftJoin('user.userClass', 'class')
             .leftJoin('novel.novelCategory', 'category')
             .leftJoin('novel.novelTags', 'tags')
+            .leftJoin('novel.files', 'files')
+            .where('novel.user is not NULL')
+            .orderBy('novel.createAt', 'DESC')
+            .getMany();
+    }
+
+    async getPage(
+        page: number, //
+    ): Promise<NovelEntity[]> {
+        const take = 10;
+
+        return await this.novelRepository
+            .createQueryBuilder('novel')
+            .select([
+                ...this._selector,
+                'user.id',
+                'user.nickName',
+                'class.id',
+                'category.id',
+                'category.name',
+                'tags.id',
+                'tags.name',
+                'files.id',
+                'files.url',
+            ])
+            .leftJoin('novel.user', 'user')
+            .leftJoin('user.userClass', 'class')
+            .leftJoin('novel.novelCategory', 'category')
+            .leftJoin('novel.novelTags', 'tags')
+            .leftJoin('novel.files', 'files')
+            .take(take)
+            .skip(take * (page - 1))
             .where('novel.user is not NULL')
             .orderBy('novel.createAt', 'DESC')
             .getMany();
@@ -54,21 +91,13 @@ export class NovelRepository {
     ): Promise<NovelEntity> {
         return await this.novelRepository
             .createQueryBuilder('novel')
-            .select([
-                'novel.id',
-                'novel.title',
-                'novel.subtitle',
-                'novel.description',
-                'novel.likeCount',
-                'novel.viewCount',
-                'novel.createAt',
-                'novel.updateAt',
-            ])
+            .select(this._selector)
             .leftJoinAndSelect('novel.user', 'user')
             .leftJoinAndSelect('novel.novelCategory', 'category')
             .leftJoinAndSelect('novel.novelTags', 'tags')
             .leftJoinAndSelect('novel.novelIndexs', 'indexs')
             .leftJoinAndSelect('novel.novelReviews', 'reviews')
+            .leftJoinAndSelect('novel.files', 'files')
             .where('novel.user is not null')
             .andWhere('novel.id=:id', { id: novelID })
             .getOne();
@@ -118,6 +147,16 @@ export class NovelRepository {
             .where('n.id=:novelID', { novelID: novelID })
             .andWhere('u.id=:userID', { userID: userID })
             .getOne();
+    }
+
+    /**
+     * 전체 갯수 조회
+     */
+    async getCount(): Promise<number> {
+        return await this.novelRepository
+            .createQueryBuilder('n')
+            .where('n.user is not null')
+            .getCount();
     }
 
     /**

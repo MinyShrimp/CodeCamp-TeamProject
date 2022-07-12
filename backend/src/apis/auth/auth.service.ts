@@ -53,6 +53,7 @@ export class AuthService {
             sub: user.id,
             name: user.name,
             email: user.email,
+            nickName: user.nickName,
         };
 
         // 권한 처리

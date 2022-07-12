@@ -1,9 +1,8 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, UpdateResult } from 'typeorm';
 import { getNowDate } from 'src/commons/utils/date.util';
 import { UserEntity } from './user.entity';
-import { MESSAGES } from 'src/commons/message/Message.enum';
 import { UpdateUserInput } from '../dto/updateUser.input';
 import { PaymentEntity } from 'src/apis/payment/entities/payment.entity';
 
@@ -63,14 +62,6 @@ export class UserRepository {
     // 조회 //
 
     /**
-     * 전체 조회
-     * @returns 조회된 회원 정보 목록
-     */
-    async findAll(): Promise<UserEntity[]> {
-        return await this.userRepository.find({});
-    }
-
-    /**
      * ID 기반 회원 조회
      * @param userID
      * @returns 회원 정보
@@ -93,9 +84,11 @@ export class UserRepository {
                 'ae.isAuth',
                 'ae.updateAt',
                 'ul.createAt',
+                'ult.id',
                 'ult.nickName',
                 'ult.email',
                 'ub.createAt',
+                'ubt.id',
                 'ubt.nickName',
                 'ubt.email',
                 'board.id',
@@ -141,7 +134,6 @@ export class UserRepository {
         const findOne = await this.userRepository
             .createQueryBuilder('user')
             .select([
-                'user.id',
                 'p.id',
                 'p.impUid',
                 'p.merchantUid',

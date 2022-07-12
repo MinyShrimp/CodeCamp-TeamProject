@@ -4,7 +4,7 @@ import { NovelEntity } from '../entities/novel.entity';
 @InputType()
 export class CreateNovelInput extends PickType(
     NovelEntity,
-    ['title', 'subtitle', 'description'],
+    ['title', 'description'],
     InputType,
 ) {
     @Field(() => [String], {
