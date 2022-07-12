@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { FileAdminRepository } from './entities/file.admin.repository';
 import { GoogleStorageSerivce } from './gStorage.service';
 import { MediaServerService } from './media.service';
@@ -11,6 +11,8 @@ export class FileAdminService {
         private readonly fileAdminRepository: FileAdminRepository, //
     ) {}
 
+    private readonly logger = new Logger('File Admin');
+
     /**
      * 구글 스토리지 벌크 Delete
      */
@@ -21,15 +23,18 @@ export class FileAdminService {
             (v) => v,
         );
 
-        const noneSoftDeletes = finds.filter((v) => v.deleteAt === null);
-        const gcp_result = await this.gStorageService.delete(noneSoftDeletes);
+        const gcp_result = await this.gStorageService.delete(finds);
         const delete_result = await this.fileAdminRepository.bulkDelete(
-            gcp_result,
+            gcp_result.map((v) => v.id),
         );
 
-        return gcp_result.map((id, idx) => {
+        finds.forEach((file) => {
+            this.logger.log(`[Delete] ${file.id}`);
+        });
+
+        return gcp_result.map((file, idx) => {
             return {
-                id: id,
+                id: file.id,
                 db: delete_result[idx].affected ? true : false,
             };
         });

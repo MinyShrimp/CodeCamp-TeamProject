@@ -17,7 +17,7 @@ export class FileService {
         private readonly gStorageService: GoogleStorageSerivce,
     ) {}
 
-    private logger = new Logger('File');
+    private readonly logger = new Logger('File');
 
     ///////////////////////////////////////////////////////////////////
     // 구글 Storage //
@@ -39,20 +39,14 @@ export class FileService {
             ? await this.gStorageService.uploadThumb(type, writeFiles)
             : await this.gStorageService.upload(type, writeFiles);
 
-        tmps.forEach((tmp) => {
-            this.logger.log(`[Google Storage Upload] ${tmp.url}`);
-        });
-
         // DB Table에 추가 후 반환
-        const dbs = await Promise.all(
-            tmps.map((v) => this.fileRepository.save(v)),
-        );
+        const result = await this.fileRepository.saveBulk(tmps);
 
-        dbs.forEach((db) => {
-            this.logger.log(`[DB] ${db.id} | ${db.url}`);
+        result.forEach((v) => {
+            this.logger.log(`[Insert] ${v.id} | ${v.url}`);
         });
 
-        return dbs;
+        return result;
     }
 
     /**
@@ -61,19 +55,11 @@ export class FileService {
     async softDeleteInGoogleStorage(
         fileIDs: string[], //
     ): Promise<boolean[]> {
-        // DB에 저장되어있는지 확인
-        // DB에 저장되지 않은 것은 스킵
-        const dbFiles = (
-            await Promise.all(
-                fileIDs.map((fileID) => this.fileRepository.findOne(fileID)),
-            )
-        ).filter((file) => file);
-
-        // Google Storage 삭제
-        const deleteFiles = await this.gStorageService.delete(dbFiles);
-
-        // DB에도 삭제
         const results = await this.fileRepository.softDelete(fileIDs);
+
+        fileIDs.forEach((id) => {
+            this.logger.log(`[Soft Delete] ${id}`);
+        });
 
         return results.map((result) => {
             return result.affected ? true : false;

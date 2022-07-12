@@ -3,11 +3,11 @@ import { NovelEntity } from 'src/apis/novel/entities/novel.entity';
 import {
     Entity,
     Column,
+    ManyToOne,
+    JoinColumn,
     CreateDateColumn,
     DeleteDateColumn,
     PrimaryGeneratedColumn,
-    ManyToOne,
-    JoinColumn,
 } from 'typeorm';
 
 /* FileUpload Entity */
@@ -26,7 +26,7 @@ export class FileEntity {
     @Field(() => String, { description: '폴더' })
     path: string;
 
-    @Column()
+    @Column({ unique: true })
     @Field(() => String, { description: 'URL' })
     url: string;
 
