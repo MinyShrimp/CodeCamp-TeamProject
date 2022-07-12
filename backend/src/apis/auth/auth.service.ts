@@ -1,7 +1,7 @@
 import * as bcrypt from 'bcryptjs';
 import { Response } from 'express';
 import { JwtService } from '@nestjs/jwt';
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, Logger } from '@nestjs/common';
 
 import { IPayloadSub } from '../../commons/interfaces/Payload.interface';
 import { MESSAGES } from '../../commons/message/Message.enum';
@@ -19,6 +19,8 @@ export class AuthService {
         private readonly userRepository: UserRepository,
         private readonly userCheckService: UserCheckService,
     ) {}
+
+    private logger = new Logger('Auth Service');
 
     ///////////////////////////////////////////////////////////////////
     // Utils //
@@ -170,6 +172,8 @@ export class AuthService {
 
         // 로그인 성공
         await this.userRepository.login(user.id);
+
+        this.logger.log(`User Login : ${user.nickName}`);
 
         // jwt 생성
         const access_token = this.getAccessToken(user);

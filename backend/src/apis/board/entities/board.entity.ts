@@ -14,6 +14,7 @@ import {
 
 import { UserEntity } from 'src/apis/user/entities/user.entity';
 import { CommentEntity } from 'src/apis/comment/entities/comment.entity';
+import { FileEntity } from 'src/apis/file/entities/file.entity';
 
 /* Board Entity */
 @Entity({ name: 'board' })
@@ -60,12 +61,19 @@ export class BoardEntity {
     @DeleteDateColumn()
     deleteAt: Date;
 
+    @OneToMany(
+        () => FileEntity,
+        (file) => file.novel, //
+    )
+    @Field(() => [FileEntity])
+    files: FileEntity[];
+
     @ManyToOne(
         () => UserEntity, //
         { cascade: true, onDelete: 'SET NULL' },
     )
     @JoinColumn({ name: 'userId' })
-    @Field(() => UserEntity)
+    @Field(() => UserEntity, { nullable: true })
     user: UserEntity;
 
     @OneToMany(

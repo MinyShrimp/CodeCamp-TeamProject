@@ -5,6 +5,7 @@ import { getNowDate } from 'src/commons/utils/date.util';
 import { UserEntity } from './user.entity';
 import { MESSAGES } from 'src/commons/message/Message.enum';
 import { UpdateUserInput } from '../dto/updateUser.input';
+import { PaymentEntity } from 'src/apis/payment/entities/payment.entity';
 
 @Injectable()
 export class UserRepository {
@@ -129,6 +130,31 @@ export class UserRepository {
             where: { email: email },
             relations: ['userClass'],
         });
+    }
+
+    /**
+     * 유저 기반 결제 정보 조회
+     */
+    async findPayments(
+        userID: string, //
+    ): Promise<PaymentEntity[]> {
+        const findOne = await this.userRepository
+            .createQueryBuilder('user')
+            .select([
+                'user.id',
+                'p.id',
+                'p.impUid',
+                'p.merchantUid',
+                'p.amount',
+                'p.createAt',
+                's.id',
+            ])
+            .leftJoin('user.payments', 'p')
+            .leftJoin('p.status', 's')
+            .where('user.id=:id', { id: userID })
+            .getOne();
+
+        return findOne.payments;
     }
 
     ///////////////////////////////////////////////////////////////////
