@@ -10,6 +10,10 @@ export class NovelCategoryRepository {
         private readonly categoryRepository: Repository<NovelCategoryEntity>,
     ) {}
 
+    async findAll(): Promise<NovelCategoryEntity[]> {
+        return await this.categoryRepository.find({});
+    }
+
     async findOne(
         categoryID: string, //
     ): Promise<NovelCategoryEntity> {
