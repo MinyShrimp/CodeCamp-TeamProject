@@ -47,6 +47,20 @@ export class BoardRepository {
         });
     }
 
+    /**
+     * 키워드 기반 조회
+     */
+    async search(
+        keyword: string, //
+    ): Promise<BoardEntity[]> {
+        const repoData = await this.boardRepository.find({
+            relations: ['user', 'comments'],
+        });
+        let result = repoData.filter((word) => word.title.includes(keyword));
+
+        return result;
+    }
+
     ///////////////////////////////////////////////////////////////////
     // 생성 //
 
