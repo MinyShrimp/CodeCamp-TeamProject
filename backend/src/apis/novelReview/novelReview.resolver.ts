@@ -5,8 +5,8 @@ import { IPayload } from 'src/commons/interfaces/Payload.interface';
 import { CurrentUser } from 'src/commons/auth/gql-user.param';
 import { GqlJwtAccessGuard } from 'src/commons/auth/gql-auth.guard';
 
-import { NovelReviewService } from './novelReview.service';
 import { NovelReviewEntity } from './entities/novelReview.entity';
+import { NovelReviewService } from './novelReview.service';
 import { CreateNovelReviewInput } from './dto/createNovelReview.input';
 import { UpdateNovelReviewInput } from './dto/updateNovelReview.input';
 
@@ -74,6 +74,7 @@ export class NovelReviewResolver {
     ): Promise<NovelReviewEntity> {
         return await this.novelReviewService.updateReview(input);
     }
+
     ///////////////////////////////////////////////////////////////////
     // 삭제 //
 

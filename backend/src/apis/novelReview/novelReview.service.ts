@@ -70,7 +70,6 @@ export class NovelReviewService {
             input.id,
         );
 
-        console.log('여기는 서비스 리뷰===========', review);
         if (!review) throw new ConflictException(MESSAGES.NOVEL_REVIEW_UNVALID);
 
         return await this.novelReviewRepository.save({
