@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+import { FileModule } from '../file/file.module';
 import { UserModule } from '../user/user.module';
 import { NovelTagModule } from '../novelTag/novelTag.module';
 import { NovelCategoryModule } from '../novelCategory/novelCategory.module';
@@ -19,6 +20,7 @@ import { NovelAdminController } from './novel.admin.controller';
             NovelEntity, //
         ]),
 
+        FileModule,
         UserModule,
         NovelTagModule,
         NovelCategoryModule,

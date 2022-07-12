@@ -14,4 +14,7 @@ export class CreateNovelInput extends PickType(
 
     @Field(() => String, { description: `소설 카테고리 ID. (UUID)` })
     categoryID: string;
+
+    @Field(() => [String], { description: '파일 IDs' })
+    fileIDs: Array<string>;
 }

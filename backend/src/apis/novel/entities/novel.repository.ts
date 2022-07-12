@@ -121,6 +121,15 @@ export class NovelRepository {
     }
 
     /**
+     * 생성
+     */
+    create(
+        novel: Partial<Omit<NovelEntity, 'id'>>, //
+    ): NovelEntity {
+        return this.novelRepository.create(novel);
+    }
+
+    /**
      * 저장
      */
     async save(

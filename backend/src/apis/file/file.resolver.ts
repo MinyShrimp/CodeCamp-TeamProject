@@ -10,7 +10,7 @@ import { FileService } from './file.service';
 
 /* FileUpload API */
 @Resolver()
-// @UseGuards(GqlJwtAccessGuard)
+@UseGuards(GqlJwtAccessGuard)
 export class FileResolver {
     constructor(
         private readonly fileService: FileService, //
@@ -36,7 +36,6 @@ export class FileResolver {
         files: FileUpload[],
     ): Promise<FileEntity[]> {
         return this.fileService.uploadInGoogleStorage(type, files, false);
-        // return this.fileService.upload(type, files);
     }
 
     /**
@@ -53,7 +52,6 @@ export class FileResolver {
         files: FileUpload[],
     ): Promise<FileEntity[]> {
         return this.fileService.uploadInGoogleStorage(type, files, true);
-        // return this.fileService.uploadWithThumb(type, files);
     }
 
     ///////////////////////////////////////////////////////////////////
@@ -75,6 +73,5 @@ export class FileResolver {
         @Args({ name: 'fileIDs', type: () => [String] }) fileIDs: string[], //
     ): Promise<boolean[]> {
         return this.fileService.softDeleteInGoogleStorage(fileIDs);
-        // return this.fileService.softDelete(fileIDs);
     }
 }

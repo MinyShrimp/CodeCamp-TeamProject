@@ -2,6 +2,8 @@ import { ConflictException, Injectable } from '@nestjs/common';
 
 import { MESSAGES } from 'src/commons/message/Message.enum';
 
+import { FileRepository } from '../file/entities/file.repository';
+
 import { UserService } from '../user/user.service';
 import { NovelTagService } from '../novelTag/novelTag.service';
 import { NovelCategoryService } from '../novelCategory/novelCategory.service';
@@ -14,6 +16,7 @@ import { UpdateNovelInput } from './dto/updateNovel.input';
 @Injectable()
 export class NovelService {
     constructor(
+        private readonly fileRepository: FileRepository,
         private readonly userService: UserService,
         private readonly novelTagService: NovelTagService,
         private readonly novelCategoryService: NovelCategoryService,
@@ -79,7 +82,7 @@ export class NovelService {
         userID: string,
         createNovelInput: CreateNovelInput, //
     ): Promise<NovelEntity> {
-        const { categoryID, tags, ...input } = createNovelInput;
+        const { categoryID, tags, fileIDs, ...input } = createNovelInput;
 
         // 유저 찾기
         const user = await this.userService.checkValid(userID);
@@ -90,11 +93,15 @@ export class NovelService {
         // 태그 찾기
         const tagEntities = await this.novelTagService.create(tags);
 
+        // 이미지 업로드
+        const uploadFiles = await this.fileRepository.findBulk(fileIDs);
+
         // 저장
         return await this.novelRepository.save({
             user: user,
             novelCategory: category,
             novelTags: tagEntities,
+            files: uploadFiles,
             ...input,
         });
     }
@@ -106,7 +113,7 @@ export class NovelService {
         userID: string,
         updateNovelInput: UpdateNovelInput, //
     ): Promise<NovelEntity> {
-        const { categoryID, tags, ...input } = updateNovelInput;
+        const { categoryID, tags, fileIDs, ...input } = updateNovelInput;
 
         // 검사
         await this.checkValidWithUser(userID, updateNovelInput.id);
@@ -126,11 +133,18 @@ export class NovelService {
                 ? await this.novelTagService.create(tags)
                 : novel.novelTags;
 
+        // 이미지 업로드
+        const uploadFiles =
+            fileIDs !== undefined
+                ? await this.fileRepository.findBulk(fileIDs)
+                : novel.files;
+
         // 수정
         return await this.novelRepository.update({
             ...novel,
             novelCategory: category,
             novelTags: tagEntities,
+            files: uploadFiles,
             ...input,
         });
     }

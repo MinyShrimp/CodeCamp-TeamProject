@@ -36,6 +36,16 @@ export class FileRepository {
             .getOne();
     }
 
+    async findBulk(
+        fileIDs: Array<string>, //
+    ): Promise<FileEntity[]> {
+        return await Promise.all(
+            fileIDs.map((id) => {
+                return this.findOne(id);
+            }),
+        );
+    }
+
     create(
         option?: Partial<FileEntity>, //
     ): FileEntity {

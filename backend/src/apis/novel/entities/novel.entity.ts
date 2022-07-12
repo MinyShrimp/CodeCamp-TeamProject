@@ -19,6 +19,7 @@ import { NovelTagEntity } from 'src/apis/novelTag/entities/novelTag.entity';
 import { NovelIndexEntity } from 'src/apis/novelIndex/entities/novelIndex.entity';
 import { NovelReviewEntity } from 'src/apis/novelReview/entities/novelReview.entity';
 import { NovelCategoryEntity } from 'src/apis/novelCategory/entities/novelCategory.entity';
+import { FileEntity } from 'src/apis/file/entities/file.entity';
 
 /* Novel Entity */
 @Entity({ name: 'novel' })
@@ -100,4 +101,11 @@ export class NovelEntity {
     )
     @Field(() => [NovelReviewEntity])
     novelReviews: NovelReviewEntity[];
+
+    @OneToMany(
+        () => FileEntity,
+        (file) => file.novel, //
+    )
+    @Field(() => [FileEntity])
+    files: FileEntity[];
 }
