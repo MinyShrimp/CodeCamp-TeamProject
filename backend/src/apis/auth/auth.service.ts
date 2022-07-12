@@ -56,9 +56,9 @@ export class AuthService {
         };
 
         // 권한 처리
-        if (user.userClass.id === 'ADMIN') {
-            payload['isAdmin'] = true;
-        }
+        // if (user.userClass.id === 'ADMIN') {
+        //     payload['isAdmin'] = true;
+        // }
 
         return payload;
     }
@@ -77,7 +77,7 @@ export class AuthService {
         return this.jwtService.sign(payload, {
             /* Options */
             secret: process.env.JWT_ACCESS_KEY,
-            expiresIn: '1h',
+            expiresIn: '1w',
         });
     }
 

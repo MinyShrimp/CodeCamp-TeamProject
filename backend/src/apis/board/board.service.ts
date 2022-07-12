@@ -14,13 +14,20 @@ import { UpdateBoardInput } from './dto/updateBoard.input';
 @Injectable()
 export class BoardService {
     constructor(
-        private readonly boardRepository: BoardRepository, //
         private readonly userRepository: UserRepository,
+        private readonly boardRepository: BoardRepository, //
         private readonly userCheckService: UserCheckService,
     ) {}
 
     ///////////////////////////////////////////////////////////////////
     // 조회 //
+
+    /* 특정 키워드로 게시글 조회 */
+    async findTarget(
+        keyword: string, //
+    ): Promise<BoardEntity[]> {
+        return await this.boardRepository.search(keyword);
+    }
 
     /* 모든 게시글 조회 */
     async findAll(): Promise<BoardEntity[]> {
