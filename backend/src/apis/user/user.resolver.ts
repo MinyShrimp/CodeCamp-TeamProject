@@ -1,4 +1,4 @@
-import { UseGuards } from '@nestjs/common';
+import { Logger, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { IPayload } from 'src/commons/interfaces/Payload.interface';
@@ -15,6 +15,7 @@ import { UserRepository } from './entities/user.repository';
 import { UserService } from './user.service';
 import { CreateUserOutput } from './dto/createUser.output';
 import { PaymentEntity } from '../payment/entities/payment.entity';
+import { UserLikeEntity } from '../userLike/entities/userLike.entity';
 
 /* 유저 API */
 @Resolver()
@@ -30,30 +31,40 @@ export class UserResolver {
     ///////////////////////////////////////////////////////////////////
     // 조회 //
 
-    /**
-     * GET /api/user
-     * - Bearer JWT
-     */
+    // 회원 단일 조회
     @UseGuards(GqlJwtAccessGuard)
     @Query(
         () => UserOutput, //
         { description: '회원 단일 조회, Bearer JWT', nullable: true },
     )
     fetchLoginUser(
-        @CurrentUser() currentUser: IPayload, //
+        @CurrentUser() payload: IPayload, //
     ): Promise<UserOutput> {
-        return this.userRepository.findOneByID(currentUser.id);
+        return this.userRepository.findOneByID(payload.id);
     }
 
+    // 결제 목록
     @UseGuards(GqlJwtAccessGuard)
     @Query(
         () => [PaymentEntity], //
         { description: '회원 결제 목록' },
     )
     fetchPaymentsInUser(
-        @CurrentUser() currentUser: IPayload, //
+        @CurrentUser() payload: IPayload, //
     ): Promise<PaymentEntity[]> {
-        return this.userRepository.findPayments(currentUser.id);
+        return this.userRepository.findPayments(payload.id);
+    }
+
+    // 선호 작가 목록
+    @UseGuards(GqlJwtAccessGuard)
+    @Query(
+        () => [UserLikeEntity], //
+        { description: '선호 작가 목록' },
+    )
+    fetchUserLikeInUser(
+        @CurrentUser() payload: IPayload, //
+    ): Promise<UserLikeEntity[]> {
+        return this.userRepository.findUserLikes(payload.id);
     }
 
     ///////////////////////////////////////////////////////////////////
@@ -75,20 +86,18 @@ export class UserResolver {
     ///////////////////////////////////////////////////////////////////
     // 수정 //
 
-    /**
-     * PATCH /api/user/pwd
-     */
+    // 비밀번호 변경
     @UseGuards(GqlJwtAccessGuard)
     @Mutation(
         () => ResultMessage, //
         { description: '비밀번호 변경, Bearer JWT' },
     )
     async updateUserPwd(
-        @CurrentUser() currentUser: IPayload, //
+        @CurrentUser() payload: IPayload, //
         @Args('pwd') pwd: string,
     ): Promise<ResultMessage> {
         // 비밀번호 변경 + 로그아웃
-        const result = await this.userService.updatePwd(currentUser.id, pwd);
+        const result = await this.userService.updatePwd(payload.id, pwd);
         return new ResultMessage({
             isSuccess: result,
             contents: result
@@ -97,21 +106,18 @@ export class UserResolver {
         });
     }
 
-    /**
-     * PATCH /api/user
-     * - Bearer JWT
-     */
+    // 회원 정보 수정
     @UseGuards(GqlJwtAccessGuard)
     @Mutation(
         () => ResultMessage, //
         { description: '회원 정보 수정, Bearer JWT' },
     )
     async updateLoginUser(
-        @CurrentUser() currentUser: IPayload,
+        @CurrentUser() payload: IPayload,
         @Args('updateInput') updateInput: UpdateUserInput,
     ): Promise<ResultMessage> {
         const result = await this.userService.updateLoginUser(
-            currentUser.id,
+            payload.id,
             updateInput,
         );
         return new ResultMessage({
@@ -125,19 +131,16 @@ export class UserResolver {
     ///////////////////////////////////////////////////////////////////
     // 삭제 //
 
-    /**
-     * DELETE /api/user
-     * - Bearer JWT
-     */
+    // 회원 탈퇴
     @UseGuards(GqlJwtAccessGuard)
     @Mutation(
         () => ResultMessage, //
         { description: '회원 탈퇴 ( Soft ), Bearer JWT' },
     )
     async deleteLoginUser(
-        @CurrentUser() currentUser: IPayload, //
+        @CurrentUser() payload: IPayload, //
     ): Promise<ResultMessage> {
-        const result = await this.userService.softDelete(currentUser.id);
+        const result = await this.userService.softDelete(payload.id);
         return new ResultMessage({
             isSuccess: result,
             contents: result

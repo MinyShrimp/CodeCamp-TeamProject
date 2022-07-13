@@ -30,11 +30,31 @@ export class NovelResolver {
     }
 
     @Query(
+        () => [NovelEntity], //
+        { description: '소설 목록 조회 ( page )' },
+    )
+    fetchNovelsPage(
+        @Args({ name: 'page', type: () => Int }) page: number,
+    ): Promise<Array<NovelEntity>> {
+        return this.novelRepository.getPage(page);
+    }
+
+    @Query(
         () => Int,
         { description: '소설 전체 갯수 조회' }, //
     )
     fetchNovelCount(): Promise<number> {
         return this.novelRepository.getCount();
+    }
+
+    @Query(
+        () => NovelEntity, //
+        { description: '소설 Detail 조회' },
+    )
+    fetchNovelDetail(
+        @Args('novelID') novelID: string, //
+    ): Promise<NovelEntity> {
+        return this.novelRepository.getOne(novelID);
     }
 
     @UseGuards(GqlJwtAccessGuard)

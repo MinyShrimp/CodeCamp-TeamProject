@@ -1,6 +1,12 @@
 ///////////////////////////////////////////////////////////////////////////
 // NestJS //
-import { Module, CacheModule } from '@nestjs/common';
+import {
+    Module,
+    CacheModule,
+    NestModule,
+    MiddlewareConsumer,
+    RequestMethod,
+} from '@nestjs/common';
 
 // GraphQL //
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
@@ -57,6 +63,7 @@ import { ReportEnumModule } from './apis/reportEnum/reportEnum.module';
 
 import { FileModule } from './apis/file/file.module';
 import { TempStorageModule } from './apis/tempStorage/tempStorage.module';
+import { LoggerMiddleware } from './logger.middle';
 
 ///////////////////////////////////////////////////////////////////////////
 @Module({
@@ -159,4 +166,10 @@ import { TempStorageModule } from './apis/tempStorage/tempStorage.module';
     controllers: [AppController],
     providers: [],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+    configure(consumer: MiddlewareConsumer) {
+        consumer
+            .apply(LoggerMiddleware)
+            .forRoutes({ path: 'graphql', method: RequestMethod.POST });
+    }
+}

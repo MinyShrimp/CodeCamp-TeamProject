@@ -20,7 +20,7 @@ export class AuthService {
         private readonly userCheckService: UserCheckService,
     ) {}
 
-    private logger = new Logger('인증');
+    private logger = new Logger('Auth');
 
     ///////////////////////////////////////////////////////////////////
     // Utils //
