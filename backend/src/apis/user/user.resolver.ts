@@ -24,8 +24,6 @@ export class UserResolver {
         private readonly userService: UserService, //
     ) {}
 
-    private logger = new Logger('User');
-
     ///////////////////////////////////////////////////////////////////
     // Util //
 
@@ -44,8 +42,6 @@ export class UserResolver {
     fetchLoginUser(
         @CurrentUser() payload: IPayload, //
     ): Promise<UserOutput> {
-        this.logger.log(`${payload.nickName} - fetchLoginUser`);
-
         return this.userRepository.findOneByID(payload.id);
     }
 
@@ -57,8 +53,6 @@ export class UserResolver {
     fetchPaymentsInUser(
         @CurrentUser() payload: IPayload, //
     ): Promise<PaymentEntity[]> {
-        this.logger.log(`${payload.nickName} - fetchPaymentsInUser`);
-
         return this.userRepository.findPayments(payload.id);
     }
 
@@ -75,8 +69,6 @@ export class UserResolver {
     createUser(
         @Args('createUserInput') input: CreateUserInput, //
     ): Promise<CreateUserOutput> {
-        this.logger.log(`${input.nickName} - createUser`);
-
         return this.userService.createUser(input);
     }
 
@@ -95,8 +87,6 @@ export class UserResolver {
         @CurrentUser() payload: IPayload, //
         @Args('pwd') pwd: string,
     ): Promise<ResultMessage> {
-        this.logger.log(`${payload.nickName} - updateUserPwd`);
-
         // 비밀번호 변경 + 로그아웃
         const result = await this.userService.updatePwd(payload.id, pwd);
         return new ResultMessage({
@@ -120,8 +110,6 @@ export class UserResolver {
         @CurrentUser() payload: IPayload,
         @Args('updateInput') updateInput: UpdateUserInput,
     ): Promise<ResultMessage> {
-        this.logger.log(`${payload.nickName} - updateLoginUser`);
-
         const result = await this.userService.updateLoginUser(
             payload.id,
             updateInput,
@@ -149,8 +137,6 @@ export class UserResolver {
     async deleteLoginUser(
         @CurrentUser() payload: IPayload, //
     ): Promise<ResultMessage> {
-        this.logger.log(`${payload.nickName} - deleteLoginUser`);
-
         const result = await this.userService.softDelete(payload.id);
         return new ResultMessage({
             isSuccess: result,
