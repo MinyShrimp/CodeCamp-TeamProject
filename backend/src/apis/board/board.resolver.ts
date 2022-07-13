@@ -1,11 +1,12 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { IPayload } from 'src/commons/interfaces/Payload.interface';
 import { CurrentUser } from 'src/commons/auth/gql-user.param';
 import { GqlJwtAccessGuard } from 'src/commons/auth/gql-auth.guard';
 
 import { BoardEntity } from './entities/board.entity';
+import { BoardRepository } from './entities/board.repository';
 import { CreateBoardInput } from './dto/createBoard.input';
 import { UpdateBoardInput } from './dto/updateBoard.input';
 
@@ -15,6 +16,7 @@ import { BoardService } from './board.service';
 @Resolver()
 export class BoardResolver {
     constructor(
+        private readonly boardRepository: BoardRepository,
         private readonly boardService: BoardService, //
     ) {}
 
@@ -30,6 +32,15 @@ export class BoardResolver {
         @Args('keyword') keyword: string,
     ): Promise<BoardEntity[]> {
         return this.boardService.findTarget(keyword);
+    }
+
+    // 게시글 전체 갯수 조회
+    @Query(
+        () => Int, //
+        { description: '게시글 전체 갯수' },
+    )
+    fetchBoardAllCount(): Promise<number> {
+        return this.boardRepository.getCount();
     }
 
     // 게시글 전체 조회
