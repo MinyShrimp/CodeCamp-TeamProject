@@ -47,6 +47,16 @@ export class NovelResolver {
         return this.novelRepository.getCount();
     }
 
+    @Query(
+        () => NovelEntity, //
+        { description: '소설 Detail 조회' },
+    )
+    fetchNovelDetail(
+        @Args('novelID') novelID: string, //
+    ): Promise<NovelEntity> {
+        return this.novelRepository.getOne(novelID);
+    }
+
     @UseGuards(GqlJwtAccessGuard)
     @Mutation(
         () => NovelEntity,
