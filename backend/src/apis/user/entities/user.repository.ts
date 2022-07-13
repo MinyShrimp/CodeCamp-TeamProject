@@ -140,9 +140,12 @@ export class UserRepository {
                 'p.merchantUid',
                 'p.amount',
                 'p.createAt',
+                'pp.id',
+                'pp.point',
                 's.id',
             ])
             .leftJoin('user.payments', 'p')
+            .leftJoin('p.product', 'pp')
             .leftJoin('p.status', 's')
             .where('user.id=:id', { id: userID })
             .getOne();

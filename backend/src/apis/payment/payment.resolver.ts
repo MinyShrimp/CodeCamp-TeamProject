@@ -1,5 +1,5 @@
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Post, UseGuards } from '@nestjs/common';
+import { Logger, Post, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 
 import { IPayload } from 'src/commons/interfaces/Payload.interface';
@@ -20,6 +20,8 @@ export class PaymentResolver {
         private readonly paymentService: PaymentService, //
     ) {}
 
+    private readonly logger = new Logger('Payment');
+
     @ApiOperation({
         summary: '결제 정보 저장',
         requestBody: {
@@ -34,6 +36,8 @@ export class PaymentResolver {
         @CurrentUser() currentUser: IPayload,
         @Args('createPaymentInput') createPaymentInput: CreatePaymentInput,
     ): Promise<PaymentEntity> {
+        this.logger.log(`${currentUser.nickName} - createPayment`);
+
         return this.paymentService.createPayment(
             currentUser,
             createPaymentInput,
@@ -48,6 +52,8 @@ export class PaymentResolver {
         @CurrentUser() currentUser: IPayload,
         @Args('cancelPaymentInput') cancelPaymentInput: CancelPaymentInput,
     ): Promise<PaymentEntity> {
+        this.logger.log(`${currentUser.nickName} - cancelPayment`);
+
         return this.paymentService.cancelPayment(
             currentUser,
             cancelPaymentInput,
