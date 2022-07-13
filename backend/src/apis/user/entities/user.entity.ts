@@ -34,12 +34,12 @@ export class UserEntity {
     name: string;
 
     // 닉네임
-    @Column()
+    @Column({ unique: true })
     @Field(() => String, { description: '닉네임' })
     nickName: string;
 
     // 이메일
-    @Column()
+    @Column({ unique: true })
     @IsEmail()
     @Field(() => String, { description: '이메일' })
     email: string;

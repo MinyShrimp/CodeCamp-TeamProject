@@ -134,6 +134,7 @@ export class UserRepository {
         const findOne = await this.userRepository
             .createQueryBuilder('user')
             .select([
+                'user.id',
                 'p.id',
                 'p.impUid',
                 'p.merchantUid',
