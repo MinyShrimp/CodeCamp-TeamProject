@@ -21,8 +21,6 @@ export class HttpExceptionFilter implements ExceptionFilter<HttpException> {
         const status = exception.getStatus();
         const where = host.getArgs()[3].fieldName;
 
-        // console.log(host.getArgs()[3]);
-
         this.logger.warn(`[${status}] ${msg} - ${where}`);
 
         return exception;

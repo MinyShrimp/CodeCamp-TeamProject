@@ -29,6 +29,9 @@ export class UserLikeEntity {
     )
     from: UserEntity;
 
+    @Column({ name: 'fromId', nullable: true })
+    fromID: string;
+
     @ManyToOne(
         () => UserEntity, //
         { onDelete: 'SET NULL' },

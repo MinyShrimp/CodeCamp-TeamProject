@@ -1,10 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, UpdateResult } from 'typeorm';
+
 import { getNowDate } from 'src/commons/utils/date.util';
+import { PaymentEntity } from 'src/apis/payment/entities/payment.entity';
+import { UserLikeEntity } from 'src/apis/userLike/entities/userLike.entity';
+
 import { UserEntity } from './user.entity';
 import { UpdateUserInput } from '../dto/updateUser.input';
-import { PaymentEntity } from 'src/apis/payment/entities/payment.entity';
 
 @Injectable()
 export class UserRepository {
@@ -151,6 +154,29 @@ export class UserRepository {
             .getOne();
 
         return findOne.payments;
+    }
+
+    /**
+     * 유저 기반 선호 작가 조회
+     */
+    async findUserLikes(
+        userID: string, //
+    ): Promise<UserLikeEntity[]> {
+        const findOne = await this.userRepository
+            .createQueryBuilder('user')
+            .select([
+                'user.id',
+                'ul.id',
+                'ul.createAt',
+                'ult.id',
+                'ult.nickName',
+            ])
+            .leftJoin('user.userLikes', 'ul')
+            .leftJoin('ul.to', 'ult')
+            .where('user.id=:id', { id: userID })
+            .getOne();
+
+        return findOne.userLikes;
     }
 
     ///////////////////////////////////////////////////////////////////
