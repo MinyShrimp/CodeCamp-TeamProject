@@ -19,8 +19,11 @@ export class HttpExceptionFilter implements ExceptionFilter<HttpException> {
     catch(exception: HttpException, host: ArgumentsHost) {
         const msg = exception.message;
         const status = exception.getStatus();
+        const where = host.getArgs()[3].fieldName;
 
-        this.logger.warn(`[${status}] ${msg}`);
+        // console.log(host.getArgs()[3]);
+
+        this.logger.warn(`[${status}] ${msg} - ${where}`);
 
         return exception;
 

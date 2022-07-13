@@ -1,4 +1,4 @@
-import { UseGuards } from '@nestjs/common';
+import { Logger, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { IPayload } from 'src/commons/interfaces/Payload.interface';
@@ -24,6 +24,8 @@ export class UserResolver {
         private readonly userService: UserService, //
     ) {}
 
+    private logger = new Logger('User');
+
     ///////////////////////////////////////////////////////////////////
     // Util //
 
@@ -40,9 +42,11 @@ export class UserResolver {
         { description: '회원 단일 조회, Bearer JWT', nullable: true },
     )
     fetchLoginUser(
-        @CurrentUser() currentUser: IPayload, //
+        @CurrentUser() payload: IPayload, //
     ): Promise<UserOutput> {
-        return this.userRepository.findOneByID(currentUser.id);
+        this.logger.log(`${payload.nickName} - fetchLoginUser`);
+
+        return this.userRepository.findOneByID(payload.id);
     }
 
     @UseGuards(GqlJwtAccessGuard)
@@ -51,9 +55,11 @@ export class UserResolver {
         { description: '회원 결제 목록' },
     )
     fetchPaymentsInUser(
-        @CurrentUser() currentUser: IPayload, //
+        @CurrentUser() payload: IPayload, //
     ): Promise<PaymentEntity[]> {
-        return this.userRepository.findPayments(currentUser.id);
+        this.logger.log(`${payload.nickName} - fetchPaymentsInUser`);
+
+        return this.userRepository.findPayments(payload.id);
     }
 
     ///////////////////////////////////////////////////////////////////
@@ -69,6 +75,8 @@ export class UserResolver {
     createUser(
         @Args('createUserInput') input: CreateUserInput, //
     ): Promise<CreateUserOutput> {
+        this.logger.log(`${input.nickName} - createUser`);
+
         return this.userService.createUser(input);
     }
 
@@ -84,11 +92,13 @@ export class UserResolver {
         { description: '비밀번호 변경, Bearer JWT' },
     )
     async updateUserPwd(
-        @CurrentUser() currentUser: IPayload, //
+        @CurrentUser() payload: IPayload, //
         @Args('pwd') pwd: string,
     ): Promise<ResultMessage> {
+        this.logger.log(`${payload.nickName} - updateUserPwd`);
+
         // 비밀번호 변경 + 로그아웃
-        const result = await this.userService.updatePwd(currentUser.id, pwd);
+        const result = await this.userService.updatePwd(payload.id, pwd);
         return new ResultMessage({
             isSuccess: result,
             contents: result
@@ -107,11 +117,13 @@ export class UserResolver {
         { description: '회원 정보 수정, Bearer JWT' },
     )
     async updateLoginUser(
-        @CurrentUser() currentUser: IPayload,
+        @CurrentUser() payload: IPayload,
         @Args('updateInput') updateInput: UpdateUserInput,
     ): Promise<ResultMessage> {
+        this.logger.log(`${payload.nickName} - updateLoginUser`);
+
         const result = await this.userService.updateLoginUser(
-            currentUser.id,
+            payload.id,
             updateInput,
         );
         return new ResultMessage({
@@ -135,9 +147,11 @@ export class UserResolver {
         { description: '회원 탈퇴 ( Soft ), Bearer JWT' },
     )
     async deleteLoginUser(
-        @CurrentUser() currentUser: IPayload, //
+        @CurrentUser() payload: IPayload, //
     ): Promise<ResultMessage> {
-        const result = await this.userService.softDelete(currentUser.id);
+        this.logger.log(`${payload.nickName} - deleteLoginUser`);
+
+        const result = await this.userService.softDelete(payload.id);
         return new ResultMessage({
             isSuccess: result,
             contents: result
