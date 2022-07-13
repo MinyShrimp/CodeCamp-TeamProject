@@ -15,13 +15,12 @@ export class LoggerMiddleware implements NestMiddleware {
             if (/^Bearer .+$/.test(authorization)) {
                 const jwt = authorization.replace('Bearer ', '');
                 const payload = decode(jwt) as IPayloadSub;
-                this.logger.log(`${payload.nickName} - ${name}`);
+                this.logger.log(`${name} - ${payload.nickName}`);
             } else {
                 this.logger.log(`${name}`);
             }
         } catch (e) {
-            console.log(authorization);
-            this.logger.error(`${e.message} - ${name}`, { stack: e });
+            this.logger.warn(`${name} - ${e.message} - ${authorization}`);
         }
 
         next();
