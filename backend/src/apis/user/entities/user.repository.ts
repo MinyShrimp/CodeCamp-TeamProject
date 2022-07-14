@@ -11,6 +11,7 @@ import { NovelDonateEntity } from 'src/apis/novelDonate/entities/novelDonate.ent
 
 import { UserEntity } from './user.entity';
 import { UpdateUserInput } from '../dto/updateUser.input';
+import { FetchPaymentOutput } from 'src/apis/payment/dto/fetchPayments.output';
 
 @Injectable()
 export class UserRepository {
@@ -132,11 +133,29 @@ export class UserRepository {
     }
 
     /**
+     * 결제 정보 갯수 조회
+     */
+    async getPaymentCount(
+        userID: string, //
+    ): Promise<number> {
+        const entity = await this.userRepository
+            .createQueryBuilder('user')
+            .select(['user.id', 'p.id'])
+            .leftJoin('user.payments', 'p')
+            .where('user.id=:id', { id: userID })
+            .getOne();
+        return entity.payments.length;
+    }
+
+    /**
      * 유저 기반 결제 정보 조회
      */
-    async findPayments(
+    async findPaymentsPage(
         userID: string, //
-    ): Promise<PaymentEntity[]> {
+        page: number,
+    ): Promise<FetchPaymentOutput> {
+        const take = 10;
+
         const findOne = await this.userRepository
             .createQueryBuilder('user')
             .select([
@@ -154,10 +173,15 @@ export class UserRepository {
             .leftJoin('p.product', 'pp')
             .leftJoin('p.status', 's')
             .where('user.id=:id', { id: userID })
+            .take(take)
+            .skip(take * (page - 1))
             .orderBy('p.createAt')
             .getOne();
 
-        return findOne.payments;
+        return {
+            payments: findOne.payments,
+            count: await this.getPaymentCount(userID),
+        };
     }
 
     /**

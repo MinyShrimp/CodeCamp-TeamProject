@@ -1,5 +1,5 @@
 import { Logger, UseGuards } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { IPayload } from 'src/commons/interfaces/Payload.interface';
 import { MESSAGES } from 'src/commons/message/Message.enum';
@@ -20,6 +20,7 @@ import { UpdateUserInput } from './dto/updateUser.input';
 import { CreateUserOutput } from './dto/createUser.output';
 
 import { UserService } from './user.service';
+import { FetchPaymentOutput } from '../payment/dto/fetchPayments.output';
 
 /* 유저 API */
 @Resolver()
@@ -50,13 +51,14 @@ export class UserResolver {
     // 결제 목록
     @UseGuards(GqlJwtAccessGuard)
     @Query(
-        () => [PaymentEntity], //
-        { description: '회원 결제 목록' },
+        () => FetchPaymentOutput, //
+        { description: '회원 결제 목록, Pagenation' },
     )
     fetchPaymentsInUser(
         @CurrentUser() payload: IPayload, //
-    ): Promise<PaymentEntity[]> {
-        return this.userRepository.findPayments(payload.id);
+        @Args({ name: 'page', type: () => Int }) page: number,
+    ): Promise<FetchPaymentOutput> {
+        return this.userRepository.findPaymentsPage(payload.id, page);
     }
 
     // 선호 작가 목록

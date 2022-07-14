@@ -72,6 +72,7 @@ export class NovelRepository {
             .leftJoinAndSelect('novel.files', 'files')
             .where('novel.user is not null')
             .andWhere('novel.id=:id', { id: novelID })
+            .orderBy('indexs.createAt', 'DESC')
             .getOne();
     }
 
