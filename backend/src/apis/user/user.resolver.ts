@@ -10,15 +10,16 @@ import { GqlJwtAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { PaymentEntity } from '../payment/entities/payment.entity';
 import { UserLikeEntity } from '../userLike/entities/userLike.entity';
 import { UserBlockEntity } from '../userBlock/entities/userBlock.entity';
+import { NovelLikeEntity } from '../novelLike/entities/novelLike.entity';
+import { NovelDonateEntity } from '../novelDonate/entities/novelDonate.entity';
 
 import { UserOutput } from './dto/user.output';
+import { UserRepository } from './entities/user.repository';
 import { CreateUserInput } from './dto/createUser.input';
 import { UpdateUserInput } from './dto/updateUser.input';
-import { UserRepository } from './entities/user.repository';
+import { CreateUserOutput } from './dto/createUser.output';
 
 import { UserService } from './user.service';
-import { CreateUserOutput } from './dto/createUser.output';
-import { NovelLikeEntity } from '../novelLike/entities/novelLike.entity';
 
 /* 유저 API */
 @Resolver()
@@ -92,6 +93,18 @@ export class UserResolver {
         @CurrentUser() payload: IPayload, //
     ): Promise<NovelLikeEntity[]> {
         return this.userRepository.findNovelLikes(payload.id);
+    }
+
+    // 후원작 목록
+    @UseGuards(GqlJwtAccessGuard)
+    @Query(
+        () => [NovelDonateEntity], //
+        { description: '후원작 목록' },
+    )
+    fetchNovelDonateInUser(
+        @CurrentUser() payload: IPayload, //
+    ): Promise<NovelDonateEntity[]> {
+        return this.userRepository.findNovelDonates(payload.id);
     }
 
     ///////////////////////////////////////////////////////////////////
