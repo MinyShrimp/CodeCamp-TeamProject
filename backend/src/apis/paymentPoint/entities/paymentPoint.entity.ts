@@ -11,6 +11,7 @@ import {
 import { UserEntity } from 'src/apis/user/entities/user.entity';
 import { NovelIndexEntity } from 'src/apis/novelIndex/entities/novelIndex.entity';
 import { PaymentPointStatusEntity } from 'src/apis/paymentPointStatus/entities/paymentPointStatus.entity';
+import { NovelEntity } from 'src/apis/novel/entities/novel.entity';
 
 /* PaymentPoint Entity */
 @Entity({ name: 'payment_point' })
@@ -36,6 +37,7 @@ export class PaymentPointEntity {
     @Field(() => PaymentPointStatusEntity, { nullable: true })
     status: PaymentPointStatusEntity;
 
+    // 회원
     @ManyToOne(
         () => UserEntity, //
         { cascade: true, onDelete: 'SET NULL' },
@@ -44,11 +46,27 @@ export class PaymentPointEntity {
     @Field(() => UserEntity, { nullable: true })
     user: UserEntity;
 
+    @Column({ name: 'userId', nullable: true })
+    userID: string;
+
+    // 소설
+    @ManyToOne(() => NovelEntity, { cascade: true, onDelete: 'SET NULL' })
+    @JoinColumn()
+    @Field(() => NovelEntity, { nullable: true })
+    novel?: NovelEntity;
+
+    @Column({ name: 'noveId', nullable: true })
+    novelID?: string;
+
+    // 에피소드
     @ManyToOne(
         () => NovelIndexEntity, //
         { cascade: true, onDelete: 'SET NULL' },
     )
     @JoinColumn()
     @Field(() => NovelIndexEntity, { nullable: true })
-    novelIndex: NovelIndexEntity;
+    novelIndex?: NovelIndexEntity;
+
+    @Column({ name: 'novelIndexId', nullable: true })
+    novelIndexID?: string;
 }

@@ -1,4 +1,4 @@
-import { PAYMENT_STATUS } from 'src/apis/paymentStatus/interface/status';
+import { PAYMENT_STATUS } from 'src/apis/paymentStatus/interface/status.enum';
 import { PaymentEntity } from '../entities/payment.entity';
 
 export interface IPaymentFind

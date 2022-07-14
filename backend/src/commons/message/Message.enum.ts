@@ -137,6 +137,15 @@ export const MESSAGES = {
 
     EVENT_RESTORE_SUCCESSED: '이벤트 삭제 취소 성공',
     EVENT_RESTORE_FAILED: '이벤트 삭제 취소 실패',
+
+    ///////////////////////////////////////////////////////////////////
+    // 포인트 결제 //
+    POINT_PAYMENT_UNVALID: '존재하지 않는 결제 내역입니다.',
+    POINT_PAYMENT_OVERLAP: '중복 결제입니다.',
+    NOT_ENOUGH_POINT: '포인트가 부족합니다.',
+
+    DO_NOT_SELF_PAID: '자기 자신 작품은 결제할 수 없습니다.',
+    DO_NOT_SELF_DONATE: '자기 자신은 후원할 수 없습니다.',
 } as const;
 
 export type MESSAGES = typeof MESSAGES[keyof typeof MESSAGES];
