@@ -22,6 +22,7 @@ import { UserClassEntity } from 'src/apis/userClass/entities/userClass.entity';
 import { NovelLikeEntity } from 'src/apis/novelLike/entities/novelLike.entity';
 import { NovelDonateEntity } from 'src/apis/novelDonate/entities/novelDonate.entity';
 import { PaymentEntity } from 'src/apis/payment/entities/payment.entity';
+import { PaymentPointEntity } from 'src/apis/paymentPoint/entities/paymentPoint.entity';
 
 @Entity({ name: 'user' })
 @ObjectType({ description: '유저 Entity' })
@@ -148,6 +149,14 @@ export class UserEntity {
     )
     @Field(() => [PaymentEntity])
     payments: PaymentEntity[];
+
+    // 포인트 결제 목록
+    @OneToMany(
+        () => PaymentPointEntity,
+        (payment) => payment.user, //
+    )
+    @Field(() => [PaymentPointEntity])
+    paymentPoints: PaymentPointEntity[];
 
     // 게시판
     @OneToMany(() => BoardEntity, (board) => board.user)

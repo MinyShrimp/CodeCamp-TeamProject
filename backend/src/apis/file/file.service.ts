@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 
 import { FileUpload } from 'graphql-upload';
 
-import { FILE_TYPE } from './entities/type.enum';
+import { FILE_TYPE } from './interface/type.enum';
 import { FileEntity } from './entities/file.entity';
 import { FileRepository } from './entities/file.repository';
 

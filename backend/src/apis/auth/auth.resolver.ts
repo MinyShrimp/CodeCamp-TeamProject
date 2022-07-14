@@ -1,5 +1,5 @@
 import { UseGuards, CACHE_MANAGER, Inject } from '@nestjs/common';
-import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Resolver, Query } from '@nestjs/graphql';
 import { Cache } from 'cache-manager';
 
 import { MESSAGES } from 'src/commons/message/Message.enum';
@@ -26,6 +26,24 @@ export class AuthResolver {
 
     ///////////////////////////////////////////////////////////////////
     // 조회 //
+
+    @UseGuards(GqlJwtAccessGuard)
+    @Query(
+        () => ResultMessage,
+        { description: '비밀번호 맞는지 확인' }, //
+    )
+    async comparePassword(
+        @CurrentUser() payload: IPayload,
+        @Args('pwd') pwd: string,
+    ): Promise<ResultMessage> {
+        const result = await this.authService.comparePwd(payload.id, pwd);
+
+        return new ResultMessage({
+            id: payload.id,
+            isSuccess: result,
+            contents: result ? '비밀번호가 같습니다.' : '비밀번호가 다릅니다.',
+        });
+    }
 
     ///////////////////////////////////////////////////////////////////
     // 생성 //

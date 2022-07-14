@@ -17,27 +17,27 @@ import {
 @ObjectType({ description: 'Report Entity' })
 export class ReportEntity {
     @PrimaryGeneratedColumn('uuid')
-    @Field(() => ID)
+    @Field(() => ID, { description: 'UUID' })
     id: string;
 
     @Column()
-    @Field(() => String)
+    @Field(() => String, { description: '제목' })
     title: string;
 
     @Column()
-    @Field(() => String)
+    @Field(() => String, { description: '내용' })
     contents: string;
 
     @Column()
-    @Field(() => String)
+    @Field(() => String, { description: '신고 대상 UUID' })
     reportUUID: string;
 
     @CreateDateColumn()
-    @Field(() => Date)
+    @Field(() => Date, { description: '생성 시간' })
     createAt: Date;
 
     @UpdateDateColumn()
-    @Field(() => Date)
+    @Field(() => Date, { description: '수정 시간' })
     updateAt: Date;
 
     @DeleteDateColumn()
@@ -48,7 +48,7 @@ export class ReportEntity {
         { onDelete: 'SET NULL' },
     )
     @JoinColumn()
-    @Field(() => ReportEnumEntity)
+    @Field(() => ReportEnumEntity, { description: '신고 ENUM' })
     enum: ReportEnumEntity;
 
     @ManyToOne(
@@ -56,6 +56,6 @@ export class ReportEntity {
         { onDelete: 'SET NULL' },
     )
     @JoinColumn()
-    @Field(() => UserEntity)
+    @Field(() => UserEntity, { description: '신고한 회원' })
     user: UserEntity;
 }

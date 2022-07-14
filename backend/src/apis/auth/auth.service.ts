@@ -214,6 +214,17 @@ export class AuthService {
         return result.affected ? true : false;
     }
 
+    /**
+     * 단순 비밀번호 비교
+     */
+    async comparePwd(
+        userID: string, //
+        pwd: string,
+    ): Promise<boolean> {
+        const hashPwd = await this.userRepository.getPwd(userID);
+        return bcrypt.compareSync(pwd, hashPwd);
+    }
+
     ///////////////////////////////////////////////////////////////////
     // 삭제 //
 }

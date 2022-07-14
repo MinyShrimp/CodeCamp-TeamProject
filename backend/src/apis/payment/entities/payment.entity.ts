@@ -31,6 +31,10 @@ export class PaymentEntity {
     @Field(() => Int, { description: '결제 금액' })
     amount: number;
 
+    @Column({ nullable: true })
+    @Field(() => String, { description: '취소 사유', nullable: true })
+    reason?: string;
+
     @CreateDateColumn()
     @Field(() => Date, { description: '생성 시간' })
     createAt: Date;

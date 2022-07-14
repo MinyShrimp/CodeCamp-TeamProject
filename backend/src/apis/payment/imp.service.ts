@@ -7,7 +7,7 @@ import {
 
 import { MESSAGES } from 'src/commons/message/Message.enum';
 
-import { IIamPort } from './interface/payment';
+import { IIamPort, IIamPortCancel } from './interface/payment';
 import { PaymentEntity } from './entities/payment.entity';
 import { PaymentRepository } from './entities/payment.repository';
 import { CreatePaymentInput } from './dto/createPayment.input';
@@ -123,22 +123,20 @@ export class IMPService {
 
     /**
      * 결제 취소 아임포트에 보내기
-     * @param payment
-     * @param checksum
-     * @param accessToken
      * @returns 아임포트에서 받은 데이터
      */
     private async getCancelData(
         payment: PaymentEntity, //
         checksum: number,
+        reason: string,
         accessToken: string,
-    ): Promise<IIamPort> {
+    ): Promise<IIamPortCancel> {
         const getCancelData = await axios.post(
             `${this.baseURL}/payments/cancel`, //
             {
                 imp_uid: payment.impUid,
                 merchant_uid: payment.merchantUid,
-                reason: '테스트',
+                reason: reason,
                 amount: payment.amount,
                 checksum: checksum,
             },
@@ -155,22 +153,27 @@ export class IMPService {
             merchantUid: res.merchant_uid,
             amount: res.cancel_amount * -1,
             statusID: res.status.toUpperCase(),
+            reason: res.cancel_reason,
         };
     }
 
     /**
      * 아임포트에 결제 정보 보내기
-     * @param payment
-     * @param checksum
      * @returns 아임포트에서 받은 결과 정보
      */
     async sendCancelData(
         payment: PaymentEntity, //
         checksum: number,
-    ): Promise<IIamPort> {
+        reason: string,
+    ): Promise<IIamPortCancel> {
         try {
             const accessToken = await this.getToken();
-            return await this.getCancelData(payment, checksum, accessToken);
+            return await this.getCancelData(
+                payment,
+                checksum,
+                reason,
+                accessToken,
+            );
         } catch (e) {
             throw new UnprocessableEntityException(
                 MESSAGES.UNVLIAD_ACCESS, //

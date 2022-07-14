@@ -32,6 +32,19 @@ export class NovelIndexRepository {
     }
 
     /**
+     * 소설 ID 기반 조회 ( Only ID )
+     */
+    async getOnlyID(
+        novelIndexID: string, //
+    ): Promise<NovelIndexEntity> {
+        return await this.indexRepository
+            .createQueryBuilder('i')
+            .select(['i.id'])
+            .where('i.id=:novelIndexID', { novelIndexID: novelIndexID })
+            .getOne();
+    }
+
+    /**
      * 유저 ID + 소설 ID 기반 조회 ( Only ID )
      */
     async getOnlyIDWithUser(
@@ -40,7 +53,7 @@ export class NovelIndexRepository {
     ): Promise<NovelIndexEntity> {
         return await this.indexRepository
             .createQueryBuilder('i')
-            .select(['i.id'])
+            .select(['i.id', 'u.id'])
             .leftJoin('i.user', 'u')
             .where('u.id=:userID', { userID: userID })
             .andWhere('i.id=:novelIndexID', { novelIndexID: novelIndexID })
@@ -56,7 +69,7 @@ export class NovelIndexRepository {
     ): Promise<NovelIndexEntity> {
         return await this.indexRepository
             .createQueryBuilder('i')
-            .select(['i.id'])
+            .select(['i.id', 'u.id'])
             .withDeleted()
             .leftJoin('i.user', 'u')
             .where('u.id=:userID', { userID: userID })

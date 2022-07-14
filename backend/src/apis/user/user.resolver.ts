@@ -1,5 +1,5 @@
-import { Logger, UseGuards } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { UseGuards } from '@nestjs/common';
+import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { IPayload } from 'src/commons/interfaces/Payload.interface';
 import { MESSAGES } from 'src/commons/message/Message.enum';
@@ -7,7 +7,6 @@ import { ResultMessage } from 'src/commons/message/ResultMessage.dto';
 import { CurrentUser } from 'src/commons/auth/gql-user.param';
 import { GqlJwtAccessGuard } from 'src/commons/auth/gql-auth.guard';
 
-import { PaymentEntity } from '../payment/entities/payment.entity';
 import { UserLikeEntity } from '../userLike/entities/userLike.entity';
 import { UserBlockEntity } from '../userBlock/entities/userBlock.entity';
 import { NovelLikeEntity } from '../novelLike/entities/novelLike.entity';
@@ -20,6 +19,8 @@ import { UpdateUserInput } from './dto/updateUser.input';
 import { CreateUserOutput } from './dto/createUser.output';
 
 import { UserService } from './user.service';
+import { FetchPaymentOutput } from '../payment/dto/fetchPayments.output';
+import { PaymentPointEntity } from '../paymentPoint/entities/paymentPoint.entity';
 
 /* 유저 API */
 @Resolver()
@@ -50,13 +51,14 @@ export class UserResolver {
     // 결제 목록
     @UseGuards(GqlJwtAccessGuard)
     @Query(
-        () => [PaymentEntity], //
-        { description: '회원 결제 목록' },
+        () => FetchPaymentOutput, //
+        { description: '회원 결제 목록, Pagenation' },
     )
     fetchPaymentsInUser(
         @CurrentUser() payload: IPayload, //
-    ): Promise<PaymentEntity[]> {
-        return this.userRepository.findPayments(payload.id);
+        @Args({ name: 'page', type: () => Int }) page: number,
+    ): Promise<FetchPaymentOutput> {
+        return this.userRepository.findPaymentsPage(payload.id, page);
     }
 
     // 선호 작가 목록
@@ -105,6 +107,32 @@ export class UserResolver {
         @CurrentUser() payload: IPayload, //
     ): Promise<NovelDonateEntity[]> {
         return this.userRepository.findNovelDonates(payload.id);
+    }
+
+    // 에피소드 ( 회차 ) 결제 목록
+    @UseGuards(GqlJwtAccessGuard)
+    @Query(
+        () => [PaymentPointEntity], //
+        { description: '에피소드 ( 회차 ) 결제 목록' },
+    )
+    fetchPaidPoints(
+        @CurrentUser() payload: IPayload, //
+        @Args({ name: 'page', type: () => Int }) page: number,
+    ): Promise<PaymentPointEntity[]> {
+        return this.userRepository.findPointPaymentsInIndex(payload.id, page);
+    }
+
+    // 후원 결제 목록
+    @UseGuards(GqlJwtAccessGuard)
+    @Query(
+        () => [PaymentPointEntity], //
+        { description: '후원 결제 목록' },
+    )
+    fetchDonatePoints(
+        @CurrentUser() payload: IPayload, //
+        @Args({ name: 'page', type: () => Int }) page: number,
+    ): Promise<PaymentPointEntity[]> {
+        return this.userRepository.findPointPaymentsInNovel(payload.id, page);
     }
 
     ///////////////////////////////////////////////////////////////////

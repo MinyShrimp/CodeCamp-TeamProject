@@ -24,34 +24,6 @@ export class NovelRepository {
         'novel.updateAt',
     ];
 
-    /**
-     * 전체 조회
-     */
-    async getAll(): Promise<NovelEntity[]> {
-        return await this.novelRepository
-            .createQueryBuilder('novel')
-            .select([
-                ...this._selector,
-                'user.id',
-                'user.nickName',
-                'class.id',
-                'category.id',
-                'category.name',
-                'tags.id',
-                'tags.name',
-                'files.id',
-                'files.url',
-            ])
-            .leftJoin('novel.user', 'user')
-            .leftJoin('user.userClass', 'class')
-            .leftJoin('novel.novelCategory', 'category')
-            .leftJoin('novel.novelTags', 'tags')
-            .leftJoin('novel.files', 'files')
-            .where('novel.user is not NULL')
-            .orderBy('novel.createAt', 'DESC')
-            .getMany();
-    }
-
     async getPage(
         page: number, //
     ): Promise<NovelEntity[]> {
@@ -100,6 +72,7 @@ export class NovelRepository {
             .leftJoinAndSelect('novel.files', 'files')
             .where('novel.user is not null')
             .andWhere('novel.id=:id', { id: novelID })
+            .orderBy('indexs.createAt', 'DESC')
             .getOne();
     }
 

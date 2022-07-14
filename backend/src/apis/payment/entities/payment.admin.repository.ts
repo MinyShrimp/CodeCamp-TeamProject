@@ -14,6 +14,7 @@ export class PaymentAdminRepository {
         'p.id',
         'p.impUid',
         'p.merchantUid',
+        'p.reason',
         'p.amount',
         'p.createAt',
         'u.id',

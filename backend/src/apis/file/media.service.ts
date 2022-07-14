@@ -5,7 +5,7 @@ import { Injectable } from '@nestjs/common';
 import { FileUpload } from 'graphql-upload';
 import axios, { Axios, AxiosResponse } from 'axios';
 
-import { FILE_TYPE } from './entities/type.enum';
+import { FILE_TYPE } from './interface/type.enum';
 
 @Injectable()
 export class MediaServerService {

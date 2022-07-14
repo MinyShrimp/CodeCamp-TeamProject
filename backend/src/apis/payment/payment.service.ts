@@ -43,7 +43,8 @@ export class PaymentService {
         userID: string;
         statusID: string;
         productID: string;
-        input: IPaymentInput; //
+        input: IPaymentInput;
+        isCancel: boolean;
     }): Promise<PaymentEntity> {
         const queryRunner = this.connection.createQueryRunner();
 
@@ -89,7 +90,7 @@ export class PaymentService {
             // 회원 포인트 수정
             const updateUser = this.userRepository.create({
                 ...user,
-                point: user.point + product.point,
+                point: user.point + product.point * (props.isCancel ? -1 : 1),
             });
             await queryRunner.manager.save(updateUser);
 
@@ -129,6 +130,7 @@ export class PaymentService {
             statusID: 'PAID',
             productID,
             input,
+            isCancel: false,
         });
     }
 
@@ -166,6 +168,7 @@ export class PaymentService {
         const impCancelData = await this.impService.sendCancelData(
             payment,
             checksum,
+            cancelPaymentInput.reason,
         );
 
         return await this.paymentTransaction({
@@ -173,6 +176,7 @@ export class PaymentService {
             statusID: 'CANCELLED',
             productID: payment.product.id,
             input: impCancelData,
+            isCancel: true,
         });
     }
 }
