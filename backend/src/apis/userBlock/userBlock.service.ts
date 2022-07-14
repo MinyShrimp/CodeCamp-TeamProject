@@ -24,9 +24,9 @@ export class UserBlockService {
     }
 
     async checkOverlap(
-        input: CreateUserBlockDto, //
+        dto: CreateUserBlockDto, //
     ): Promise<boolean> {
-        const check = await this.userBlockRepository.checkOverlap(input);
+        const check = await this.userBlockRepository.checkOverlap(dto);
         if (check) {
             throw new ConflictException('이미 등록된 회원입니다.');
         }

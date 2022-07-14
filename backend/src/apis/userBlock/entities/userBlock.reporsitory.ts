@@ -14,25 +14,25 @@ export class UserBlockRepository {
         private readonly userBlockRepository: Repository<UserBlockEntity>,
     ) {}
 
-    async checkOverlap(
-        dto: CreateUserBlockDto, //
-    ): Promise<UserBlockEntity> {
-        return await this.userBlockRepository
-            .createQueryBuilder('ul')
-            .select(['ul.id', 'ul.fromID', 'ul.toID'])
-            .where('ul.fromID=:fromID', { fromID: dto.fromID })
-            .andWhere('ul.toID=:toID', { toID: dto.toID })
-            .getOne();
-    }
-
     async checkValid(
         dto: DeleteUserBlockDto, //
     ): Promise<UserBlockEntity> {
         return await this.userBlockRepository
-            .createQueryBuilder('ul')
-            .select(['ul.id', 'ul.fromID'])
-            .where('ul.id=:id', { id: dto.userBlockID })
-            .where('ul.fromID=:fromID', { fromID: dto.fromID })
+            .createQueryBuilder('ub')
+            .select(['ub.id', 'ub.fromID'])
+            .where('ub.id=:id', { id: dto.userBlockID })
+            .andWhere('ub.fromID=:fromID', { fromID: dto.fromID })
+            .getOne();
+    }
+
+    async checkOverlap(
+        dto: CreateUserBlockDto, //
+    ): Promise<UserBlockEntity> {
+        return await this.userBlockRepository
+            .createQueryBuilder('ub')
+            .select(['ub.id', 'ub.fromID', 'ub.toID'])
+            .where('ub.fromID=:fromID', { fromID: dto.fromID })
+            .andWhere('ub.toID=:toID', { toID: dto.toID })
             .getOne();
     }
 

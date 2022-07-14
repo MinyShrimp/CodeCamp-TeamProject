@@ -32,7 +32,7 @@ export class UserLikeRepository {
             .createQueryBuilder('ul')
             .select(['ul.id', 'ul.fromID'])
             .where('ul.id=:id', { id: dto.userLikeID })
-            .where('ul.fromID=:fromID', { fromID: dto.fromID })
+            .andWhere('ul.fromID=:fromID', { fromID: dto.fromID })
             .getOne();
     }
 
