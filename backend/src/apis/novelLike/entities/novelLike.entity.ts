@@ -3,6 +3,7 @@ import { NovelEntity } from 'src/apis/novel/entities/novel.entity';
 import { UserEntity } from 'src/apis/user/entities/user.entity';
 import {
     Entity,
+    Column,
     ManyToOne,
     CreateDateColumn,
     PrimaryGeneratedColumn,
@@ -27,10 +28,16 @@ export class NovelLikeEntity {
     @Field(() => UserEntity)
     user: UserEntity;
 
+    @Column({ name: 'userId', nullable: true })
+    userID: string;
+
     @ManyToOne(
         () => NovelEntity, //
         { cascade: true, onDelete: 'CASCADE' },
     )
     @Field(() => NovelEntity)
     novel: NovelEntity;
+
+    @Column({ name: 'novelId', nullable: true })
+    novelID: string;
 }
