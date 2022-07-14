@@ -108,9 +108,32 @@ export const MESSAGES = {
     NOVEL_INDEX_SOFT_DELETE_FAILED: '소설 인덱스 삭제 실패',
 
     ///////////////////////////////////////////////////////////////////
-    // 소설 인덱스 리뷰
+    // 소설 인덱스 리뷰 //
     NOVEL_INDEX_REVIEW_SOFT_DELETE_SUCCESSED: '소설 인덱스 삭제 성공',
     NOVEL_INDEX_REVIEW_SOFT_DELETE_FAILED: '소설 인덱스 삭제 실패',
+
+    ///////////////////////////////////////////////////////////////////
+    // 공지사항 //
+    NOTICE_AUTHORIZATION: '작업 권한이 없습니다.',
+
+    NOTICE_UNVALID: '해당 공지사항을 찾을 수 없습니다.',
+    NOTICE_ALREADY_PROCESSED: '이미 처리되었습니다.',
+
+    NOTICE_SOFT_DELETE_SUCCESSED: '공지사항 삭제 성공',
+    NOTICE_SOFT_DELETE_FAILED: '공지사항 삭제 실패',
+
+    NOTICE_RESTORE_SUCCESSED: '공지사항 삭제 취소 성공',
+    NOTICE_RESTORE_FAILED: '공지사항 삭제 취소 실패',
+
+    ///////////////////////////////////////////////////////////////////
+    // 이벤트 //
+    EVENT_UNVALID: '해당 이벤트를 찾을 수 없습니다.',
+
+    EVENT_SOFT_DELETE_SUCCESSED: '이벤트 삭제 성공',
+    EVENT_SOFT_DELETE_FAILED: '이벤트 삭제 실패',
+
+    EVENT_RESTORE_SUCCESSED: '이벤트 삭제 취소 성공',
+    EVENT_RESTORE_FAILED: '이벤트 삭제 취소 실패',
 } as const;
 
 export type MESSAGES = typeof MESSAGES[keyof typeof MESSAGES];
