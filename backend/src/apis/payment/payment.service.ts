@@ -168,6 +168,7 @@ export class PaymentService {
         const impCancelData = await this.impService.sendCancelData(
             payment,
             checksum,
+            cancelPaymentInput.reason,
         );
 
         return await this.paymentTransaction({
