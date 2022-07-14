@@ -34,7 +34,7 @@ export class NoticeRepository {
         id: string, //
     ): Promise<NoticeEntity> {
         return await this.noticeRepository.findOne({
-            relations: ['user'],
+            relations: ['user', 'user.userClass'],
             where: { id },
         });
     }

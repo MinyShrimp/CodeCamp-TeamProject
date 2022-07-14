@@ -60,10 +60,22 @@ export class BoardRepository {
     async search(
         keyword: string, //
     ): Promise<BoardEntity[]> {
+        const NonSpacingKeyword = keyword.replace(/\s/g, '');
         const repoData = await this.boardRepository.find({
             relations: ['user', 'comments'],
         });
-        let result = repoData.filter((word) => word.title.includes(keyword));
+
+        let searchedKeyword = repoData.filter((word) =>
+            word.title.includes(keyword),
+        );
+
+        let searchedKeyword2 = repoData.filter((word) =>
+            word.title.includes(NonSpacingKeyword),
+        );
+
+        const mergeData = [...searchedKeyword, ...searchedKeyword2];
+        const set = new Set(mergeData);
+        const result = [...set];
 
         return result;
     }
