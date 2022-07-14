@@ -1,13 +1,14 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { GqlJwtAccessGuard } from 'src/commons/auth/gql-auth.guard';
-import { CurrentUser } from 'src/commons/auth/gql-user.param';
+
 import { IPayload } from 'src/commons/interfaces/Payload.interface';
+import { CurrentUser } from 'src/commons/auth/gql-user.param';
+import { GqlJwtAccessGuard } from 'src/commons/auth/gql-auth.guard';
+
+import { NovelIndexReviewEntity } from './entities/novelIndexReview.entity';
+import { NovelIndexReviewService } from './novelIndexReview.service';
 import { CreateNovelIndexReviewInput } from './dto/createNovelIndexReview.input';
 import { UpdateNovelIndexReviewInput } from './dto/updateNovelIndexReview.input';
-import { NovelIndexReviewEntity } from './entities/novelIndexReview.entity';
-
-import { NovelIndexReviewService } from './novelIndexReview.service';
 
 /* 편당 리뷰 API */
 @Resolver()
