@@ -7,15 +7,19 @@ import { ResultMessage } from 'src/commons/message/ResultMessage.dto';
 import { CurrentUser } from 'src/commons/auth/gql-user.param';
 import { GqlJwtAccessGuard } from 'src/commons/auth/gql-auth.guard';
 
-import { UserOutput } from './dto/user.output';
-import { CreateUserInput } from './dto/createUser.input';
-import { UpdateUserInput } from './dto/updateUser.input';
-import { UserRepository } from './entities/user.repository';
-
-import { UserService } from './user.service';
-import { CreateUserOutput } from './dto/createUser.output';
 import { PaymentEntity } from '../payment/entities/payment.entity';
 import { UserLikeEntity } from '../userLike/entities/userLike.entity';
+import { UserBlockEntity } from '../userBlock/entities/userBlock.entity';
+import { NovelLikeEntity } from '../novelLike/entities/novelLike.entity';
+import { NovelDonateEntity } from '../novelDonate/entities/novelDonate.entity';
+
+import { UserOutput } from './dto/user.output';
+import { UserRepository } from './entities/user.repository';
+import { CreateUserInput } from './dto/createUser.input';
+import { UpdateUserInput } from './dto/updateUser.input';
+import { CreateUserOutput } from './dto/createUser.output';
+
+import { UserService } from './user.service';
 
 /* 유저 API */
 @Resolver()
@@ -65,6 +69,42 @@ export class UserResolver {
         @CurrentUser() payload: IPayload, //
     ): Promise<UserLikeEntity[]> {
         return this.userRepository.findUserLikes(payload.id);
+    }
+
+    // 차단 회원 목록
+    @UseGuards(GqlJwtAccessGuard)
+    @Query(
+        () => [UserBlockEntity], //
+        { description: '차단 회원 목록' },
+    )
+    fetchUserBlockInUser(
+        @CurrentUser() payload: IPayload, //
+    ): Promise<UserBlockEntity[]> {
+        return this.userRepository.findUserBlocks(payload.id);
+    }
+
+    // 선호작 목록
+    @UseGuards(GqlJwtAccessGuard)
+    @Query(
+        () => [NovelLikeEntity], //
+        { description: '선호작 목록' },
+    )
+    fetchNovelLikeInUser(
+        @CurrentUser() payload: IPayload, //
+    ): Promise<NovelLikeEntity[]> {
+        return this.userRepository.findNovelLikes(payload.id);
+    }
+
+    // 후원작 목록
+    @UseGuards(GqlJwtAccessGuard)
+    @Query(
+        () => [NovelDonateEntity], //
+        { description: '후원작 목록' },
+    )
+    fetchNovelDonateInUser(
+        @CurrentUser() payload: IPayload, //
+    ): Promise<NovelDonateEntity[]> {
+        return this.userRepository.findNovelDonates(payload.id);
     }
 
     ///////////////////////////////////////////////////////////////////

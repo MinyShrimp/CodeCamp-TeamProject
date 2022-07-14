@@ -1,32 +1,29 @@
-import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 
 import { IPayload } from 'src/commons/interfaces/Payload.interface';
 import { MESSAGES } from 'src/commons/message/Message.enum';
 import { CurrentUser } from 'src/commons/auth/gql-user.param';
-import { GqlJwtAccessGuard } from 'src/commons/auth/gql-auth.guard';
-
-import { UserLikeService } from './userLike.service';
 import { ResultMessage } from 'src/commons/message/ResultMessage.dto';
-import { UserLikeEntity } from './entities/userLike.entity';
+
+import { UserBlockEntity } from './entities/userBlock.entity';
+import { UserBlockService } from './userBlock.service';
 
 @Resolver()
-@UseGuards(GqlJwtAccessGuard)
-export class UserLikeResolver {
+export class UserBlockResolver {
     constructor(
-        private readonly userLikeService: UserLikeService, //
+        private readonly userBlockService: UserBlockService, //
     ) {}
 
     // 선호 작가 등록
     @Mutation(
-        () => UserLikeEntity, //
+        () => UserBlockEntity, //
         { description: '선호 작가 등록' },
     )
     createUserLike(
         @CurrentUser() payload: IPayload,
         @Args('userID', { description: '등록할 유저 UUID' }) userID: string,
-    ): Promise<UserLikeEntity> {
-        return this.userLikeService.create({
+    ): Promise<UserBlockEntity> {
+        return this.userBlockService.create({
             fromID: payload.id,
             toID: userID,
         });
@@ -39,15 +36,16 @@ export class UserLikeResolver {
     )
     async deleteUserLike(
         @CurrentUser() payload: IPayload,
-        @Args('userLikeID', { description: '삭제할 UUID' }) userLikeID: string,
+        @Args('userBlockID', { description: '삭제할 UUID' })
+        userBlockID: string,
     ): Promise<ResultMessage> {
-        const result = await this.userLikeService.delete({
+        const result = await this.userBlockService.delete({
             fromID: payload.id,
-            userLikeID,
+            userBlockID,
         });
 
         return new ResultMessage({
-            id: userLikeID,
+            id: userBlockID,
             isSuccess: result,
             contents: result ? MESSAGES.DELETE_SUCCESS : MESSAGES.DELETE_FAILED,
         });

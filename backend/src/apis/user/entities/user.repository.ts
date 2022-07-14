@@ -5,6 +5,9 @@ import { Repository, UpdateResult } from 'typeorm';
 import { getNowDate } from 'src/commons/utils/date.util';
 import { PaymentEntity } from 'src/apis/payment/entities/payment.entity';
 import { UserLikeEntity } from 'src/apis/userLike/entities/userLike.entity';
+import { UserBlockEntity } from 'src/apis/userBlock/entities/userBlock.entity';
+import { NovelLikeEntity } from 'src/apis/novelLike/entities/novelLike.entity';
+import { NovelDonateEntity } from 'src/apis/novelDonate/entities/novelDonate.entity';
 
 import { UserEntity } from './user.entity';
 import { UpdateUserInput } from '../dto/updateUser.input';
@@ -177,6 +180,71 @@ export class UserRepository {
             .getOne();
 
         return findOne.userLikes;
+    }
+
+    /**
+     * 유저 기반 차단 유저 조회
+     */
+    async findUserBlocks(
+        userID: string, //
+    ): Promise<UserBlockEntity[]> {
+        const findOne = await this.userRepository
+            .createQueryBuilder('user')
+            .select([
+                'user.id',
+                'ub.id',
+                'ub.createAt',
+                'ubt.id',
+                'ubt.nickName',
+            ])
+            .leftJoin('user.userBlocks', 'ub')
+            .leftJoin('ub.to', 'ubt')
+            .where('user.id=:id', { id: userID })
+            .getOne();
+
+        return findOne.userBlocks;
+    }
+
+    /**
+     * 유저 기반 선호작 조회
+     */
+    async findNovelLikes(
+        userID: string, //
+    ): Promise<NovelLikeEntity[]> {
+        const findOne = await this.userRepository
+            .createQueryBuilder('user')
+            .select(['user.id'])
+            .leftJoinAndSelect('user.novelLikes', 'nl')
+            .leftJoinAndSelect('nl.novel', 'to')
+            .leftJoinAndSelect('to.user', 'tu')
+            .leftJoinAndSelect('to.novelCategory', 'tc')
+            .leftJoinAndSelect('to.novelTags', 'tt')
+            .leftJoinAndSelect('to.files', 'tf')
+            .where('user.id=:id', { id: userID })
+            .getOne();
+
+        return findOne.novelLikes;
+    }
+
+    /**
+     * 유저 기반 후원작 조회
+     */
+    async findNovelDonates(
+        userID: string, //
+    ): Promise<NovelDonateEntity[]> {
+        const findOne = await this.userRepository
+            .createQueryBuilder('user')
+            .select(['user.id'])
+            .leftJoinAndSelect('user.novelDonates', 'nd')
+            .leftJoinAndSelect('nd.novel', 'to')
+            .leftJoinAndSelect('to.user', 'tu')
+            .leftJoinAndSelect('to.novelCategory', 'tc')
+            .leftJoinAndSelect('to.novelTags', 'tt')
+            .leftJoinAndSelect('to.files', 'tf')
+            .where('user.id=:id', { id: userID })
+            .getOne();
+
+        return findOne.novelDonates;
     }
 
     ///////////////////////////////////////////////////////////////////

@@ -2,7 +2,6 @@ import { Field, ID, ObjectType } from '@nestjs/graphql';
 import {
     Entity,
     Column,
-    OneToOne,
     ManyToOne,
     JoinColumn,
     CreateDateColumn,
@@ -29,6 +28,9 @@ export class UserBlockEntity {
     )
     from: UserEntity;
 
+    @Column({ name: 'fromId', nullable: true })
+    fromID: string;
+
     @ManyToOne(
         () => UserEntity, //
         { onDelete: 'SET NULL' },
@@ -36,4 +38,7 @@ export class UserBlockEntity {
     @JoinColumn()
     @Field(() => UserEntity, { description: '대상 회원' })
     to: UserEntity;
+
+    @Column({ name: 'toId', nullable: true })
+    toID: string;
 }

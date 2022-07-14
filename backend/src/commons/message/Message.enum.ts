@@ -3,6 +3,9 @@ export const MESSAGES = {
     // GENERALs //
     UNVLIAD_ACCESS: '잘못된 접근입니다.',
 
+    DELETE_SUCCESS: '삭제 성공',
+    DELETE_FAILED: '삭제 실패',
+
     ///////////////////////////////////////////////////////////////////
     // 회원 //
     USER_OVERLAP_PHONE: '이미 인증이 완료된 번호입니다.',
