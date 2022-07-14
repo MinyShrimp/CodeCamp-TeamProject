@@ -2,6 +2,7 @@ import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 
 import { IPayload } from 'src/commons/interfaces/Payload.interface';
+import { MESSAGES } from 'src/commons/message/Message.enum';
 import { CurrentUser } from 'src/commons/auth/gql-user.param';
 import { ResultMessage } from 'src/commons/message/ResultMessage.dto';
 import { GqlJwtAccessGuard } from 'src/commons/auth/gql-auth.guard';
@@ -56,7 +57,7 @@ export class NovelLikeResolver {
         return new ResultMessage({
             id: novelLikeID,
             isSuccess: result,
-            contents: result ? '삭제 완료' : '삭제 실패',
+            contents: result ? MESSAGES.DELETE_SUCCESS : MESSAGES.DELETE_FAILED,
         });
     }
 }
