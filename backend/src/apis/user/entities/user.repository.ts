@@ -12,6 +12,7 @@ import { NovelDonateEntity } from 'src/apis/novelDonate/entities/novelDonate.ent
 import { UserEntity } from './user.entity';
 import { UpdateUserInput } from '../dto/updateUser.input';
 import { FetchPaymentOutput } from 'src/apis/payment/dto/fetchPayments.output';
+import { PaymentPointEntity } from 'src/apis/paymentPoint/entities/paymentPoint.entity';
 
 @Injectable()
 export class UserRepository {
@@ -19,6 +20,8 @@ export class UserRepository {
         @InjectRepository(UserEntity)
         private readonly userRepository: Repository<UserEntity>,
     ) {}
+
+    private readonly take = 10;
 
     ///////////////////////////////////////////////////////////////////
     // 검사 //
@@ -168,8 +171,6 @@ export class UserRepository {
         userID: string, //
         page: number,
     ): Promise<FetchPaymentOutput> {
-        const take = 10;
-
         const findOne = await this.userRepository
             .createQueryBuilder('user')
             .select([
@@ -187,8 +188,8 @@ export class UserRepository {
             .leftJoin('p.product', 'pp')
             .leftJoin('p.status', 's')
             .where('user.id=:id', { id: userID })
-            .take(take)
-            .skip(take * (page - 1))
+            .take(this.take)
+            .skip(this.take * (page - 1))
             .orderBy('p.createAt')
             .getOne();
 
@@ -290,6 +291,68 @@ export class UserRepository {
             .getOne();
 
         return findOne.novelDonates;
+    }
+
+    /**
+     * 유저 기반 소설 결제 조회
+     */
+    async findPointPaymentsInNovel(
+        userID: string, //
+        page: number,
+    ): Promise<PaymentPointEntity[]> {
+        const findOne = await this.userRepository
+            .createQueryBuilder('user')
+            .select([
+                'user.id',
+                'status.id',
+                'nu.id',
+                'nu.nickName',
+                'class.id',
+            ])
+            .leftJoinAndSelect('user.paymentPoints', 'upp')
+            .leftJoin('upp.status', 'status')
+            .leftJoinAndSelect('user.novel', 'novel')
+            .leftJoin('novel.user', 'nu')
+            .leftJoin('nu.userClass', 'class')
+            .where('user.id=:id', { id: userID })
+            .andWhere('user.novelID is not null')
+            .orderBy('upp.createAt')
+            .take(this.take)
+            .skip(this.take * (page - 1))
+            .getOne();
+
+        return findOne.paymentPoints;
+    }
+
+    /**
+     * 유저 기반 에피소드 결제 조회
+     */
+    async findPointPaymentsInIndex(
+        userID: string, //
+        page: number,
+    ): Promise<PaymentPointEntity[]> {
+        const findOne = await this.userRepository
+            .createQueryBuilder('user')
+            .select([
+                'user.id',
+                'status.id',
+                'niu.id',
+                'niu.nickName',
+                'class.id',
+            ])
+            .leftJoinAndSelect('user.paymentPoints', 'upp')
+            .leftJoin('upp.status', 'status')
+            .leftJoinAndSelect('user.novelIndex', 'novelIndex')
+            .leftJoin('novelIndex.user', 'niu')
+            .leftJoin('niu.userClass', 'class')
+            .where('user.id=:id', { id: userID })
+            .andWhere('user.novelIndexID is not null')
+            .orderBy('upp.createAt')
+            .take(this.take)
+            .skip(this.take * (page - 1))
+            .getOne();
+
+        return findOne.paymentPoints;
     }
 
     ///////////////////////////////////////////////////////////////////

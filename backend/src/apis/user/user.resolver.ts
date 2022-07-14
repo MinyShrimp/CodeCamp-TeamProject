@@ -21,6 +21,7 @@ import { CreateUserOutput } from './dto/createUser.output';
 
 import { UserService } from './user.service';
 import { FetchPaymentOutput } from '../payment/dto/fetchPayments.output';
+import { PaymentPointEntity } from '../paymentPoint/entities/paymentPoint.entity';
 
 /* 유저 API */
 @Resolver()
@@ -107,6 +108,32 @@ export class UserResolver {
         @CurrentUser() payload: IPayload, //
     ): Promise<NovelDonateEntity[]> {
         return this.userRepository.findNovelDonates(payload.id);
+    }
+
+    // 에피소드 ( 회차 ) 결제 목록
+    @UseGuards(GqlJwtAccessGuard)
+    @Query(
+        () => [PaymentPointEntity], //
+        { description: '에피소드 ( 회차 ) 결제 목록' },
+    )
+    fetchPaidPoints(
+        @CurrentUser() payload: IPayload, //
+        @Args({ name: 'page', type: () => Int }) page: number,
+    ): Promise<PaymentPointEntity[]> {
+        return this.userRepository.findPointPaymentsInIndex(payload.id, page);
+    }
+
+    // 후원 결제 목록
+    @UseGuards(GqlJwtAccessGuard)
+    @Query(
+        () => [PaymentPointEntity], //
+        { description: '후원 결제 목록' },
+    )
+    fetchDonatePoints(
+        @CurrentUser() payload: IPayload, //
+        @Args({ name: 'page', type: () => Int }) page: number,
+    ): Promise<PaymentPointEntity[]> {
+        return this.userRepository.findPointPaymentsInNovel(payload.id, page);
     }
 
     ///////////////////////////////////////////////////////////////////
