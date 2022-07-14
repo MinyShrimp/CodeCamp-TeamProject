@@ -28,8 +28,8 @@ export class NoticeEntity {
     contents: string;
 
     @Column({ default: false })
-    @Field(() => Boolean, { description: '상단 노출 여부' })
-    isTop: boolean;
+    @Field(() => Boolean, { description: '상단 노출 여부', nullable: true })
+    isTop?: boolean;
 
     @CreateDateColumn()
     @Field(() => Date, { description: '생성 시간' })
