@@ -1,7 +1,10 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { NovelEntity } from 'src/apis/novel/entities/novel.entity';
 import {
     Entity,
     Column,
+    ManyToOne,
+    JoinColumn,
     CreateDateColumn,
     DeleteDateColumn,
     PrimaryGeneratedColumn,
@@ -23,9 +26,16 @@ export class FileEntity {
     @Field(() => String, { description: '폴더' })
     path: string;
 
-    @Column()
+    @Column({ unique: true })
     @Field(() => String, { description: 'URL' })
     url: string;
+
+    @ManyToOne(
+        () => NovelEntity,
+        { cascade: true, onDelete: 'SET NULL' }, //
+    )
+    @JoinColumn()
+    novel: NovelEntity;
 
     @CreateDateColumn()
     createAt: Date;

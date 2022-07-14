@@ -1,7 +1,7 @@
 import * as bcrypt from 'bcryptjs';
 import { Response } from 'express';
 import { JwtService } from '@nestjs/jwt';
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, Logger } from '@nestjs/common';
 
 import { IPayloadSub } from '../../commons/interfaces/Payload.interface';
 import { MESSAGES } from '../../commons/message/Message.enum';
@@ -19,6 +19,8 @@ export class AuthService {
         private readonly userRepository: UserRepository,
         private readonly userCheckService: UserCheckService,
     ) {}
+
+    private logger = new Logger('Auth');
 
     ///////////////////////////////////////////////////////////////////
     // Utils //
@@ -51,6 +53,7 @@ export class AuthService {
             sub: user.id,
             name: user.name,
             email: user.email,
+            nickName: user.nickName,
         };
 
         // 권한 처리
@@ -107,8 +110,8 @@ export class AuthService {
             // 개발 환경
             res.setHeader(
                 'Set-Cookie',
-                // `refreshToken=${refreshToken}; path=/; domain=.jp.ngrok.io; SameSite=None; Secure; httpOnly;`,
-                `refreshToken=${refreshToken}; path=/; `,
+                `refreshToken=${refreshToken}; path=/; domain=.jp.ngrok.io; SameSite=None; Secure; httpOnly;`,
+                // `refreshToken=${refreshToken}; path=/; `,
             );
         }
 
@@ -159,9 +162,6 @@ export class AuthService {
         // 존재 여부 검사
         this.userCheckService.checkValidUser(user);
 
-        // 로그인 여부 검사 ( MySQL )
-        this.userCheckService.checkLogin(user);
-
         // Set Refresh Token
         const refresh_token = this.setRefreshToken(user, context.res);
 
@@ -170,6 +170,7 @@ export class AuthService {
 
         // 로그인 성공
         await this.userRepository.login(user.id);
+        this.logger.log(`Login ${user.nickName}`);
 
         // jwt 생성
         const access_token = this.getAccessToken(user);
@@ -194,7 +195,20 @@ export class AuthService {
 
         // 로그아웃 시도
         const result = await this.userRepository.logout(userID);
-        context.res.setHeader('Set-Cookie', `refreshToken=; path=/;`);
+
+        if (process.env.MODE === 'PRODUCTION') {
+            context.res.setHeader(
+                'Set-Cookie',
+                `refreshToken=; path=/; domain=.miny-shrimp.shop; SameSite=None; Secure; httpOnly;`,
+            );
+        } else {
+            context.res.setHeader(
+                'Set-Cookie',
+                `refreshToken=; path=/; domain=.jp.ngrok.io; SameSite=None; Secure; httpOnly;`,
+            );
+        }
+
+        this.logger.log(`Logout ${user.nickName}`);
 
         // 메세지 반환
         return result.affected ? true : false;

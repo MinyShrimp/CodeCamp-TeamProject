@@ -1,6 +1,7 @@
 interface __Payload {
     name: string;
     email: string;
+    nickName: string;
     isAdmin?: boolean;
 }
 

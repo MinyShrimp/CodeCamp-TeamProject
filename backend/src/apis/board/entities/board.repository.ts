@@ -15,6 +15,13 @@ export class BoardRepository {
     // 조회 //
 
     /**
+     * 전체 갯수 조회
+     */
+    async getCount(): Promise<number> {
+        return await this.boardRepository.count();
+    }
+
+    /**
      * 전체 조회
      */
     async findAll(): Promise<BoardEntity[]> {

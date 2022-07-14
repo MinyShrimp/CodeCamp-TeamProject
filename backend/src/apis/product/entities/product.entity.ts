@@ -20,12 +20,12 @@ export class ProductEntity extends BaseEntity {
     @Min(0)
     @IsInt()
     @Column({ type: 'int', unsigned: true })
-    @Field(() => Int, { description: '제공하는 포인트' })
+    @Field(() => Int, { description: '가격' })
     price: number;
 
     @Min(0)
     @IsInt()
     @Column({ type: 'int', unsigned: true })
-    @Field(() => Int, { description: '가격' })
+    @Field(() => Int, { description: '제공하는 포인트' })
     point: number;
 }

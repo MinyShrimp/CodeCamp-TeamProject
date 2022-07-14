@@ -18,7 +18,11 @@ import { MediaServerService } from './media.service';
             FileEntity, //
         ]),
     ],
-    exports: [FileService, GoogleStorageSerivce],
+    exports: [
+        FileService, //
+        FileRepository,
+        GoogleStorageSerivce,
+    ],
     controllers: [FileAdminController],
     providers: [
         FileResolver, //

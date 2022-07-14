@@ -4,7 +4,7 @@ import { NovelEntity } from '../entities/novel.entity';
 @InputType()
 export class CreateNovelInput extends PickType(
     NovelEntity,
-    ['title', 'subtitle', 'description'],
+    ['title', 'description'],
     InputType,
 ) {
     @Field(() => [String], {
@@ -14,4 +14,7 @@ export class CreateNovelInput extends PickType(
 
     @Field(() => String, { description: `소설 카테고리 ID. (UUID)` })
     categoryID: string;
+
+    @Field(() => [String], { description: '파일 URLs' })
+    fileURLs: Array<string>;
 }

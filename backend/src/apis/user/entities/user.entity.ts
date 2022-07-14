@@ -19,6 +19,9 @@ import { PhoneEntity } from 'src/apis/phone/entities/phone.entity';
 import { UserLikeEntity } from 'src/apis/userLike/entities/userLike.entity';
 import { UserBlockEntity } from 'src/apis/userBlock/entities/userBlock.entity';
 import { UserClassEntity } from 'src/apis/userClass/entities/userClass.entity';
+import { NovelLikeEntity } from 'src/apis/novelLike/entities/novelLike.entity';
+import { NovelDonateEntity } from 'src/apis/novelDonate/entities/novelDonate.entity';
+import { PaymentEntity } from 'src/apis/payment/entities/payment.entity';
 
 @Entity({ name: 'user' })
 @ObjectType({ description: '유저 Entity' })
@@ -33,12 +36,12 @@ export class UserEntity {
     name: string;
 
     // 닉네임
-    @Column()
+    @Column({ unique: true })
     @Field(() => String, { description: '닉네임' })
     nickName: string;
 
     // 이메일
-    @Column()
+    @Column({ unique: true })
     @IsEmail()
     @Field(() => String, { description: '이메일' })
     email: string;
@@ -121,6 +124,30 @@ export class UserEntity {
     )
     @Field(() => [UserLikeEntity])
     userLikes: UserLikeEntity[];
+
+    // 선호작
+    @OneToMany(
+        () => NovelLikeEntity, //
+        (novelLike) => novelLike.user,
+    )
+    @Field(() => [NovelLikeEntity])
+    novelLikes: NovelLikeEntity[];
+
+    // 후원작
+    @OneToMany(
+        () => NovelDonateEntity, //
+        (novelDonate) => novelDonate.user,
+    )
+    @Field(() => [NovelDonateEntity])
+    novelDonates: NovelDonateEntity[];
+
+    // 결제 목록
+    @OneToMany(
+        () => PaymentEntity,
+        (payment) => payment.user, //
+    )
+    @Field(() => [PaymentEntity])
+    payments: PaymentEntity[];
 
     // 게시판
     @OneToMany(() => BoardEntity, (board) => board.user)

@@ -14,6 +14,7 @@ import {
     PrimaryGeneratedColumn,
 } from 'typeorm';
 
+import { FileEntity } from 'src/apis/file/entities/file.entity';
 import { UserEntity } from 'src/apis/user/entities/user.entity';
 import { NovelTagEntity } from 'src/apis/novelTag/entities/novelTag.entity';
 import { NovelIndexEntity } from 'src/apis/novelIndex/entities/novelIndex.entity';
@@ -31,10 +32,6 @@ export class NovelEntity {
     @Column()
     @Field(() => String, { description: '제목' })
     title: string;
-
-    @Column({ nullable: true })
-    @Field(() => String, { description: '소제목', nullable: true })
-    subtitle?: string;
 
     @Column({ type: 'text' })
     @Field(() => String, { description: '설명' })
@@ -100,4 +97,11 @@ export class NovelEntity {
     )
     @Field(() => [NovelReviewEntity])
     novelReviews: NovelReviewEntity[];
+
+    @OneToMany(
+        () => FileEntity,
+        (file) => file.novel, //
+    )
+    @Field(() => [FileEntity])
+    files: FileEntity[];
 }

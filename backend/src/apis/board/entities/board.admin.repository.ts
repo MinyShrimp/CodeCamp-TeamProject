@@ -14,7 +14,7 @@ export class BoardAdminRepository {
     // prettier-ignore
     private readonly _selector = [
         'board.id', 'board.title', 'board.contents',
-        'board.createAt', 'board.deleteAt',
+        'board.createAt', 'board.updateAt', 'board.deleteAt',
         'user.id', 'user.email',
     ];
 

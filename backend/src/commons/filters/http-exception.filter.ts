@@ -7,16 +7,21 @@ import {
     Catch,
     ExceptionFilter,
     HttpException,
+    Logger,
 } from '@nestjs/common';
-import { ResultMessage } from '../message/ResultMessage.dto';
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter<HttpException> {
     constructor() {}
 
+    private logger = new Logger('Exception');
+
     catch(exception: HttpException, host: ArgumentsHost) {
         const msg = exception.message;
         const status = exception.getStatus();
+        const where = host.getArgs()[3].fieldName;
+
+        this.logger.warn(`[${status}] ${msg} - ${where}`);
 
         return exception;
 

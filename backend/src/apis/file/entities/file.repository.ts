@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
+
 import { FileEntity } from './file.entity';
+import { UploadResult } from '../dto/uploadResult.dto';
 
 @Injectable()
 export class FileRepository {
@@ -9,7 +11,6 @@ export class FileRepository {
         @InjectRepository(FileEntity)
         private readonly fileRepository: Repository<FileEntity>,
     ) {}
-
     private readonly _selector = [
         'file.id',
         'file.name',
@@ -36,6 +37,36 @@ export class FileRepository {
             .getOne();
     }
 
+    async findBulk(
+        fileIDs: Array<string>, //
+    ): Promise<FileEntity[]> {
+        return await Promise.all(
+            fileIDs.map((id) => {
+                return this.findOne(id);
+            }),
+        );
+    }
+
+    async findOneByUrl(
+        url: string, //
+    ): Promise<FileEntity> {
+        return await this.fileRepository
+            .createQueryBuilder('file')
+            .select([...this._selector, 'file.deleteAt'])
+            .where('file.url=:url', { url: url })
+            .getOne();
+    }
+
+    async findBulkByUrl(
+        urls: Array<string>, //
+    ): Promise<FileEntity[]> {
+        return await Promise.all(
+            urls.map((url) => {
+                return this.findOneByUrl(url);
+            }),
+        );
+    }
+
     create(
         option?: Partial<FileEntity>, //
     ): FileEntity {
@@ -46,6 +77,16 @@ export class FileRepository {
         option?: Partial<FileEntity>, //
     ): Promise<FileEntity> {
         return await this.fileRepository.save(option);
+    }
+
+    async saveBulk(
+        files: UploadResult[], //
+    ): Promise<FileEntity[]> {
+        return await Promise.all(
+            files.map((file) => {
+                return this.fileRepository.save(file);
+            }),
+        );
     }
 
     async softDelete(
