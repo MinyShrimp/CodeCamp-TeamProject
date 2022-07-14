@@ -8,6 +8,7 @@ import {
     CreateDateColumn,
     UpdateDateColumn,
     PrimaryGeneratedColumn,
+    DeleteDateColumn,
 } from 'typeorm';
 
 /* Event Entity */
@@ -30,13 +31,13 @@ export class EventEntity {
     @Field(() => Boolean, { description: '이벤트 진행 여부' })
     isEvent: boolean;
 
-    @Column()
-    @Field(() => Date, { description: '이벤트 시작 시간' })
-    startAt: Date;
+    @Column({ nullable: true })
+    @Field(() => Date, { description: '이벤트 시작 시간', nullable: true })
+    startAt?: Date;
 
-    @Column()
-    @Field(() => Date, { description: '이벤트 종료 시간' })
-    endAt: Date;
+    @Column({ nullable: true })
+    @Field(() => Date, { description: '이벤트 종료 시간', nullable: true })
+    endAt?: Date;
 
     @CreateDateColumn()
     @Field(() => Date, { description: '생성 시간' })
@@ -45,6 +46,9 @@ export class EventEntity {
     @UpdateDateColumn()
     @Field(() => Date, { description: '수정 시간' })
     updateAt: Date;
+
+    @DeleteDateColumn()
+    deleteAt: Date;
 
     @ManyToOne(
         () => UserEntity, //
