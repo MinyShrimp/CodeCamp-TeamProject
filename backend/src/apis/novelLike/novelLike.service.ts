@@ -7,8 +7,9 @@ import { NovelService } from '../novel/novel.service';
 
 import { CreateNovelLikeDto } from './dto/createNovelLike.dto';
 import { DeleteNovelLikeDto } from './dto/deleteNovelLike.dto';
-import { NovelLikeRepository } from './entities/novelLike.repository';
+
 import { NovelLikeEntity } from './entities/novelLike.entity';
+import { NovelLikeRepository } from './entities/novelLike.repository';
 
 @Injectable()
 export class NovelLikeService {

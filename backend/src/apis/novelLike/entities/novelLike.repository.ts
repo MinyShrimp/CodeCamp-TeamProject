@@ -17,10 +17,10 @@ export class NovelLikeRepository {
         dto: DeleteNovelLikeDto, //
     ): Promise<NovelLikeEntity> {
         return await this.novelLikeRepository
-            .createQueryBuilder('ub')
-            .select(['ub.id', 'ub.userID'])
-            .where('ub.id=:id', { id: dto.novelLikeID })
-            .andWhere('ub.userID=:userID', { userID: dto.userID })
+            .createQueryBuilder('nl')
+            .select(['nl.id', 'nl.userID'])
+            .where('nl.id=:id', { id: dto.novelLikeID })
+            .andWhere('nl.userID=:userID', { userID: dto.userID })
             .getOne();
     }
 
@@ -28,10 +28,10 @@ export class NovelLikeRepository {
         dto: CreateNovelLikeDto, //
     ): Promise<NovelLikeEntity> {
         return await this.novelLikeRepository
-            .createQueryBuilder('ub')
-            .select(['ub.id', 'ub.userID', 'ub.novelID'])
-            .where('ub.userID=:userID', { userID: dto.userID })
-            .andWhere('ub.novelID=:novelID', { novelID: dto.novelID })
+            .createQueryBuilder('nl')
+            .select(['nl.id', 'nl.userID', 'nl.novelID'])
+            .where('nl.userID=:userID', { userID: dto.userID })
+            .andWhere('nl.novelID=:novelID', { novelID: dto.novelID })
             .getOne();
     }
 
