@@ -1,4 +1,4 @@
-import { Logger, UseGuards } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { IPayload } from 'src/commons/interfaces/Payload.interface';
@@ -7,7 +7,6 @@ import { ResultMessage } from 'src/commons/message/ResultMessage.dto';
 import { CurrentUser } from 'src/commons/auth/gql-user.param';
 import { GqlJwtAccessGuard } from 'src/commons/auth/gql-auth.guard';
 
-import { PaymentEntity } from '../payment/entities/payment.entity';
 import { UserLikeEntity } from '../userLike/entities/userLike.entity';
 import { UserBlockEntity } from '../userBlock/entities/userBlock.entity';
 import { NovelLikeEntity } from '../novelLike/entities/novelLike.entity';
