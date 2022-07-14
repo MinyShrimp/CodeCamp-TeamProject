@@ -41,6 +41,7 @@ export class PaymentRepository {
                 'p.impUid',
                 'p.merchantUid',
                 'p.amount',
+                'p.reason',
                 'p.createAt',
                 'u.id',
                 'pd.id',

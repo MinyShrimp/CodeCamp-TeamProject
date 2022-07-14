@@ -4,6 +4,6 @@ import { PaymentEntity } from '../entities/payment.entity';
 @InputType()
 export class CancelPaymentInput extends PickType(
     PaymentEntity,
-    ['impUid', 'merchantUid'],
+    ['impUid', 'merchantUid', 'reason'],
     InputType,
 ) {}

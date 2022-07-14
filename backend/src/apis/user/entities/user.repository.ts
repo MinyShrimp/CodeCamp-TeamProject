@@ -154,6 +154,7 @@ export class UserRepository {
             .leftJoin('p.product', 'pp')
             .leftJoin('p.status', 's')
             .where('user.id=:id', { id: userID })
+            .orderBy('p.createAt')
             .getOne();
 
         return findOne.payments;
@@ -177,6 +178,7 @@ export class UserRepository {
             .leftJoin('user.userLikes', 'ul')
             .leftJoin('ul.to', 'ult')
             .where('user.id=:id', { id: userID })
+            .orderBy('ul.createAt')
             .getOne();
 
         return findOne.userLikes;
@@ -200,6 +202,7 @@ export class UserRepository {
             .leftJoin('user.userBlocks', 'ub')
             .leftJoin('ub.to', 'ubt')
             .where('user.id=:id', { id: userID })
+            .orderBy('ub.createAt')
             .getOne();
 
         return findOne.userBlocks;
@@ -222,6 +225,7 @@ export class UserRepository {
             .leftJoinAndSelect('to.novelTags', 'tt')
             .leftJoinAndSelect('to.files', 'tf')
             .where('user.id=:id', { id: userID })
+            .orderBy('nl.createAt')
             .getOne();
 
         return findOne.novelLikes;
@@ -244,6 +248,7 @@ export class UserRepository {
             .leftJoinAndSelect('to.novelTags', 'tt')
             .leftJoinAndSelect('to.files', 'tf')
             .where('user.id=:id', { id: userID })
+            .orderBy('nd.createAt')
             .getOne();
 
         return findOne.novelDonates;

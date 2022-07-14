@@ -6,7 +6,7 @@ export interface IPaymentFind
 
 export interface IPaymentInput
     extends IPaymentFind,
-        Pick<PaymentEntity, 'amount'> {}
+        Pick<PaymentEntity, 'amount' | 'reason'> {}
 
 export interface IWebhook extends IPaymentFind {
     status: 'paid' | 'ready' | 'failed' | 'cancelled';
@@ -14,4 +14,8 @@ export interface IWebhook extends IPaymentFind {
 
 export interface IIamPort extends IPaymentInput {
     statusID: PAYMENT_STATUS;
+}
+
+export interface IIamPortCancel extends IIamPort {
+    reason: string;
 }

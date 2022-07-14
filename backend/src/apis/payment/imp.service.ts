@@ -7,7 +7,7 @@ import {
 
 import { MESSAGES } from 'src/commons/message/Message.enum';
 
-import { IIamPort } from './interface/payment';
+import { IIamPort, IIamPortCancel } from './interface/payment';
 import { PaymentEntity } from './entities/payment.entity';
 import { PaymentRepository } from './entities/payment.repository';
 import { CreatePaymentInput } from './dto/createPayment.input';
@@ -132,13 +132,13 @@ export class IMPService {
         payment: PaymentEntity, //
         checksum: number,
         accessToken: string,
-    ): Promise<IIamPort> {
+    ): Promise<IIamPortCancel> {
         const getCancelData = await axios.post(
             `${this.baseURL}/payments/cancel`, //
             {
                 imp_uid: payment.impUid,
                 merchant_uid: payment.merchantUid,
-                reason: '테스트',
+                reason: payment.reason,
                 amount: payment.amount,
                 checksum: checksum,
             },
@@ -155,6 +155,7 @@ export class IMPService {
             merchantUid: res.merchant_uid,
             amount: res.cancel_amount * -1,
             statusID: res.status.toUpperCase(),
+            reason: payment.reason,
         };
     }
 
@@ -167,7 +168,7 @@ export class IMPService {
     async sendCancelData(
         payment: PaymentEntity, //
         checksum: number,
-    ): Promise<IIamPort> {
+    ): Promise<IIamPortCancel> {
         try {
             const accessToken = await this.getToken();
             return await this.getCancelData(payment, checksum, accessToken);
