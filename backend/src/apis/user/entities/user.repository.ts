@@ -133,6 +133,20 @@ export class UserRepository {
     }
 
     /**
+     * 비밀번호 가져오기
+     */
+    async getPwd(
+        userID: string, //
+    ): Promise<string> {
+        const entity = await this.userRepository
+            .createQueryBuilder('user')
+            .select(['user.id', 'user.pwd'])
+            .where('user.id=:id', { id: userID })
+            .getOne();
+        return entity.pwd;
+    }
+
+    /**
      * 결제 정보 갯수 조회
      */
     async getPaymentCount(
