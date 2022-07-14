@@ -5,6 +5,7 @@ import { Repository, UpdateResult } from 'typeorm';
 import { getNowDate } from 'src/commons/utils/date.util';
 import { PaymentEntity } from 'src/apis/payment/entities/payment.entity';
 import { UserLikeEntity } from 'src/apis/userLike/entities/userLike.entity';
+import { UserBlockEntity } from 'src/apis/userBlock/entities/userBlock.entity';
 
 import { UserEntity } from './user.entity';
 import { UpdateUserInput } from '../dto/updateUser.input';
@@ -177,6 +178,29 @@ export class UserRepository {
             .getOne();
 
         return findOne.userLikes;
+    }
+
+    /**
+     * 유저 기반 차단 유저 조회
+     */
+    async findUserBlocks(
+        userID: string, //
+    ): Promise<UserBlockEntity[]> {
+        const findOne = await this.userRepository
+            .createQueryBuilder('user')
+            .select([
+                'user.id',
+                'ub.id',
+                'ub.createAt',
+                'ubt.id',
+                'ubt.nickName',
+            ])
+            .leftJoin('user.userBlocks', 'ub')
+            .leftJoin('ub.to', 'ubt')
+            .where('user.id=:id', { id: userID })
+            .getOne();
+
+        return findOne.userBlocks;
     }
 
     ///////////////////////////////////////////////////////////////////
