@@ -5,7 +5,7 @@ import { FileUpload, GraphQLUpload } from 'graphql-upload';
 import { GqlJwtAccessGuard } from 'src/commons/auth/gql-auth.guard';
 
 import { FileEntity } from './entities/file.entity';
-import { FILE_TYPE } from './entities/type.enum';
+import { FILE_TYPE } from './interface/type.enum';
 import { FileService } from './file.service';
 
 /* FileUpload API */

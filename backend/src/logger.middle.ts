@@ -9,18 +9,20 @@ export class LoggerMiddleware implements NestMiddleware {
 
     use(req: Request, res: Response, next: NextFunction) {
         const name = req.body.operationName;
-        const authorization = req.headers.authorization;
+        if (name !== 'IntrospectionQuery') {
+            const authorization = req.headers.authorization;
 
-        try {
-            if (/^Bearer .+$/.test(authorization)) {
-                const jwt = authorization.replace('Bearer ', '');
-                const payload = decode(jwt) as IPayloadSub;
-                this.logger.log(`${name} - ${payload.nickName}`);
-            } else {
-                this.logger.log(`${name}`);
+            try {
+                if (/^Bearer .+$/.test(authorization)) {
+                    const jwt = authorization.replace('Bearer ', '');
+                    const payload = decode(jwt) as IPayloadSub;
+                    this.logger.log(`${name} - ${payload.nickName}`);
+                } else {
+                    this.logger.log(`${name}`);
+                }
+            } catch (e) {
+                this.logger.warn(`${name} - ${e.message} - ${authorization}`);
             }
-        } catch (e) {
-            this.logger.warn(`${name} - ${e.message} - ${authorization}`);
         }
 
         next();

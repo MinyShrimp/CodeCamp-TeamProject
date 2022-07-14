@@ -23,14 +23,6 @@ export class NovelResolver {
 
     @Query(
         () => [NovelEntity], //
-        { description: '소설 전체 목록 조회' },
-    )
-    fetchNovelsAll(): Promise<Array<NovelEntity>> {
-        return this.novelRepository.getAll();
-    }
-
-    @Query(
-        () => [NovelEntity], //
         { description: '소설 목록 조회 ( page )' },
     )
     fetchNovelsPage(

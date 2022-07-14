@@ -11,6 +11,8 @@ import { NovelDonateEntity } from 'src/apis/novelDonate/entities/novelDonate.ent
 
 import { UserEntity } from './user.entity';
 import { UpdateUserInput } from '../dto/updateUser.input';
+import { FetchPaymentOutput } from 'src/apis/payment/dto/fetchPayments.output';
+import { PaymentPointEntity } from 'src/apis/paymentPoint/entities/paymentPoint.entity';
 
 @Injectable()
 export class UserRepository {
@@ -18,6 +20,8 @@ export class UserRepository {
         @InjectRepository(UserEntity)
         private readonly userRepository: Repository<UserEntity>,
     ) {}
+
+    private readonly take = 10;
 
     ///////////////////////////////////////////////////////////////////
     // 검사 //
@@ -132,11 +136,41 @@ export class UserRepository {
     }
 
     /**
+     * 비밀번호 가져오기
+     */
+    async getPwd(
+        userID: string, //
+    ): Promise<string> {
+        const entity = await this.userRepository
+            .createQueryBuilder('user')
+            .select(['user.id', 'user.pwd'])
+            .where('user.id=:id', { id: userID })
+            .getOne();
+        return entity.pwd;
+    }
+
+    /**
+     * 결제 정보 갯수 조회
+     */
+    async getPaymentCount(
+        userID: string, //
+    ): Promise<number> {
+        const entity = await this.userRepository
+            .createQueryBuilder('user')
+            .select(['user.id', 'p.id'])
+            .leftJoin('user.payments', 'p')
+            .where('user.id=:id', { id: userID })
+            .getOne();
+        return entity.payments.length;
+    }
+
+    /**
      * 유저 기반 결제 정보 조회
      */
-    async findPayments(
+    async findPaymentsPage(
         userID: string, //
-    ): Promise<PaymentEntity[]> {
+        page: number,
+    ): Promise<FetchPaymentOutput> {
         const findOne = await this.userRepository
             .createQueryBuilder('user')
             .select([
@@ -154,9 +188,15 @@ export class UserRepository {
             .leftJoin('p.product', 'pp')
             .leftJoin('p.status', 's')
             .where('user.id=:id', { id: userID })
+            .take(this.take)
+            .skip(this.take * (page - 1))
+            .orderBy('p.createAt')
             .getOne();
 
-        return findOne.payments;
+        return {
+            payments: findOne.payments,
+            count: await this.getPaymentCount(userID),
+        };
     }
 
     /**
@@ -177,6 +217,7 @@ export class UserRepository {
             .leftJoin('user.userLikes', 'ul')
             .leftJoin('ul.to', 'ult')
             .where('user.id=:id', { id: userID })
+            .orderBy('ul.createAt')
             .getOne();
 
         return findOne.userLikes;
@@ -200,6 +241,7 @@ export class UserRepository {
             .leftJoin('user.userBlocks', 'ub')
             .leftJoin('ub.to', 'ubt')
             .where('user.id=:id', { id: userID })
+            .orderBy('ub.createAt')
             .getOne();
 
         return findOne.userBlocks;
@@ -217,10 +259,12 @@ export class UserRepository {
             .leftJoinAndSelect('user.novelLikes', 'nl')
             .leftJoinAndSelect('nl.novel', 'to')
             .leftJoinAndSelect('to.user', 'tu')
+            .leftJoinAndSelect('tu.userClass', 'tuc')
             .leftJoinAndSelect('to.novelCategory', 'tc')
             .leftJoinAndSelect('to.novelTags', 'tt')
             .leftJoinAndSelect('to.files', 'tf')
             .where('user.id=:id', { id: userID })
+            .orderBy('nl.createAt')
             .getOne();
 
         return findOne.novelLikes;
@@ -238,13 +282,77 @@ export class UserRepository {
             .leftJoinAndSelect('user.novelDonates', 'nd')
             .leftJoinAndSelect('nd.novel', 'to')
             .leftJoinAndSelect('to.user', 'tu')
+            .leftJoinAndSelect('tu.userClass', 'tuc')
             .leftJoinAndSelect('to.novelCategory', 'tc')
             .leftJoinAndSelect('to.novelTags', 'tt')
             .leftJoinAndSelect('to.files', 'tf')
             .where('user.id=:id', { id: userID })
+            .orderBy('nd.createAt')
             .getOne();
 
         return findOne.novelDonates;
+    }
+
+    /**
+     * 유저 기반 소설 결제 조회
+     */
+    async findPointPaymentsInNovel(
+        userID: string, //
+        page: number,
+    ): Promise<PaymentPointEntity[]> {
+        const findOne = await this.userRepository
+            .createQueryBuilder('user')
+            .select([
+                'user.id',
+                'status.id',
+                'nu.id',
+                'nu.nickName',
+                'class.id',
+            ])
+            .leftJoinAndSelect('user.paymentPoints', 'upp')
+            .leftJoin('upp.status', 'status')
+            .leftJoinAndSelect('user.novel', 'novel')
+            .leftJoin('novel.user', 'nu')
+            .leftJoin('nu.userClass', 'class')
+            .where('user.id=:id', { id: userID })
+            .andWhere('user.novelID is not null')
+            .orderBy('upp.createAt')
+            .take(this.take)
+            .skip(this.take * (page - 1))
+            .getOne();
+
+        return findOne.paymentPoints;
+    }
+
+    /**
+     * 유저 기반 에피소드 결제 조회
+     */
+    async findPointPaymentsInIndex(
+        userID: string, //
+        page: number,
+    ): Promise<PaymentPointEntity[]> {
+        const findOne = await this.userRepository
+            .createQueryBuilder('user')
+            .select([
+                'user.id',
+                'status.id',
+                'niu.id',
+                'niu.nickName',
+                'class.id',
+            ])
+            .leftJoinAndSelect('user.paymentPoints', 'upp')
+            .leftJoin('upp.status', 'status')
+            .leftJoinAndSelect('user.novelIndex', 'novelIndex')
+            .leftJoin('novelIndex.user', 'niu')
+            .leftJoin('niu.userClass', 'class')
+            .where('user.id=:id', { id: userID })
+            .andWhere('user.novelIndexID is not null')
+            .orderBy('upp.createAt')
+            .take(this.take)
+            .skip(this.take * (page - 1))
+            .getOne();
+
+        return findOne.paymentPoints;
     }
 
     ///////////////////////////////////////////////////////////////////

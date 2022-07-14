@@ -22,6 +22,19 @@ export class NovelIndexService {
      * 존재 확인
      */
     async checkValid(
+        novelIndexID: string, //
+    ): Promise<NovelIndexEntity> {
+        const index = await this.indexRepository.getOnlyID(novelIndexID);
+        if (index === undefined) {
+            throw new ConflictException(MESSAGES.NOVEL_INDEX_UNVALID);
+        }
+        return index;
+    }
+
+    /**
+     * 존재 확인
+     */
+    async checkValidWithUser(
         userID: string, //
         novelIndexID: string,
     ): Promise<NovelIndexEntity> {
@@ -103,7 +116,7 @@ export class NovelIndexService {
         input: UpdateNovelIndexInput, //
     ): Promise<NovelIndexEntity> {
         // 검사
-        await this.checkValid(userID, input.id);
+        await this.checkValidWithUser(userID, input.id);
 
         const entity = await this.indexRepository.getOne(input.id);
 
@@ -137,7 +150,7 @@ export class NovelIndexService {
         novelIndexID: string,
     ): Promise<boolean> {
         // 검사
-        await this.checkValid(userID, novelIndexID);
+        await this.checkValidWithUser(userID, novelIndexID);
 
         // 삭제
         const result = await this.indexRepository.delete(novelIndexID);
