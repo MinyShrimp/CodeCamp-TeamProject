@@ -9,6 +9,7 @@ import { UserBlockEntity } from 'src/apis/userBlock/entities/userBlock.entity';
 
 import { UserEntity } from './user.entity';
 import { UpdateUserInput } from '../dto/updateUser.input';
+import { NovelLikeEntity } from 'src/apis/novelLike/entities/novelLike.entity';
 
 @Injectable()
 export class UserRepository {
@@ -201,6 +202,27 @@ export class UserRepository {
             .getOne();
 
         return findOne.userBlocks;
+    }
+
+    /**
+     * 유저 기반 선호작 조회
+     */
+    async findNovelLikes(
+        userID: string, //
+    ): Promise<NovelLikeEntity[]> {
+        const findOne = await this.userRepository
+            .createQueryBuilder('user')
+            .select(['user.id'])
+            .leftJoinAndSelect('user.novelLikes', 'nl')
+            .leftJoinAndSelect('nl.novel', 'to')
+            .leftJoinAndSelect('to.user', 'tu')
+            .leftJoinAndSelect('to.novelCategory', 'tc')
+            .leftJoinAndSelect('to.novelTags', 'tt')
+            .leftJoinAndSelect('to.files', 'tf')
+            .where('user.id=:id', { id: userID })
+            .getOne();
+
+        return findOne.novelLikes;
     }
 
     ///////////////////////////////////////////////////////////////////

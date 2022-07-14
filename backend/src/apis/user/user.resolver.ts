@@ -18,6 +18,7 @@ import { UserRepository } from './entities/user.repository';
 
 import { UserService } from './user.service';
 import { CreateUserOutput } from './dto/createUser.output';
+import { NovelLikeEntity } from '../novelLike/entities/novelLike.entity';
 
 /* 유저 API */
 @Resolver()
@@ -69,16 +70,28 @@ export class UserResolver {
         return this.userRepository.findUserLikes(payload.id);
     }
 
-    // 선호 작가 목록
+    // 차단 회원 목록
     @UseGuards(GqlJwtAccessGuard)
     @Query(
         () => [UserBlockEntity], //
-        { description: '선호 작가 목록' },
+        { description: '차단 회원 목록' },
     )
     fetchUserBlockInUser(
         @CurrentUser() payload: IPayload, //
     ): Promise<UserBlockEntity[]> {
         return this.userRepository.findUserBlocks(payload.id);
+    }
+
+    // 선호작 목록
+    @UseGuards(GqlJwtAccessGuard)
+    @Query(
+        () => [NovelLikeEntity], //
+        { description: '선호작 목록' },
+    )
+    fetchNovelLikeInUser(
+        @CurrentUser() payload: IPayload, //
+    ): Promise<NovelLikeEntity[]> {
+        return this.userRepository.findNovelLikes(payload.id);
     }
 
     ///////////////////////////////////////////////////////////////////
