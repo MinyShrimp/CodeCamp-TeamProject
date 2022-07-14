@@ -45,6 +45,7 @@ export class NovelIndexReviewRepository {
 
     ///////////////////////////////////////////////////////////////////
     // 삭제 //
+
     async softDelete(
         reviewID: string, //
     ): Promise<UpdateResult> {
