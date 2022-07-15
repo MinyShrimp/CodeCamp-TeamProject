@@ -26,7 +26,7 @@ export class NovelResolver {
         { description: '소설 목록 조회 ( page )' },
     )
     fetchNovelsPage(
-        @Args({ name: 'page', type: () => Int }) page: number,
+        @Args({ name: 'page', type: () => Int, defaultValue: 1 }) page: number,
     ): Promise<Array<NovelEntity>> {
         return this.novelRepository.getPage(page);
     }
