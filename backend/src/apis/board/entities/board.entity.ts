@@ -63,7 +63,7 @@ export class BoardEntity {
 
     @OneToMany(
         () => FileEntity,
-        (file) => file.novel, //
+        (file) => file.board, //
     )
     @Field(() => [FileEntity])
     files: FileEntity[];

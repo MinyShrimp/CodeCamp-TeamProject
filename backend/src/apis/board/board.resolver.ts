@@ -63,6 +63,18 @@ export class BoardResolver {
         return this.boardService.findAll();
     }
 
+    // 특정 게시글 조회 (단일)
+    @UseGuards(GqlJwtAccessGuard)
+    @Query(
+        () => BoardEntity, //
+        { description: '특정 게시글 조회' },
+    )
+    fetchBoard(
+        @Args('boardID') boardID: string, //
+    ): Promise<BoardEntity> {
+        return this.boardService.findOne(boardID);
+    }
+
     // 유저가 쓴 게시글 조회
     @UseGuards(GqlJwtAccessGuard)
     @Query(
