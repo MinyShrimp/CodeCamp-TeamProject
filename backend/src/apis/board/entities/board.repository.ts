@@ -11,6 +11,59 @@ export class BoardRepository {
         private readonly boardRepository: Repository<BoardEntity>, //
     ) {}
 
+    private readonly _selector = [
+        'board.id',
+        'board.title',
+        'board.contents',
+        'board.likeCount',
+        'board.dislikeCount',
+        'board.viewCount',
+        'board.createAt',
+        'board.updateAt',
+    ];
+
+    /** 페이지네이션 */
+    async getPage(
+        page: number, //
+    ): Promise<BoardEntity[]> {
+        const take: number = page;
+
+        console.log(
+            await this.boardRepository
+                .createQueryBuilder('board')
+                .select([
+                    ...this._selector,
+                    'user.id',
+                    'user.nickName',
+                    'files.id',
+                    'files.url',
+                ])
+                .leftJoin('board.user', 'user')
+                .leftJoin('board.files', 'files')
+                .take(take)
+                .skip(take * (page - 1))
+                .orderBy('board.createAt', 'DESC')
+                .getMany(),
+        );
+
+        return await this.boardRepository
+            .createQueryBuilder('board')
+            .select([
+                ...this._selector,
+                'user.id',
+                'user.nickName',
+                'files.id',
+                'files.url',
+            ])
+            .leftJoin('board.user', 'user')
+            .leftJoin('board.files', 'files')
+            .take(take)
+            .skip(take * (page - 1))
+            // .where('board.user is not NULL')
+            .orderBy('board.createAt', 'DESC')
+            .getMany();
+    }
+
     ///////////////////////////////////////////////////////////////////
     // 조회 //
 

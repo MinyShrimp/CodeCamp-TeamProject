@@ -16,12 +16,32 @@ import { BoardService } from './board.service';
 @Resolver()
 export class BoardResolver {
     constructor(
-        private readonly boardRepository: BoardRepository,
         private readonly boardService: BoardService, //
+        private readonly boardRepository: BoardRepository,
     ) {}
 
     ///////////////////////////////////////////////////////////////////
     // 조회 //
+
+    // 페이지네이션
+    @Query(
+        () => [BoardEntity], //
+        { description: '게시판 목록 조회 ( page )' },
+    )
+    fetchBoardsPage(
+        @Args({ name: 'page', type: () => Int }) page: number,
+    ): Promise<Array<BoardEntity>> {
+        return this.boardRepository.getPage(page);
+    }
+
+    // 게시글 전체 갯수 조회
+    @Query(
+        () => Int, //
+        { description: '게시글 전체 갯수' },
+    )
+    fetchBoardAllCount(): Promise<number> {
+        return this.boardRepository.getCount();
+    }
 
     // 키워드로 조회
     @Query(
@@ -32,15 +52,6 @@ export class BoardResolver {
         @Args('keyword') keyword: string,
     ): Promise<BoardEntity[]> {
         return this.boardService.findTarget(keyword);
-    }
-
-    // 게시글 전체 갯수 조회
-    @Query(
-        () => Int, //
-        { description: '게시글 전체 갯수' },
-    )
-    fetchBoardAllCount(): Promise<number> {
-        return this.boardRepository.getCount();
     }
 
     // 게시글 전체 조회

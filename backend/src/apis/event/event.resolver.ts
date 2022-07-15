@@ -87,7 +87,7 @@ export class EventResolver {
     ): Promise<string> {
         const result = await this.eventService.restore(currentUser.id, eventID);
         return result
-            ? MESSAGES.NOTICE_RESTORE_SUCCESSED
-            : MESSAGES.NOTICE_RESTORE_FAILED;
+            ? MESSAGES.EVENT_RESTORE_SUCCESSED
+            : MESSAGES.EVENT_RESTORE_FAILED;
     }
 }
