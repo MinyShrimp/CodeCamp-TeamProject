@@ -29,7 +29,7 @@ export class BoardResolver {
         { description: '게시판 목록 조회 ( page )' },
     )
     fetchBoardsPage(
-        @Args({ name: 'page', type: () => Int }) page: number,
+        @Args({ name: 'page', type: () => Int, defaultValue: 1 }) page: number,
     ): Promise<Array<BoardEntity>> {
         return this.boardRepository.getPage(page);
     }
@@ -61,6 +61,18 @@ export class BoardResolver {
     )
     fetchBoardsAll(): Promise<BoardEntity[]> {
         return this.boardService.findAll();
+    }
+
+    // 특정 게시글 조회 (단일)
+    @UseGuards(GqlJwtAccessGuard)
+    @Query(
+        () => BoardEntity, //
+        { description: '특정 게시글 조회' },
+    )
+    fetchBoard(
+        @Args('boardID') boardID: string, //
+    ): Promise<BoardEntity> {
+        return this.boardService.findOne(boardID);
     }
 
     // 유저가 쓴 게시글 조회

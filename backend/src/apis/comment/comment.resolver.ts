@@ -40,9 +40,20 @@ export class CommentResolver {
         return this.commentService.findComments(currentUser);
     }
 
+    /** 특정 댓글 조회 (단일) */
+    @UseGuards(GqlJwtAccessGuard)
+    @Query(
+        () => CommentEntity, //
+        { description: '특정 댓글 조회' },
+    )
+    fetchComment(
+        @Args('commentID') commentID: string, //
+    ): Promise<CommentEntity> {
+        return this.commentService.find(commentID);
+    }
+
     ///////////////////////////////////////////////////////////////////
     // 생성 //
-
     @UseGuards(GqlJwtAccessGuard)
     @Mutation(
         () => CommentEntity, //
