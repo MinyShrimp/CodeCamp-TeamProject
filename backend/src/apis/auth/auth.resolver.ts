@@ -28,7 +28,7 @@ export class AuthResolver {
     // 조회 //
 
     @UseGuards(GqlJwtAccessGuard)
-    @Query(
+    @Mutation(
         () => ResultMessage,
         { description: '비밀번호 맞는지 확인' }, //
     )

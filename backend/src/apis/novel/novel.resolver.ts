@@ -13,6 +13,7 @@ import { CreateNovelInput } from './dto/createNovel.input';
 
 import { NovelService } from './novel.service';
 import { UpdateNovelInput } from './dto/updateNovel.input';
+import { FetchNovelsOutput } from './dto/fetchNovels.output';
 
 @Resolver()
 export class NovelResolver {
@@ -22,21 +23,18 @@ export class NovelResolver {
     ) {}
 
     @Query(
-        () => [NovelEntity], //
+        () => FetchNovelsOutput, //
         { description: '소설 목록 조회 ( page )' },
     )
     fetchNovelsPage(
-        @Args({ name: 'page', type: () => Int }) page: number,
-    ): Promise<Array<NovelEntity>> {
+        @Args({
+            name: 'page',
+            type: () => Int,
+            defaultValue: 1,
+        })
+        page: number,
+    ): Promise<FetchNovelsOutput> {
         return this.novelRepository.getPage(page);
-    }
-
-    @Query(
-        () => Int,
-        { description: '소설 전체 갯수 조회' }, //
-    )
-    fetchNovelCount(): Promise<number> {
-        return this.novelRepository.getCount();
     }
 
     @Query(

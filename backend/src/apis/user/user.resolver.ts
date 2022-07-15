@@ -56,7 +56,8 @@ export class UserResolver {
     )
     fetchPaymentsInUser(
         @CurrentUser() payload: IPayload, //
-        @Args({ name: 'page', type: () => Int }) page: number,
+        @Args({ name: 'page', type: () => Int, defaultValue: 1 })
+        page: number,
     ): Promise<FetchPaymentOutput> {
         return this.userRepository.findPaymentsPage(payload.id, page);
     }
@@ -107,32 +108,6 @@ export class UserResolver {
         @CurrentUser() payload: IPayload, //
     ): Promise<NovelDonateEntity[]> {
         return this.userRepository.findNovelDonates(payload.id);
-    }
-
-    // 에피소드 ( 회차 ) 결제 목록
-    @UseGuards(GqlJwtAccessGuard)
-    @Query(
-        () => [PaymentPointEntity], //
-        { description: '에피소드 ( 회차 ) 결제 목록' },
-    )
-    fetchPaidPoints(
-        @CurrentUser() payload: IPayload, //
-        @Args({ name: 'page', type: () => Int }) page: number,
-    ): Promise<PaymentPointEntity[]> {
-        return this.userRepository.findPointPaymentsInIndex(payload.id, page);
-    }
-
-    // 후원 결제 목록
-    @UseGuards(GqlJwtAccessGuard)
-    @Query(
-        () => [PaymentPointEntity], //
-        { description: '후원 결제 목록' },
-    )
-    fetchDonatePoints(
-        @CurrentUser() payload: IPayload, //
-        @Args({ name: 'page', type: () => Int }) page: number,
-    ): Promise<PaymentPointEntity[]> {
-        return this.userRepository.findPointPaymentsInNovel(payload.id, page);
     }
 
     ///////////////////////////////////////////////////////////////////
