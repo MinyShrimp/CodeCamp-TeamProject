@@ -36,6 +36,15 @@ export class CommentService {
     }
 
     /**
+     * 특정 댓글 조회
+     */
+    async find(
+        commentID: string, //
+    ): Promise<CommentEntity> {
+        return await this.commentRepository.findOneByCommentOnlyOne(commentID);
+    }
+
+    /**
      *  유저 본인이 작성한 댓글 전체 조회
      */
     async findComments(
