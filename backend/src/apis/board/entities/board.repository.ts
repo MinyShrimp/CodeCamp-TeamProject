@@ -26,25 +26,7 @@ export class BoardRepository {
     async getPage(
         page: number, //
     ): Promise<BoardEntity[]> {
-        const take: number = page;
-
-        console.log(
-            await this.boardRepository
-                .createQueryBuilder('board')
-                .select([
-                    ...this._selector,
-                    'user.id',
-                    'user.nickName',
-                    'files.id',
-                    'files.url',
-                ])
-                .leftJoin('board.user', 'user')
-                .leftJoin('board.files', 'files')
-                .take(take)
-                .skip(take * (page - 1))
-                .orderBy('board.createAt', 'DESC')
-                .getMany(),
-        );
+        const take: number = 10;
 
         return await this.boardRepository
             .createQueryBuilder('board')
@@ -59,7 +41,7 @@ export class BoardRepository {
             .leftJoin('board.files', 'files')
             .take(take)
             .skip(take * (page - 1))
-            // .where('board.user is not NULL')
+            .where('board.user is not NULL')
             .orderBy('board.createAt', 'DESC')
             .getMany();
     }

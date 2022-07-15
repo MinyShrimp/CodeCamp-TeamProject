@@ -10,17 +10,26 @@ import { BoardEntity } from './entities/board.entity';
 import { BoardRepository } from './entities/board.repository';
 import { CreateBoardInput } from './dto/createBoard.input';
 import { UpdateBoardInput } from './dto/updateBoard.input';
+import { FileRepository } from '../file/entities/file.repository';
 
 @Injectable()
 export class BoardService {
     constructor(
         private readonly userRepository: UserRepository,
+        private readonly fileRepository: FileRepository,
         private readonly boardRepository: BoardRepository, //
         private readonly userCheckService: UserCheckService,
     ) {}
 
     ///////////////////////////////////////////////////////////////////
     // 조회 //
+
+    /** 특정 게시글 조회 (단일) */
+    async findOne(
+        boardID: string, //
+    ): Promise<BoardEntity> {
+        return await this.boardRepository.findOneByBoard(boardID);
+    }
 
     /* 특정 키워드로 게시글 조회 */
     async findTarget(
@@ -48,14 +57,20 @@ export class BoardService {
         userID: string,
         input: CreateBoardInput, //
     ): Promise<BoardEntity> {
+        const { fileURLs, ...rest } = input;
+
         // 회원 검색
         const user = await this.userRepository.findOneByID(userID);
         this.userCheckService.checkValidUser(user);
 
+        // 이미지 업로드
+        const uploadFiles = await this.fileRepository.findBulkByUrl(fileURLs);
+
         // 게시글 생성
         return await this.boardRepository.save({
             user,
-            ...input,
+            files: uploadFiles,
+            ...rest,
         });
     }
 

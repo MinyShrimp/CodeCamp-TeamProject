@@ -36,6 +36,18 @@ export class CommentRepository {
     }
 
     /**
+     * 댓글 ID 기반 조회
+     */
+    async findOneByCommentOnlyOne(
+        commentID: string, //
+    ): Promise<CommentEntity> {
+        return await this.commentRepository.findOne({
+            relations: ['user', 'board', 'parent', 'children'],
+            where: { id: commentID },
+        });
+    }
+
+    /**
      *  보드 ID & 유저 ID 기반 조회
      */
 
