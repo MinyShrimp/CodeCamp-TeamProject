@@ -17,7 +17,7 @@ export class EventRepository {
     /** 전체 조회 (삭제 데이터 포함X) */
     async findAll(): Promise<EventEntity[]> {
         return await this.eventRepository.find({
-            relations: ['user'],
+            relations: ['user', 'user.userClass'],
         });
     }
 
@@ -34,7 +34,7 @@ export class EventRepository {
         id: string, //
     ): Promise<EventEntity> {
         return await this.eventRepository.findOne({
-            relations: ['user'],
+            relations: ['user', 'user.userClass'],
             where: { id },
         });
     }
