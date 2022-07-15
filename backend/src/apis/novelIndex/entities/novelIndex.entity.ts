@@ -21,7 +21,7 @@ import { NovelIndexReviewEntity } from 'src/apis/novelIndexReview/entities/novel
 @ObjectType({ description: 'NovelIndex Entity' })
 export class NovelIndexEntity {
     @PrimaryGeneratedColumn('uuid')
-    @Field(() => ID, { description: 'UUID' })
+    @Field(() => ID, { description: '에피소드 UUID' })
     id: string;
 
     @Column()

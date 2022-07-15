@@ -22,7 +22,7 @@ export class NovelIndexResolver {
 
     @Query(
         () => NovelIndexEntity, //
-        { description: '소설 인덱스 단일 조회' },
+        { description: '에피소드 단일 조회' },
     )
     fetchOneNovelIndex(
         @CurrentUser() user: IPayload,
@@ -33,7 +33,7 @@ export class NovelIndexResolver {
 
     @Mutation(
         () => NovelIndexEntity, //
-        { description: '소설 인덱스 등록' },
+        { description: '에피소드 등록' },
     )
     createNovelIndex(
         @CurrentUser() user: IPayload,
@@ -44,7 +44,7 @@ export class NovelIndexResolver {
 
     @Mutation(
         () => NovelIndexEntity, //
-        { description: '소설 인덱스 수정' },
+        { description: '에피소드 수정' },
     )
     async updateNovelIndex(
         @CurrentUser() user: IPayload,
@@ -55,7 +55,17 @@ export class NovelIndexResolver {
 
     @Mutation(
         () => ResultMessage, //
-        { description: '소설 인덱스 삭제 취소' },
+        { description: '에피소드 비공개 전환' },
+    )
+    async changePrivateNovelIndex(
+        @CurrentUser() payload: IPayload,
+        @Args({ name: 'novelIndexID', description: '에피소드 UUID' })
+        novelIndexID: string, //
+    ) {}
+
+    @Mutation(
+        () => ResultMessage, //
+        { description: '에피소드 삭제 취소' },
     )
     async restoreNovelIndex(
         @CurrentUser() user: IPayload,
@@ -72,7 +82,7 @@ export class NovelIndexResolver {
 
     @Mutation(
         () => ResultMessage, //
-        { description: '소설 인덱스 삭제' },
+        { description: '에피소드 삭제' },
     )
     async deleteNovelIndex(
         @CurrentUser() user: IPayload,
