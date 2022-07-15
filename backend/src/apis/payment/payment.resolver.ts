@@ -1,13 +1,15 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { IPayload } from 'src/commons/interfaces/Payload.interface';
 import { CurrentUser } from 'src/commons/auth/gql-user.param';
 import { GqlJwtAccessGuard } from 'src/commons/auth/gql-auth.guard';
 
 import { PaymentEntity } from './entities/payment.entity';
+import { PaymentRepository } from './entities/payment.repository';
 import { CreatePaymentInput } from './dto/createPayment.input';
 import { CancelPaymentInput } from './dto/cancelPayment.input';
+import { FetchPaymentOutput } from './dto/fetchPayments.output';
 
 import { PaymentService } from './payment.service';
 
@@ -16,7 +18,20 @@ import { PaymentService } from './payment.service';
 export class PaymentResolver {
     constructor(
         private readonly paymentService: PaymentService, //
+        private readonly paymentRepository: PaymentRepository,
     ) {}
+
+    @Query(
+        () => FetchPaymentOutput, //
+        { description: '회원 결제 목록, Pagenation' },
+    )
+    fetchPaymentsInUser(
+        @CurrentUser() payload: IPayload, //
+        @Args({ name: 'page', type: () => Int, defaultValue: 1 })
+        page: number,
+    ): Promise<FetchPaymentOutput> {
+        return this.paymentRepository.getPage(payload.id, page);
+    }
 
     @Mutation(
         () => PaymentEntity, //

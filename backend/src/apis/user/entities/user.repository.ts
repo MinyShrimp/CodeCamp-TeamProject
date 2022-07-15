@@ -149,56 +149,6 @@ export class UserRepository {
     }
 
     /**
-     * 결제 정보 갯수 조회
-     */
-    async getPaymentCount(
-        userID: string, //
-    ): Promise<number> {
-        const entity = await this.userRepository
-            .createQueryBuilder('user')
-            .select(['user.id', 'p.id'])
-            .leftJoin('user.payments', 'p')
-            .where('user.id=:id', { id: userID })
-            .getOne();
-        return entity.payments.length;
-    }
-
-    /**
-     * 유저 기반 결제 정보 조회
-     */
-    async findPaymentsPage(
-        userID: string, //
-        page: number,
-    ): Promise<FetchPaymentOutput> {
-        const findOne = await this.userRepository
-            .createQueryBuilder('user')
-            .select([
-                'user.id',
-                'p.id',
-                'p.impUid',
-                'p.merchantUid',
-                'p.amount',
-                'p.createAt',
-                'pp.id',
-                'pp.point',
-                's.id',
-            ])
-            .leftJoin('user.payments', 'p')
-            .leftJoin('p.product', 'pp')
-            .leftJoin('p.status', 's')
-            .where('user.id=:id', { id: userID })
-            .take(this.take)
-            .skip(this.take * (page - 1))
-            .orderBy('p.createAt')
-            .getOne();
-
-        return {
-            payments: findOne.payments,
-            count: await this.getPaymentCount(userID),
-        };
-    }
-
-    /**
      * 유저 기반 선호 작가 조회
      */
     async findUserLikes(

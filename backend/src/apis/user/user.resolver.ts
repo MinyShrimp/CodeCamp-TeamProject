@@ -48,20 +48,6 @@ export class UserResolver {
         return this.userRepository.findOneByID(payload.id);
     }
 
-    // 결제 목록
-    @UseGuards(GqlJwtAccessGuard)
-    @Query(
-        () => FetchPaymentOutput, //
-        { description: '회원 결제 목록, Pagenation' },
-    )
-    fetchPaymentsInUser(
-        @CurrentUser() payload: IPayload, //
-        @Args({ name: 'page', type: () => Int, defaultValue: 1 })
-        page: number,
-    ): Promise<FetchPaymentOutput> {
-        return this.userRepository.findPaymentsPage(payload.id, page);
-    }
-
     // 선호 작가 목록
     @UseGuards(GqlJwtAccessGuard)
     @Query(
