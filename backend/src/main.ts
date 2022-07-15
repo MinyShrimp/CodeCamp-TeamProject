@@ -1,12 +1,20 @@
+import * as morgan from 'morgan';
 import { ValidationPipe } from '@nestjs/common';
 import { graphqlUploadExpress } from 'graphql-upload';
 import { NestFactory } from '@nestjs/core';
+
 import { AppModule } from './app.module';
 
-import { HttpExceptionFilter } from './commons/filters/http-exception.filter';
 import { setupSwagger } from './commons/utils/swaggerSetup.util';
-import { AppLoggerService } from './logger.service';
-import { createLogger } from './winston.config';
+import { HttpExceptionFilter } from './commons/filters/http-exception.filter';
+
+import {
+    createLogger,
+    ConsoleLoggerStream,
+    ResponseLoggerStream,
+} from './logger/winston.config';
+import { AppLoggerService } from './logger/logger.service';
+import { Request } from 'express';
 
 async function bootstrap() {
     createLogger();
@@ -27,6 +35,25 @@ async function bootstrap() {
     app.useGlobalPipes(new ValidationPipe());
     app.useGlobalFilters(new HttpExceptionFilter());
     app.use(graphqlUploadExpress());
+
+    morgan.token('operationName', (req: Request) => {
+        return req.body.operationName;
+    });
+
+    app.use(
+        morgan(
+            ':remote-addr - :remote-user ":method :url :operationName HTTP/:http-version" :status :res[content-length] :response-time ":referrer" ":user-agent"',
+            { stream: ResponseLoggerStream },
+        ),
+    );
+    app.use(
+        morgan(
+            ':remote-addr - :remote-user ":method :url :operationName HTTP/:http-version" :status (:response-time ms)',
+            {
+                stream: ConsoleLoggerStream,
+            },
+        ),
+    );
 
     setupSwagger(app);
     ///////////////////////////////////////////////////////////////////////////

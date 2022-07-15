@@ -63,7 +63,6 @@ import { ReportEnumModule } from './apis/reportEnum/reportEnum.module';
 
 import { FileModule } from './apis/file/file.module';
 import { TempStorageModule } from './apis/tempStorage/tempStorage.module';
-import { LoggerMiddleware } from './logger.middle';
 
 ///////////////////////////////////////////////////////////////////////////
 @Module({
@@ -166,10 +165,4 @@ import { LoggerMiddleware } from './logger.middle';
     controllers: [AppController],
     providers: [],
 })
-export class AppModule implements NestModule {
-    configure(consumer: MiddlewareConsumer) {
-        consumer
-            .apply(LoggerMiddleware)
-            .forRoutes({ path: 'graphql', method: RequestMethod.POST });
-    }
-}
+export class AppModule {}
