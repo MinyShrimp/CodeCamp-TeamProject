@@ -29,7 +29,7 @@ export class BoardResolver {
         { description: '게시판 목록 조회 ( page )' },
     )
     fetchBoardsPage(
-        @Args({ name: 'page', type: () => Int }) page: number,
+        @Args({ name: 'page', type: () => Int, defaultValue: 1 }) page: number,
     ): Promise<Array<BoardEntity>> {
         return this.boardRepository.getPage(page);
     }
