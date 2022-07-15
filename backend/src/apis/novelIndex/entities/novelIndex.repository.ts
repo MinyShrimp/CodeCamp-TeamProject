@@ -87,8 +87,8 @@ export class NovelIndexRepository {
             .leftJoinAndSelect('novelIndex.user', 'user')
             .leftJoinAndSelect('novelIndex.novel', 'novel')
             .leftJoinAndSelect('novelIndex.novelIndexReviews', 'reviews')
+            .where(`novelIndex.isPrivate = 0`)
             .where('novelIndex.id=:id', { id: novelIndexID })
-            .where('novelIndex.isPrivate = 0 or novelIndex.isPrivate is null')
             .getOne();
     }
 

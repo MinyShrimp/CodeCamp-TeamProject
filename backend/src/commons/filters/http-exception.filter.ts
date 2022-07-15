@@ -3,11 +3,11 @@
  */
 
 import {
-    ArgumentsHost,
     Catch,
-    ExceptionFilter,
-    HttpException,
     Logger,
+    ArgumentsHost,
+    HttpException,
+    ExceptionFilter,
 } from '@nestjs/common';
 
 @Catch(HttpException)
@@ -19,10 +19,16 @@ export class HttpExceptionFilter implements ExceptionFilter<HttpException> {
     catch(exception: HttpException, host: ArgumentsHost) {
         const msg = exception.message;
         const status = exception.getStatus();
-        const where = host.getArgs()[3].fieldName;
+        if (host.getArgs()[3]) {
+            if (host.getArgs()[3].fieldName) {
+                const where = host.getArgs()[3].fieldName;
 
-        this.logger.warn(`[${status}] ${msg} - ${where}`);
+                this.logger.warn(`[${status}] ${msg} - ${where}`);
+                return exception;
+            }
+        }
 
+        this.logger.warn(`[${status}] ${msg} - -`);
         return exception;
 
         // return new ResultMessage({

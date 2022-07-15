@@ -67,7 +67,7 @@ export class NovelRepository {
     async getOne(
         novelID: string, //
     ): Promise<NovelEntity> {
-        return await this.novelRepository
+        const result = await this.novelRepository
             .createQueryBuilder('novel')
             .leftJoinAndSelect('novel.user', 'user')
             .leftJoinAndSelect('novel.novelCategory', 'novelCategory')
@@ -75,10 +75,11 @@ export class NovelRepository {
             .leftJoinAndSelect('novel.novelIndexs', 'novelIndexs')
             .leftJoinAndSelect('novel.files', 'files')
             .where('novel.user is not null')
-            .andWhere('novel.id=:id', { id: novelID })
-            .where('novelIndexs.isPrivate = 0 or novelIndexs.isPrivate is null')
-            .orderBy('novel.createAt', 'DESC')
+            .where(`novelIndexs.isPrivate = 0`)
+            .where('novel.id=:novelID', { novelID: novelID })
             .getOne();
+
+        return result;
     }
 
     /**

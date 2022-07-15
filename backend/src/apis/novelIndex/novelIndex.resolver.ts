@@ -25,10 +25,10 @@ export class NovelIndexResolver {
         { description: '에피소드 단일 조회' },
     )
     fetchOneNovelIndex(
-        @CurrentUser() user: IPayload,
+        @CurrentUser() payload: IPayload,
         @Args('novelIndexID') id: string,
     ): Promise<NovelIndexEntity> {
-        return this.novelIndexService.findOne(user.id, id);
+        return this.novelIndexService.findOne(payload.id, id);
     }
 
     @Mutation(
@@ -36,42 +36,44 @@ export class NovelIndexResolver {
         { description: '에피소드 등록' },
     )
     createNovelIndex(
-        @CurrentUser() user: IPayload,
+        @CurrentUser() payload: IPayload,
         @Args('input') input: CreateNovelIndexInput,
     ): Promise<NovelIndexEntity> {
-        return this.novelIndexService.create(user.id, input);
+        return this.novelIndexService.create(payload.id, input);
     }
 
     @Mutation(
         () => NovelIndexEntity, //
         { description: '에피소드 수정' },
     )
-    async updateNovelIndex(
-        @CurrentUser() user: IPayload,
+    updateNovelIndex(
+        @CurrentUser() payload: IPayload,
         @Args('input') input: UpdateNovelIndexInput,
     ): Promise<NovelIndexEntity> {
-        return await this.novelIndexService.update(user.id, input);
+        return this.novelIndexService.update(payload.id, input);
     }
 
     @Mutation(
-        () => ResultMessage, //
+        () => NovelIndexEntity, //
         { description: '에피소드 비공개 전환' },
     )
-    async changePrivateNovelIndex(
+    changePrivateNovelIndex(
         @CurrentUser() payload: IPayload,
         @Args({ name: 'novelIndexID', description: '에피소드 UUID' })
         novelIndexID: string, //
-    ) {}
+    ): Promise<NovelIndexEntity> {
+        return this.novelIndexService.changePrivate(payload.id, novelIndexID);
+    }
 
     @Mutation(
         () => ResultMessage, //
         { description: '에피소드 삭제 취소' },
     )
     async restoreNovelIndex(
-        @CurrentUser() user: IPayload,
+        @CurrentUser() payload: IPayload,
         @Args('novelIndexID') id: string,
     ): Promise<ResultMessage> {
-        const result = await this.novelIndexService.restore(user.id, id);
+        const result = await this.novelIndexService.restore(payload.id, id);
         return new ResultMessage({
             isSuccess: result,
             contents: result
@@ -85,10 +87,10 @@ export class NovelIndexResolver {
         { description: '에피소드 삭제' },
     )
     async deleteNovelIndex(
-        @CurrentUser() user: IPayload,
+        @CurrentUser() payload: IPayload,
         @Args('novelIndexID') id: string,
     ): Promise<ResultMessage> {
-        const result = await this.novelIndexService.delete(user.id, id);
+        const result = await this.novelIndexService.delete(payload.id, id);
         return new ResultMessage({
             isSuccess: result,
             contents: result
