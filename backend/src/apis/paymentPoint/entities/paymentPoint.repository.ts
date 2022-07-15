@@ -1,6 +1,6 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { ConflictException, Injectable } from '@nestjs/common';
-import { Connection, QueryRunner, Repository } from 'typeorm';
+import { Connection, IsNull, Not, QueryRunner, Repository } from 'typeorm';
 
 import { MESSAGES } from 'src/commons/message/Message.enum';
 import { UserEntity } from 'src/apis/user/entities/user.entity';
@@ -25,7 +25,60 @@ export class PaymentPointRepository {
         private readonly userRepository: UserRepository,
     ) {}
 
+    private readonly take = 10;
     private readonly point = 100;
+
+    /**
+     * 유저 기반 소설 결제 조회
+     */
+    async findPointPaymentsInNovel(
+        userID: string, //
+        page: number,
+    ): Promise<PaymentPointEntity[]> {
+        return await this.paymentPointRepository.find({
+            where: {
+                userID: userID,
+                novel: Not(IsNull()),
+            },
+            relations: [
+                'status',
+                'novel',
+                'novel.user',
+                'novel.user.userClass',
+            ],
+            order: {
+                createAt: 'ASC',
+            },
+            take: this.take,
+            skip: this.take * (page - 1),
+        });
+    }
+
+    /**
+     * 유저 기반 에피소드 결제 조회
+     */
+    async findPointPaymentsInIndex(
+        userID: string, //
+        page: number,
+    ): Promise<PaymentPointEntity[]> {
+        return await this.paymentPointRepository.find({
+            where: {
+                userID: userID,
+                novelIndex: Not(IsNull()),
+            },
+            relations: [
+                'status',
+                'novelIndex',
+                'novelIndex.user',
+                'novelIndex.user.userClass',
+            ],
+            order: {
+                createAt: 'ASC',
+            },
+            take: this.take,
+            skip: this.take * (page - 1),
+        });
+    }
 
     // 존재 확인
     async checkValid(
