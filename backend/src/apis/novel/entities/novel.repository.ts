@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Connection, IsNull, Not, Repository, UpdateResult } from 'typeorm';
+
 import { NovelIndexEntity } from 'src/apis/novelIndex/entities/novelIndex.entity';
-import { Connection, Repository, UpdateResult } from 'typeorm';
-import { UpdateNovelInput } from '../dto/updateNovel.input';
 
 import { NovelEntity } from './novel.entity';
+import { FetchNovelsOutput } from '../dto/fetchNovels.output';
 
 @Injectable()
 export class NovelRepository {
@@ -24,35 +25,40 @@ export class NovelRepository {
         'novel.updateAt',
     ];
 
+    /**
+     * 전체 갯수 조회
+     */
+    async getCount(): Promise<number> {
+        return await this.novelRepository
+            .createQueryBuilder('n')
+            .where('n.user is not null')
+            .getCount();
+    }
+
     async getPage(
         page: number, //
-    ): Promise<NovelEntity[]> {
+    ): Promise<FetchNovelsOutput> {
         const take = 10;
 
-        return await this.novelRepository
+        const novels = await this.novelRepository
             .createQueryBuilder('novel')
-            .select([
-                ...this._selector,
-                'user.id',
-                'user.nickName',
-                'class.id',
-                'category.id',
-                'category.name',
-                'tags.id',
-                'tags.name',
-                'files.id',
-                'files.url',
-            ])
-            .leftJoin('novel.user', 'user')
-            .leftJoin('user.userClass', 'class')
-            .leftJoin('novel.novelCategory', 'category')
-            .leftJoin('novel.novelTags', 'tags')
-            .leftJoin('novel.files', 'files')
+            .leftJoinAndSelect('novel.user', 'user')
+            .leftJoinAndSelect('user.userClass', 'userClass')
+            .leftJoinAndSelect('novel.novelCategory', 'novelCategory')
+            .leftJoinAndSelect('novel.novelTags', 'novelTags')
+            .leftJoinAndSelect('novel.files', 'files')
+            .where('novel.user is not null')
+            .orderBy('novel.createAt', 'DESC')
             .take(take)
             .skip(take * (page - 1))
-            .where('novel.user is not NULL')
-            .orderBy('novel.createAt', 'DESC')
             .getMany();
+
+        const count = await this.getCount();
+
+        return {
+            novels: novels,
+            count: count,
+        };
     }
 
     /**
@@ -61,19 +67,19 @@ export class NovelRepository {
     async getOne(
         novelID: string, //
     ): Promise<NovelEntity> {
-        return await this.novelRepository
+        const result = await this.novelRepository
             .createQueryBuilder('novel')
-            .select(this._selector)
             .leftJoinAndSelect('novel.user', 'user')
-            .leftJoinAndSelect('novel.novelCategory', 'category')
-            .leftJoinAndSelect('novel.novelTags', 'tags')
-            .leftJoinAndSelect('novel.novelIndexs', 'indexs')
-            .leftJoinAndSelect('novel.novelReviews', 'reviews')
+            .leftJoinAndSelect('novel.novelCategory', 'novelCategory')
+            .leftJoinAndSelect('novel.novelTags', 'novelTags')
+            .leftJoinAndSelect('novel.novelIndexs', 'novelIndexs')
             .leftJoinAndSelect('novel.files', 'files')
             .where('novel.user is not null')
-            .andWhere('novel.id=:id', { id: novelID })
-            .orderBy('indexs.createAt', 'DESC')
+            .where(`novelIndexs.isPrivate = 0`)
+            .where('novel.id=:novelID', { novelID: novelID })
             .getOne();
+
+        return result;
     }
 
     /**
@@ -120,16 +126,6 @@ export class NovelRepository {
             .where('n.id=:novelID', { novelID: novelID })
             .andWhere('u.id=:userID', { userID: userID })
             .getOne();
-    }
-
-    /**
-     * 전체 갯수 조회
-     */
-    async getCount(): Promise<number> {
-        return await this.novelRepository
-            .createQueryBuilder('n')
-            .where('n.user is not null')
-            .getCount();
     }
 
     /**

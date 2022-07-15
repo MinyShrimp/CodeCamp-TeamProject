@@ -10,7 +10,7 @@ import { FileService } from './file.service';
 
 /* FileUpload API */
 @Resolver()
-// @UseGuards(GqlJwtAccessGuard)
+@UseGuards(GqlJwtAccessGuard)
 export class FileResolver {
     constructor(
         private readonly fileService: FileService, //

@@ -128,6 +128,24 @@ export class NovelIndexService {
     }
 
     /**
+     * 비공개 전환 ( switch )
+     */
+    async changePrivate(
+        userID: string,
+        novelIndexID: string, //
+    ): Promise<NovelIndexEntity> {
+        // 검사
+        await this.checkValidWithUser(userID, novelIndexID);
+
+        const entity = await this.indexRepository.getOne(novelIndexID);
+
+        return await this.indexRepository.update({
+            ...entity,
+            isPrivate: !entity.isPrivate,
+        });
+    }
+
+    /**
      * 삭제 취소
      */
     async restore(

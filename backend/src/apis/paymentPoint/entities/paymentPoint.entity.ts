@@ -55,7 +55,7 @@ export class PaymentPointEntity {
     @Field(() => NovelEntity, { nullable: true })
     novel?: NovelEntity;
 
-    @Column({ name: 'noveId', nullable: true })
+    @Column({ name: 'novelId', nullable: true })
     novelID?: string;
 
     // 에피소드

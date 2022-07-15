@@ -1,7 +1,8 @@
 import * as morgan from 'morgan';
+import { Request } from 'express';
+import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { graphqlUploadExpress } from 'graphql-upload';
-import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app.module';
 
@@ -14,7 +15,6 @@ import {
     ResponseLoggerStream,
 } from './logger/winston.config';
 import { AppLoggerService } from './logger/logger.service';
-import { Request } from 'express';
 
 async function bootstrap() {
     createLogger();
@@ -37,7 +37,12 @@ async function bootstrap() {
     app.use(graphqlUploadExpress());
 
     morgan.token('operationName', (req: Request) => {
-        return req.body.operationName;
+        if (req.body) {
+            if (req.body.operationName) {
+                return req.body.operationName;
+            }
+        }
+        return '-';
     });
 
     app.use(

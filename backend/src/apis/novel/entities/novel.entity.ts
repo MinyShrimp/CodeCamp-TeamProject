@@ -68,6 +68,9 @@ export class NovelEntity {
     @Field(() => UserEntity)
     user: UserEntity;
 
+    @Column({ name: 'userId', nullable: true })
+    userID: string;
+
     @ManyToOne(
         () => NovelCategoryEntity, //
         { cascade: true, onDelete: 'SET NULL' },

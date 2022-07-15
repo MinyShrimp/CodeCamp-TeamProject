@@ -14,57 +14,66 @@ import { UpdateNovelIndexInput } from './dto/updateNovelIndex.input';
 import { NovelIndexService } from './novelIndex.service';
 
 @Resolver()
+@UseGuards(GqlJwtAccessGuard)
 export class NovelIndexResolver {
     constructor(
         private readonly novelIndexService: NovelIndexService, //
     ) {}
 
-    @UseGuards(GqlJwtAccessGuard)
     @Query(
         () => NovelIndexEntity, //
-        { description: '소설 인덱스 단일 조회' },
+        { description: '에피소드 단일 조회' },
     )
     fetchOneNovelIndex(
-        @CurrentUser() user: IPayload,
+        @CurrentUser() payload: IPayload,
         @Args('novelIndexID') id: string,
     ): Promise<NovelIndexEntity> {
-        return this.novelIndexService.findOne(user.id, id);
+        return this.novelIndexService.findOne(payload.id, id);
     }
 
-    @UseGuards(GqlJwtAccessGuard)
     @Mutation(
         () => NovelIndexEntity, //
-        { description: '소설 인덱스 등록' },
+        { description: '에피소드 등록' },
     )
     createNovelIndex(
-        @CurrentUser() user: IPayload,
-        @Args('createNovelIndexInput') input: CreateNovelIndexInput,
+        @CurrentUser() payload: IPayload,
+        @Args('input') input: CreateNovelIndexInput,
     ): Promise<NovelIndexEntity> {
-        return this.novelIndexService.create(user.id, input);
+        return this.novelIndexService.create(payload.id, input);
     }
 
-    @UseGuards(GqlJwtAccessGuard)
     @Mutation(
         () => NovelIndexEntity, //
-        { description: '소설 인덱스 수정' },
+        { description: '에피소드 수정' },
     )
-    async updateNovelIndex(
-        @CurrentUser() user: IPayload,
-        @Args('updateNovelIndexInput') input: UpdateNovelIndexInput,
+    updateNovelIndex(
+        @CurrentUser() payload: IPayload,
+        @Args('input') input: UpdateNovelIndexInput,
     ): Promise<NovelIndexEntity> {
-        return await this.novelIndexService.update(user.id, input);
+        return this.novelIndexService.update(payload.id, input);
     }
 
-    @UseGuards(GqlJwtAccessGuard)
+    @Mutation(
+        () => NovelIndexEntity, //
+        { description: '에피소드 비공개 전환' },
+    )
+    changePrivateNovelIndex(
+        @CurrentUser() payload: IPayload,
+        @Args({ name: 'novelIndexID', description: '에피소드 UUID' })
+        novelIndexID: string, //
+    ): Promise<NovelIndexEntity> {
+        return this.novelIndexService.changePrivate(payload.id, novelIndexID);
+    }
+
     @Mutation(
         () => ResultMessage, //
-        { description: '소설 인덱스 삭제 취소' },
+        { description: '에피소드 삭제 취소' },
     )
     async restoreNovelIndex(
-        @CurrentUser() user: IPayload,
+        @CurrentUser() payload: IPayload,
         @Args('novelIndexID') id: string,
     ): Promise<ResultMessage> {
-        const result = await this.novelIndexService.restore(user.id, id);
+        const result = await this.novelIndexService.restore(payload.id, id);
         return new ResultMessage({
             isSuccess: result,
             contents: result
@@ -73,16 +82,15 @@ export class NovelIndexResolver {
         });
     }
 
-    @UseGuards(GqlJwtAccessGuard)
     @Mutation(
         () => ResultMessage, //
-        { description: '소설 인덱스 삭제' },
+        { description: '에피소드 삭제' },
     )
     async deleteNovelIndex(
-        @CurrentUser() user: IPayload,
+        @CurrentUser() payload: IPayload,
         @Args('novelIndexID') id: string,
     ): Promise<ResultMessage> {
-        const result = await this.novelIndexService.delete(user.id, id);
+        const result = await this.novelIndexService.delete(payload.id, id);
         return new ResultMessage({
             isSuccess: result,
             contents: result
