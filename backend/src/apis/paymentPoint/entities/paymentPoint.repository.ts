@@ -35,23 +35,20 @@ export class PaymentPointRepository {
         userID: string, //
         page: number,
     ): Promise<PaymentPointEntity[]> {
-        return await this.paymentPointRepository.find({
-            where: {
-                userID: userID,
-                novel: Not(IsNull()),
-            },
-            relations: [
-                'status',
-                'novel',
-                'novel.user',
-                'novel.user.userClass',
-            ],
-            order: {
-                createAt: 'ASC',
-            },
-            take: this.take,
-            skip: this.take * (page - 1),
-        });
+        return await this.paymentPointRepository
+            .createQueryBuilder('pp')
+            .leftJoinAndSelect('pp.status', 'pps')
+            .leftJoinAndSelect('pp.user', 'ppu')
+            .leftJoinAndSelect('ppu.userClass', 'ppuc')
+            .leftJoinAndSelect('pp.novel', 'ppn')
+            .leftJoinAndSelect('ppn.user', 'ppnu')
+            .leftJoinAndSelect('ppnu.userClass', 'ppnuc')
+            .where('ppu.id=:userID', { userID: userID })
+            .where('pp.novel is not null')
+            .orderBy('pp.createAt', 'ASC')
+            .take(this.take)
+            .skip(this.take * (page - 1))
+            .getMany();
     }
 
     /**
@@ -61,23 +58,20 @@ export class PaymentPointRepository {
         userID: string, //
         page: number,
     ): Promise<PaymentPointEntity[]> {
-        return await this.paymentPointRepository.find({
-            where: {
-                userID: userID,
-                novelIndex: Not(IsNull()),
-            },
-            relations: [
-                'status',
-                'novelIndex',
-                'novelIndex.user',
-                'novelIndex.user.userClass',
-            ],
-            order: {
-                createAt: 'ASC',
-            },
-            take: this.take,
-            skip: this.take * (page - 1),
-        });
+        return await this.paymentPointRepository
+            .createQueryBuilder('pp')
+            .leftJoinAndSelect('pp.status', 'pps')
+            .leftJoinAndSelect('pp.user', 'ppu')
+            .leftJoinAndSelect('ppu.userClass', 'ppuc')
+            .leftJoinAndSelect('pp.novelIndex', 'ppni')
+            .leftJoinAndSelect('ppni.user', 'ppniu')
+            .leftJoinAndSelect('ppniu.userClass', 'ppniuc')
+            .where('ppu.id=:userID', { userID: userID })
+            .where('pp.novelIndex is not null')
+            .orderBy('pp.createAt', 'ASC')
+            .take(this.take)
+            .skip(this.take * (page - 1))
+            .getMany();
     }
 
     // 존재 확인
