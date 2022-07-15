@@ -1,4 +1,5 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { BoardEntity } from 'src/apis/board/entities/board.entity';
 import { NovelEntity } from 'src/apis/novel/entities/novel.entity';
 import {
     Entity,
@@ -36,6 +37,13 @@ export class FileEntity {
     )
     @JoinColumn()
     novel: NovelEntity;
+
+    @ManyToOne(
+        () => BoardEntity, //
+        { cascade: true, onDelete: 'SET NULL' },
+    )
+    @JoinColumn()
+    board: BoardEntity;
 
     @CreateDateColumn()
     createAt: Date;
