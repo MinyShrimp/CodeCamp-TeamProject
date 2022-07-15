@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
-import { UpdateNovelIndexInput } from '../dto/updateNovelIndex.input';
 import { NovelIndexEntity } from './novelIndex.entity';
 
 @Injectable()
@@ -84,21 +83,12 @@ export class NovelIndexRepository {
         novelIndexID: string, //
     ): Promise<NovelIndexEntity> {
         return await this.indexRepository
-            .createQueryBuilder('i')
-            .select([
-                'i.id',
-                'i.title',
-                'i.contents',
-                'i.index',
-                'i.star',
-                'i.viewCount',
-                'i.createAt',
-                'i.updateAt',
-            ])
-            .leftJoinAndSelect('i.user', 'u')
-            .leftJoinAndSelect('i.novel', 'n')
-            .leftJoinAndSelect('i.novelIndexReviews', 'r')
-            .where('i.id=:id', { id: novelIndexID })
+            .createQueryBuilder('novelIndex')
+            .leftJoinAndSelect('novelIndex.user', 'user')
+            .leftJoinAndSelect('novelIndex.novel', 'novel')
+            .leftJoinAndSelect('novelIndex.novelIndexReviews', 'reviews')
+            .where('novelIndex.id=:id', { id: novelIndexID })
+            .where('novelIndex.isPrivate = 0 or novelIndex.isPrivate is null')
             .getOne();
     }
 

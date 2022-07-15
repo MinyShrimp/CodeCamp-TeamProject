@@ -40,28 +40,23 @@ export class NovelRepository {
     ): Promise<FetchNovelsOutput> {
         const take = 10;
 
-        const result = await this.novelRepository.find({
-            where: {
-                user: Not(IsNull()),
-            },
-            relations: [
-                'user',
-                'user.userClass',
-                'novelCategory',
-                'novelTags',
-                'files',
-            ],
-            order: {
-                createAt: 'ASC',
-            },
-            take: take,
-            skip: take * (page - 1),
-        });
+        const novels = await this.novelRepository
+            .createQueryBuilder('novel')
+            .leftJoinAndSelect('novel.user', 'user')
+            .leftJoinAndSelect('user.userClass', 'userClass')
+            .leftJoinAndSelect('novel.novelCategory', 'novelCategory')
+            .leftJoinAndSelect('novel.novelTags', 'novelTags')
+            .leftJoinAndSelect('novel.files', 'files')
+            .where('novel.user is not null')
+            .orderBy('novel.createAt', 'DESC')
+            .take(take)
+            .skip(take * (page - 1))
+            .getMany();
 
         const count = await this.getCount();
 
         return {
-            novels: result,
+            novels: novels,
             count: count,
         };
     }
@@ -74,16 +69,15 @@ export class NovelRepository {
     ): Promise<NovelEntity> {
         return await this.novelRepository
             .createQueryBuilder('novel')
-            .select(this._selector)
             .leftJoinAndSelect('novel.user', 'user')
-            .leftJoinAndSelect('novel.novelCategory', 'category')
-            .leftJoinAndSelect('novel.novelTags', 'tags')
-            .leftJoinAndSelect('novel.novelIndexs', 'indexs')
-            .leftJoinAndSelect('novel.novelReviews', 'reviews')
+            .leftJoinAndSelect('novel.novelCategory', 'novelCategory')
+            .leftJoinAndSelect('novel.novelTags', 'novelTags')
+            .leftJoinAndSelect('novel.novelIndexs', 'novelIndexs')
             .leftJoinAndSelect('novel.files', 'files')
             .where('novel.user is not null')
             .andWhere('novel.id=:id', { id: novelID })
-            .orderBy('indexs.createAt', 'DESC')
+            .where('novelIndexs.isPrivate = 0 or novelIndexs.isPrivate is null')
+            .orderBy('novel.createAt', 'DESC')
             .getOne();
     }
 
