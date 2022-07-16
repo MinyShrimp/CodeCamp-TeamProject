@@ -1,6 +1,7 @@
 import * as winston from 'winston';
 import 'winston-daily-rotate-file';
 import { Logger, format, transports } from 'winston';
+import { BigQuery } from '@google-cloud/bigquery';
 
 const { combine, timestamp, colorize, errors, json, printf } = format;
 
@@ -102,10 +103,42 @@ export const createLogger = () => {
 
     ResponseLoggerStream = {
         write: (message) => {
-            ResponseLogger.info(
-                message.substring(0, message.lastIndexOf('\n')),
-                { from: 'Response' },
-            );
+            const res = message.substring(0, message.lastIndexOf('\n'));
+            ResponseLogger.info(res, { from: 'Response' });
+
+            const _json = JSON.parse(res);
+            const bigquery = new BigQuery({
+                keyFilename: `./key/${process.env.FILE_BIGQUERY_KEY}`,
+                projectId: process.env.FILE_PROJECT_ID,
+            });
+
+            const bqRequest = {};
+            Object.keys(_json).forEach((key) => {
+                /**
+                 * key:
+                 *  key가 '-'를 포함하고 있다면,
+                 *  '-' + 뒤의 한글자 를 찾아서 '-' 를 제거하고 뒤의 한글자를 대문자로 변환한다.
+                 *
+                 * value:
+                 *  value가 '-'라면,
+                 *  null로 바꾼다.
+                 */
+                bqRequest[
+                    key.includes('-')
+                        ? key.replace(/-[a-z]/, (letter) =>
+                              letter[1].toUpperCase(),
+                          )
+                        : key
+                ] = _json[key] === '-' ? null : _json[key];
+            });
+
+            bigquery
+                .dataset('teamproject')
+                .table('response')
+                .insert([bqRequest])
+                .catch((e) => {
+                    FileLogger.error(e);
+                });
         },
     };
 };

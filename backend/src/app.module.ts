@@ -63,6 +63,7 @@ import { ReportEnumModule } from './apis/reportEnum/reportEnum.module';
 
 import { FileModule } from './apis/file/file.module';
 import { TempStorageModule } from './apis/tempStorage/tempStorage.module';
+import { LoggerModule } from './apis/logger/logger.module';
 
 ///////////////////////////////////////////////////////////////////////////
 @Module({
@@ -162,6 +163,8 @@ import { TempStorageModule } from './apis/tempStorage/tempStorage.module';
 
         FileModule,
         TempStorageModule,
+
+        LoggerModule,
     ],
     controllers: [AppController],
     providers: [],

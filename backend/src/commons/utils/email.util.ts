@@ -39,7 +39,6 @@ export class EmailUtil {
                 html: props.html,
             });
 
-            console.log(result);
             return true;
         } catch (e) {
             console.log(e);
