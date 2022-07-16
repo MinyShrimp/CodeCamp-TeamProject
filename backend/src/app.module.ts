@@ -91,6 +91,7 @@ import { TempStorageModule } from './apis/tempStorage/tempStorage.module';
                 credentials: 'include',
                 exposedHeaders: ['Authorization', 'Set-Cookie', 'Cookie'],
             },
+            playground: process.env.MODE !== 'PRODUCTION',
         }),
 
         ///////////////////////////////////////////////////////////////////////////

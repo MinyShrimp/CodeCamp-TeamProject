@@ -2,8 +2,7 @@ import * as winston from 'winston';
 import 'winston-daily-rotate-file';
 import { Logger, format, transports } from 'winston';
 
-const { combine, timestamp, colorize, errors, json, printf, prettyPrint } =
-    format;
+const { combine, timestamp, colorize, errors, json, printf } = format;
 
 interface IStream {
     write: (message: string) => void;
@@ -38,11 +37,8 @@ export const createLogger = () => {
 
     ResponseLogger = winston.createLogger({
         format: combine(
-            timestamp({
-                format: 'YYYY-MM-DD HH:mm:ss',
-            }),
             printf((info) => {
-                return `[${info.timestamp}] ${info.message}`;
+                return info.message;
             }),
         ),
         transports: [],
@@ -70,7 +66,7 @@ export const createLogger = () => {
     FileLogger.add(
         new transports.DailyRotateFile({
             level: 'error',
-            filename: 'log/error-%DATE%.log',
+            filename: 'log/error/error-%DATE%.log',
             datePattern: 'YYYY-MM-DD',
             zippedArchive: true,
             maxFiles: '14d',
@@ -79,7 +75,7 @@ export const createLogger = () => {
 
     FileLogger.add(
         new transports.DailyRotateFile({
-            filename: 'log/app-%DATE%.log',
+            filename: 'log/app/app-%DATE%.log',
             datePattern: 'YYYY-MM-DD',
             zippedArchive: true,
             maxFiles: '14d',
@@ -88,7 +84,7 @@ export const createLogger = () => {
 
     ResponseLogger.add(
         new transports.DailyRotateFile({
-            filename: 'log/response-%DATE%.log',
+            filename: 'log/response/response-%DATE%.log',
             datePattern: 'YYYY-MM-DD',
             zippedArchive: true,
             maxFiles: '14d',

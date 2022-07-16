@@ -1,4 +1,5 @@
 import * as morgan from 'morgan';
+const morgan_json = require('morgan-json');
 import { Request } from 'express';
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
@@ -47,7 +48,10 @@ async function bootstrap() {
 
     app.use(
         morgan(
-            ':remote-addr - :remote-user ":method :url :operationName HTTP/:http-version" :status :res[content-length] :response-time ":referrer" ":user-agent"',
+            morgan_json(
+                ':date[iso] :remote-addr :remote-user :method :url :operationName :http-version :status :res[content-length] :response-time :referrer :user-agent',
+                { stringify: true },
+            ),
             {
                 stream: ResponseLoggerStream,
                 skip: (req: Request) => {
@@ -66,7 +70,19 @@ async function bootstrap() {
     app.use(
         morgan(
             ':remote-addr - :remote-user ":method :url :operationName HTTP/:http-version" :status (:response-time ms)',
-            { stream: ConsoleLoggerStream },
+            {
+                stream: ConsoleLoggerStream,
+                skip: (req: Request) => {
+                    if (req.body) {
+                        if (req.body.operationName) {
+                            return (
+                                req.body.operationName === 'IntrospectionQuery'
+                            );
+                        }
+                    }
+                    return false;
+                },
+            },
         ),
     );
 
