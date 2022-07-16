@@ -1,4 +1,5 @@
 import * as morgan from 'morgan';
+const morgan_json = require('morgan-json');
 import { Request } from 'express';
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
@@ -13,8 +14,8 @@ import {
     createLogger,
     ConsoleLoggerStream,
     ResponseLoggerStream,
-} from './logger/winston.config';
-import { AppLoggerService } from './logger/logger.service';
+} from './commons/logger/winston.config';
+import { AppLoggerService } from './commons/logger/logger.service';
 
 async function bootstrap() {
     createLogger();
@@ -47,8 +48,23 @@ async function bootstrap() {
 
     app.use(
         morgan(
-            ':remote-addr - :remote-user ":method :url :operationName HTTP/:http-version" :status :res[content-length] :response-time ":referrer" ":user-agent"',
-            { stream: ResponseLoggerStream },
+            morgan_json(
+                ':date[iso] :remote-addr :remote-user :method :url :operationName :http-version :status :res[content-length] :response-time :referrer :user-agent',
+                { stringify: true },
+            ),
+            {
+                stream: ResponseLoggerStream,
+                skip: (req: Request) => {
+                    if (req.body) {
+                        if (req.body.operationName) {
+                            return (
+                                req.body.operationName === 'IntrospectionQuery'
+                            );
+                        }
+                    }
+                    return false;
+                },
+            },
         ),
     );
     app.use(
@@ -56,6 +72,16 @@ async function bootstrap() {
             ':remote-addr - :remote-user ":method :url :operationName HTTP/:http-version" :status (:response-time ms)',
             {
                 stream: ConsoleLoggerStream,
+                skip: (req: Request) => {
+                    if (req.body) {
+                        if (req.body.operationName) {
+                            return (
+                                req.body.operationName === 'IntrospectionQuery'
+                            );
+                        }
+                    }
+                    return false;
+                },
             },
         ),
     );

@@ -19,8 +19,6 @@ import { UpdateUserInput } from './dto/updateUser.input';
 import { CreateUserOutput } from './dto/createUser.output';
 
 import { UserService } from './user.service';
-import { FetchPaymentOutput } from '../payment/dto/fetchPayments.output';
-import { PaymentPointEntity } from '../paymentPoint/entities/paymentPoint.entity';
 
 /* 유저 API */
 @Resolver()

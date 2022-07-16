@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Connection, IsNull, Not, Repository, UpdateResult } from 'typeorm';
+import { Connection, Repository, UpdateResult } from 'typeorm';
 
 import { NovelIndexEntity } from 'src/apis/novelIndex/entities/novelIndex.entity';
 
 import { NovelEntity } from './novel.entity';
 import { FetchNovelsOutput } from '../dto/fetchNovels.output';
+import { NovelDto } from '../dto/novel.dto';
 
 @Injectable()
 export class NovelRepository {
@@ -15,15 +16,7 @@ export class NovelRepository {
         private readonly connection: Connection,
     ) {}
 
-    private readonly _selector = [
-        'novel.id',
-        'novel.title',
-        'novel.description',
-        'novel.likeCount',
-        'novel.viewCount',
-        'novel.createAt',
-        'novel.updateAt',
-    ];
+    private readonly take = 10;
 
     /**
      * 전체 갯수 조회
@@ -35,11 +28,12 @@ export class NovelRepository {
             .getCount();
     }
 
+    /**
+     * detail 조회
+     */
     async getPage(
         page: number, //
     ): Promise<FetchNovelsOutput> {
-        const take = 10;
-
         const novels = await this.novelRepository
             .createQueryBuilder('novel')
             .leftJoinAndSelect('novel.user', 'user')
@@ -49,8 +43,8 @@ export class NovelRepository {
             .leftJoinAndSelect('novel.files', 'files')
             .where('novel.user is not null')
             .orderBy('novel.createAt', 'DESC')
-            .take(take)
-            .skip(take * (page - 1))
+            .take(this.take)
+            .skip(this.take * (page - 1))
             .getMany();
 
         const count = await this.getCount();
@@ -62,12 +56,73 @@ export class NovelRepository {
     }
 
     /**
+     * 내가 쓴 소설 갯수 조회
+     */
+    async getMyCount(
+        userID: string, //
+    ): Promise<number> {
+        return await this.novelRepository
+            .createQueryBuilder('novel')
+            .select(['novel.id', 'user.id'])
+            .leftJoin('novel.user', 'user')
+            .where('user.id=:id', { id: userID })
+            .getCount();
+    }
+
+    /**
+     * 내가 쓴 소설 목록 조회
+     */
+    async getMyListPage(dto: {
+        page: number;
+        userID: string; //
+    }): Promise<FetchNovelsOutput> {
+        const list = await this.novelRepository
+            .createQueryBuilder('novel')
+            .leftJoinAndSelect('novel.user', 'user')
+            .leftJoinAndSelect('user.userClass', 'userClass')
+            .leftJoinAndSelect('novel.novelCategory', 'novelCategory')
+            .leftJoinAndSelect('novel.novelTags', 'novelTags')
+            .leftJoinAndSelect('novel.novelIndexs', 'novelIndexs')
+            .leftJoinAndSelect('novel.files', 'files')
+            .where('user.id=:id', { id: dto.userID })
+            .orderBy('novel.createAt', 'DESC')
+            .take(this.take)
+            .skip(this.take * (dto.page - 1))
+            .getMany();
+
+        const count = await this.getMyCount(dto.userID);
+
+        return {
+            novels: list,
+            count: count,
+        };
+    }
+
+    /**
+     * 내가 쓴 소설 단일 조회
+     */
+    async getMyDetail(
+        dto: NovelDto, //
+    ): Promise<NovelEntity> {
+        return await this.novelRepository
+            .createQueryBuilder('novel')
+            .leftJoinAndSelect('novel.user', 'user')
+            .leftJoinAndSelect('novel.novelCategory', 'novelCategory')
+            .leftJoinAndSelect('novel.novelTags', 'novelTags')
+            .leftJoinAndSelect('novel.novelIndexs', 'novelIndexs')
+            .leftJoinAndSelect('novel.files', 'files')
+            .where('novel.id=:novelID', { novelID: dto.novelID })
+            .andWhere('user.id=:userID', { userID: dto.userID })
+            .getOne();
+    }
+
+    /**
      * ID 기반 조회
      */
     async getOne(
         novelID: string, //
     ): Promise<NovelEntity> {
-        const result = await this.novelRepository
+        return await this.novelRepository
             .createQueryBuilder('novel')
             .leftJoinAndSelect('novel.user', 'user')
             .leftJoinAndSelect('novel.novelCategory', 'novelCategory')
@@ -78,8 +133,6 @@ export class NovelRepository {
             .where(`novelIndexs.isPrivate = 0`)
             .where('novel.id=:novelID', { novelID: novelID })
             .getOne();
-
-        return result;
     }
 
     /**
@@ -104,7 +157,7 @@ export class NovelRepository {
     ): Promise<NovelEntity> {
         return await this.novelRepository
             .createQueryBuilder('n')
-            .select(['n.id'])
+            .select(['n.id', 'u.id'])
             .leftJoin('n.user', 'u')
             .where('n.id=:novelID', { novelID: novelID })
             .andWhere('u.id=:userID', { userID: userID })
@@ -120,7 +173,7 @@ export class NovelRepository {
     ): Promise<NovelEntity> {
         return await this.novelRepository
             .createQueryBuilder('n')
-            .select(['n.id'])
+            .select(['n.id', 'u.id'])
             .withDeleted()
             .leftJoin('n.user', 'u')
             .where('n.id=:novelID', { novelID: novelID })

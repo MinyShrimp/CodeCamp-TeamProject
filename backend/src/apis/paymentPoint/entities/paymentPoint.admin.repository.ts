@@ -14,7 +14,7 @@ export class PaymentPointAdminRepository {
     // prettier-ignore
     private readonly _selector = [
         'pp.id', 'pp.point', 'pp.createAt',
-        'pps.id', 'u.id', 'u.email', 'ni.id', 'ni.title',
+        'pps.id', 'u.id', 'u.email', 'n.id', 'n.title', 'ni.id', 'ni.title',
     ];
 
     async findAll(): Promise<PaymentPointEntity[]> {
@@ -24,6 +24,7 @@ export class PaymentPointAdminRepository {
             .withDeleted()
             .leftJoin('pp.status', 'pps')
             .leftJoin('pp.user', 'u')
+            .leftJoin('pp.novel', 'n')
             .leftJoin('pp.novelIndex', 'ni')
             .orderBy('pp.createAt')
             .getMany();
@@ -34,12 +35,11 @@ export class PaymentPointAdminRepository {
     ): Promise<PaymentPointEntity> {
         return await this.paymentPointRepository
             .createQueryBuilder('pp')
-            .select([
-                ...this._selector, //
-            ])
+            .select(this._selector)
             .withDeleted()
             .leftJoin('pp.status', 'pps')
             .leftJoin('pp.user', 'u')
+            .leftJoin('pp.novel', 'n')
             .leftJoin('pp.novelIndex', 'ni')
             .where('pp.id=:id', { id: id })
             .getOne();

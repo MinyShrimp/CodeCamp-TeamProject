@@ -63,6 +63,7 @@ import { ReportEnumModule } from './apis/reportEnum/reportEnum.module';
 
 import { FileModule } from './apis/file/file.module';
 import { TempStorageModule } from './apis/tempStorage/tempStorage.module';
+import { LoggerModule } from './apis/logger/logger.module';
 
 ///////////////////////////////////////////////////////////////////////////
 @Module({
@@ -91,6 +92,7 @@ import { TempStorageModule } from './apis/tempStorage/tempStorage.module';
                 credentials: 'include',
                 exposedHeaders: ['Authorization', 'Set-Cookie', 'Cookie'],
             },
+            playground: process.env.MODE !== 'PRODUCTION',
         }),
 
         ///////////////////////////////////////////////////////////////////////////
@@ -161,6 +163,8 @@ import { TempStorageModule } from './apis/tempStorage/tempStorage.module';
 
         FileModule,
         TempStorageModule,
+
+        LoggerModule,
     ],
     controllers: [AppController],
     providers: [],

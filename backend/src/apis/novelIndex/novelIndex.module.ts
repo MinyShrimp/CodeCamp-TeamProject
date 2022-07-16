@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+import { UserModule } from '../user/user.module';
 import { NovelModule } from '../novel/novel.module';
 
 import { NovelIndexEntity } from './entities/novelIndex.entity';
@@ -9,8 +10,8 @@ import { NovelIndexAdminRepository } from './entities/novelIndex.admin.repositor
 
 import { NovelIndexService } from './novelIndex.service';
 import { NovelIndexResolver } from './novelIndex.resolver';
+import { NovelIndexViewCountRedis } from './novelIndex.redis.viewCount';
 import { NovelIndexAdminController } from './novelIndex.admin.controller';
-import { UserModule } from '../user/user.module';
 
 @Module({
     imports: [
@@ -23,6 +24,7 @@ import { UserModule } from '../user/user.module';
     ],
     exports: [
         NovelIndexService, //
+        NovelIndexViewCountRedis,
     ],
     controllers: [
         NovelIndexAdminController, //
@@ -33,6 +35,7 @@ import { UserModule } from '../user/user.module';
         NovelIndexService,
         NovelIndexResolver,
         NovelIndexRepository,
+        NovelIndexViewCountRedis,
     ],
 })
 export class NovelIndexModule {}

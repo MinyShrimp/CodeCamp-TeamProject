@@ -10,20 +10,24 @@ export const PointPaymentIndex = EntityFactory.getEntity<IPointPaymentColumn>({
     list: {
         column: [
             'id', 'point', 'createAt', 'status',
-            'user', 'novelIndex',
+            'user', 'novel', 'novelIndex',
         ],
         option: {
             user: 'email',
+            status: 'id',
+            novel: 'title',
             novelIndex: 'title'
         }
     },
     show: {
         column: [
             'id', 'point', 'createAt', 'status',
-            'user', 'novelIndex',
+            'user', 'novel', 'novelIndex',
         ],
         option: {
             user: 'email',
+            status: 'id',
+            novel: 'title',
             novelIndex: 'title'
         }
     },

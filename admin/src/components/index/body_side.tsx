@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from 'react';
+import { ReactElement, useState } from 'react';
 import { Collapse, Nav } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
@@ -364,6 +364,21 @@ export function IndexBodySide() {
                                             </>
                                         }
                                     />
+                                </>
+                            }
+                        ></NavCollapse>
+
+                        <NavCollapse
+                            id="logger-collapse"
+                            title="Logger"
+                            items={
+                                <>
+                                    <Nav.Link
+                                        as={Link}
+                                        to="/admin/logger/response"
+                                    >
+                                        Response
+                                    </Nav.Link>
                                 </>
                             }
                         ></NavCollapse>
