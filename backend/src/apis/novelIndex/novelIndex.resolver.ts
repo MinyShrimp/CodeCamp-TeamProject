@@ -26,7 +26,11 @@ export class NovelIndexResolver {
     )
     fetchOneNovelIndex(
         @CurrentUser() payload: IPayload,
-        @Args('novelIndexID') id: string,
+        @Args({
+            name: 'novelIndexID',
+            description: '에피소드 UUID',
+        })
+        id: string,
     ): Promise<NovelIndexEntity> {
         return this.novelIndexService.findOne({
             userID: payload.id,
@@ -62,7 +66,10 @@ export class NovelIndexResolver {
     )
     changePrivateNovelIndex(
         @CurrentUser() payload: IPayload,
-        @Args({ name: 'novelIndexID', description: '에피소드 UUID' })
+        @Args({
+            name: 'novelIndexID',
+            description: '에피소드 UUID',
+        })
         id: string, //
     ): Promise<NovelIndexEntity> {
         return this.novelIndexService.changePrivate({
@@ -77,12 +84,17 @@ export class NovelIndexResolver {
     )
     async restoreNovelIndex(
         @CurrentUser() payload: IPayload,
-        @Args('novelIndexID') id: string,
+        @Args({
+            name: 'novelIndexID',
+            description: '에피소드 UUID',
+        })
+        id: string,
     ): Promise<ResultMessage> {
         const result = await this.novelIndexService.restore({
             userID: payload.id,
             novelIndexID: id,
         });
+
         return new ResultMessage({
             isSuccess: result,
             contents: result
@@ -97,12 +109,17 @@ export class NovelIndexResolver {
     )
     async deleteNovelIndex(
         @CurrentUser() payload: IPayload,
-        @Args('novelIndexID') id: string,
+        @Args({
+            name: 'novelIndexID',
+            description: '에피소드 UUID',
+        })
+        id: string,
     ): Promise<ResultMessage> {
         const result = await this.novelIndexService.delete({
             userID: payload.id,
             novelIndexID: id,
         });
+
         return new ResultMessage({
             isSuccess: result,
             contents: result
