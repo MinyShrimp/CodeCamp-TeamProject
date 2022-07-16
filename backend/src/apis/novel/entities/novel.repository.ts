@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Connection, IsNull, Not, Repository, UpdateResult } from 'typeorm';
+import { Connection, Repository, UpdateResult } from 'typeorm';
 
 import { NovelIndexEntity } from 'src/apis/novelIndex/entities/novelIndex.entity';
 
@@ -17,15 +17,6 @@ export class NovelRepository {
     ) {}
 
     private readonly take = 10;
-    private readonly _selector = [
-        'novel.id',
-        'novel.title',
-        'novel.description',
-        'novel.likeCount',
-        'novel.viewCount',
-        'novel.createAt',
-        'novel.updateAt',
-    ];
 
     /**
      * 전체 갯수 조회
@@ -71,8 +62,10 @@ export class NovelRepository {
         userID: string, //
     ): Promise<number> {
         return await this.novelRepository
-            .createQueryBuilder('n')
-            .where('nove.user.id=:id', { id: userID })
+            .createQueryBuilder('novel')
+            .select(['novel.id', 'user.id'])
+            .leftJoin('novel.user', 'user')
+            .where('user.id=:id', { id: userID })
             .getCount();
     }
 
@@ -89,6 +82,7 @@ export class NovelRepository {
             .leftJoinAndSelect('user.userClass', 'userClass')
             .leftJoinAndSelect('novel.novelCategory', 'novelCategory')
             .leftJoinAndSelect('novel.novelTags', 'novelTags')
+            .leftJoinAndSelect('novel.novelIndexs', 'novelIndexs')
             .leftJoinAndSelect('novel.files', 'files')
             .where('user.id=:id', { id: dto.userID })
             .orderBy('novel.createAt', 'DESC')
@@ -118,7 +112,7 @@ export class NovelRepository {
             .leftJoinAndSelect('novel.novelIndexs', 'novelIndexs')
             .leftJoinAndSelect('novel.files', 'files')
             .where('novel.id=:novelID', { novelID: dto.novelID })
-            .andWhere('novel.user.id=:userID', { userID: dto.userID })
+            .andWhere('user.id=:userID', { userID: dto.userID })
             .getOne();
     }
 
