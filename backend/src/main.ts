@@ -13,8 +13,8 @@ import {
     createLogger,
     ConsoleLoggerStream,
     ResponseLoggerStream,
-} from './logger/winston.config';
-import { AppLoggerService } from './logger/logger.service';
+} from './commons/logger/winston.config';
+import { AppLoggerService } from './commons/logger/logger.service';
 
 async function bootstrap() {
     createLogger();
