@@ -24,7 +24,7 @@ export class NovelIndexResolver {
         () => NovelIndexEntity, //
         { description: '에피소드 단일 조회' },
     )
-    fetchOneNovelIndex(
+    fetchEpisodeDetail(
         @CurrentUser() payload: IPayload,
         @Args({
             name: 'novelIndexID',
