@@ -48,15 +48,25 @@ async function bootstrap() {
     app.use(
         morgan(
             ':remote-addr - :remote-user ":method :url :operationName HTTP/:http-version" :status :res[content-length] :response-time ":referrer" ":user-agent"',
-            { stream: ResponseLoggerStream },
+            {
+                stream: ResponseLoggerStream,
+                skip: (req: Request) => {
+                    if (req.body) {
+                        if (req.body.operationName) {
+                            return (
+                                req.body.operationName === 'IntrospectionQuery'
+                            );
+                        }
+                    }
+                    return false;
+                },
+            },
         ),
     );
     app.use(
         morgan(
             ':remote-addr - :remote-user ":method :url :operationName HTTP/:http-version" :status (:response-time ms)',
-            {
-                stream: ConsoleLoggerStream,
-            },
+            { stream: ConsoleLoggerStream },
         ),
     );
 
