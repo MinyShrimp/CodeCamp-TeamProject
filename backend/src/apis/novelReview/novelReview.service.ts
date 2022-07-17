@@ -76,10 +76,8 @@ export class NovelReviewService {
 
     async softDelete(
         reviewID: string, //
-    ): Promise<string> {
+    ): Promise<boolean> {
         const result = await this.novelReviewRepository.softDelete(reviewID);
-        return result.affected
-            ? MESSAGES.NOVEL_REVIEW_SOFT_DELETE_SUCCESSED
-            : MESSAGES.NOVEL_REVIEW_SOFT_DELETE_FAILED;
+        return result.affected ? true : false;
     }
 }

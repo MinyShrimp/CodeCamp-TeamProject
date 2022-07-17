@@ -51,7 +51,7 @@ export class NovelIndexReviewRepository {
 
         return {
             count: count,
-            reviews: reviews,
+            episodeReviews: reviews,
         };
     }
 

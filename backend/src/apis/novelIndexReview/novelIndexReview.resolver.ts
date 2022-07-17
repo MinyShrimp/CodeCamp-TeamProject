@@ -1,8 +1,10 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 
+import { MESSAGES } from 'src/commons/message/Message.enum';
 import { IPayload } from 'src/commons/interfaces/Payload.interface';
 import { CurrentUser } from 'src/commons/auth/gql-user.param';
+import { ResultMessage } from 'src/commons/message/ResultMessage.dto';
 import { GqlJwtAccessGuard } from 'src/commons/auth/gql-auth.guard';
 
 import { NovelIndexReviewEntity } from './entities/novelIndexReview.entity';
@@ -76,12 +78,19 @@ export class NovelIndexReviewResolver {
 
     @UseGuards(GqlJwtAccessGuard)
     @Mutation(
-        () => String, //
+        () => ResultMessage, //
         { description: '에피소드 별 리뷰 삭제' },
     )
-    deleteEpisodeReview(
+    async deleteEpisodeReview(
         @Args('ReviewID') reviewID: string, //
-    ): Promise<string> {
-        return this.episodeReviewService.softDelete(reviewID);
+    ): Promise<ResultMessage> {
+        const result = await this.episodeReviewService.softDelete(reviewID);
+        return new ResultMessage({
+            id: reviewID,
+            isSuccess: result,
+            contents: result
+                ? MESSAGES.NOVEL_INDEX_REVIEW_SOFT_DELETE_SUCCESSED
+                : MESSAGES.NOVEL_INDEX_REVIEW_SOFT_DELETE_FAILED,
+        });
     }
 }

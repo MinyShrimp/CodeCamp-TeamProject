@@ -7,5 +7,5 @@ export class FetchEpisodeReviewOutput {
     count: number;
 
     @Field(() => [NovelIndexReviewEntity], { description: '조회된 리뷰 목록' })
-    reviews: Array<NovelIndexReviewEntity>;
+    episodeReviews: Array<NovelIndexReviewEntity>;
 }

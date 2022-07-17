@@ -105,10 +105,8 @@ export class BoardService {
 
     async softDelete(
         boardID: string, //
-    ): Promise<string> {
+    ): Promise<boolean> {
         const result = await this.boardRepository.softDelete(boardID);
-        return result.affected
-            ? MESSAGES.BOARD_SOFT_DELETE_SUCCESSED
-            : MESSAGES.BOARD_SOFT_DELETE_FAILED;
+        return result ? true : false;
     }
 }

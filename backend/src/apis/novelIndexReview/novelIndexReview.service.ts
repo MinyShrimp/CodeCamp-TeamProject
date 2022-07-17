@@ -71,10 +71,8 @@ export class NovelIndexReviewService {
 
     async softDelete(
         reviewID: string, //
-    ): Promise<string> {
+    ): Promise<boolean> {
         const result = await this.episodeReviewRepository.softDelete(reviewID);
-        return result.affected
-            ? MESSAGES.NOVEL_INDEX_REVIEW_SOFT_DELETE_SUCCESSED
-            : MESSAGES.NOVEL_INDEX_REVIEW_SOFT_DELETE_FAILED;
+        return result.affected ? true : false;
     }
 }
