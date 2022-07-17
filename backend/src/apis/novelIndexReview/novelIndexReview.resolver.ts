@@ -1,34 +1,43 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { IPayload } from 'src/commons/interfaces/Payload.interface';
 import { CurrentUser } from 'src/commons/auth/gql-user.param';
 import { GqlJwtAccessGuard } from 'src/commons/auth/gql-auth.guard';
 
 import { NovelIndexReviewEntity } from './entities/novelIndexReview.entity';
-import { NovelIndexReviewService } from './novelIndexReview.service';
+import { NovelIndexReviewRepository } from './entities/novelIndexReview.repository';
+
+import { FetchEpisodeReviewOutput } from './dto/fetchEpisodeReview.output';
 import { CreateNovelIndexReviewInput } from './dto/createNovelIndexReview.input';
 import { UpdateNovelIndexReviewInput } from './dto/updateNovelIndexReview.input';
+
+import { NovelIndexReviewService } from './novelIndexReview.service';
 
 /* 편당 리뷰 API */
 @Resolver()
 export class NovelIndexReviewResolver {
     constructor(
-        private readonly episodeService: NovelIndexReviewService, //
+        private readonly episodeReviewService: NovelIndexReviewService, //
+        private readonly episodeReviewRepository: NovelIndexReviewRepository,
     ) {}
 
     ///////////////////////////////////////////////////////////////////
     // 조회 //
 
-    /** 해당 에피소드의 모든 리뷰 조회 */
+    /** 해당 에피소드의 리뷰 조회, Page */
     @Query(
-        () => [NovelIndexReviewEntity], //
-        { description: '해당 에피소드의 리뷰 전체 조회 ' },
+        () => FetchEpisodeReviewOutput, //
+        { description: '해당 에피소드의 리뷰 조회, Page' },
     )
-    async fetchEpisodeReviewAll(
-        @Args('novelIndex') episodeID: string, //
-    ): Promise<NovelIndexReviewEntity[]> {
-        return await this.episodeService.findAll(episodeID);
+    async fetchEpisodeReviewPage(
+        @Args('episodeID') episodeID: string,
+        @Args({ name: 'page', type: () => Int }) page: number,
+    ): Promise<FetchEpisodeReviewOutput> {
+        return await this.episodeReviewRepository.findReviewPage({
+            page: page,
+            episodeID: episodeID,
+        });
     }
 
     ///////////////////////////////////////////////////////////////////q
@@ -42,7 +51,10 @@ export class NovelIndexReviewResolver {
         @CurrentUser() currentUser: IPayload, //
         @Args('createEpisodeReviewInput') input: CreateNovelIndexReviewInput,
     ): Promise<NovelIndexReviewEntity> {
-        return await this.episodeService.createReview(currentUser.id, input);
+        return await this.episodeReviewService.createReview(
+            currentUser.id,
+            input,
+        );
     }
 
     ///////////////////////////////////////////////////////////////////
@@ -56,7 +68,7 @@ export class NovelIndexReviewResolver {
     async updateEpisodeReview(
         @Args('updateEpisodeReviewInput') input: UpdateNovelIndexReviewInput,
     ): Promise<NovelIndexReviewEntity> {
-        return await this.episodeService.updateReview(input);
+        return await this.episodeReviewService.updateReview(input);
     }
 
     ///////////////////////////////////////////////////////////////////
@@ -70,6 +82,6 @@ export class NovelIndexReviewResolver {
     deleteEpisodeReview(
         @Args('ReviewID') reviewID: string, //
     ): Promise<string> {
-        return this.episodeService.softDelete(reviewID);
+        return this.episodeReviewService.softDelete(reviewID);
     }
 }
