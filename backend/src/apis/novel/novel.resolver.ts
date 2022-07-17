@@ -24,9 +24,9 @@ export class NovelResolver {
 
     @Query(
         () => FetchNovelsOutput, //
-        { description: '소설 목록 조회, page' },
+        { description: '연재 중인 작품 목록 조회, page, 최신순' },
     )
-    fetchNovelsPage(
+    fetchNovelCyclesPageLastOrder(
         @Args({
             name: 'page',
             type: () => Int,
@@ -34,7 +34,22 @@ export class NovelResolver {
         })
         page: number,
     ): Promise<FetchNovelsOutput> {
-        return this.novelRepository.getPage(page);
+        return this.novelRepository.getPageIngLastOrder(page);
+    }
+
+    @Query(
+        () => FetchNovelsOutput, //
+        { description: '완결된 작품 목록 조회, page, 최신순' },
+    )
+    fetchNovelFinsPageLastOrder(
+        @Args({
+            name: 'page',
+            type: () => Int,
+            defaultValue: 1,
+        })
+        page: number,
+    ): Promise<FetchNovelsOutput> {
+        return this.novelRepository.getPageFinLastOrder(page);
     }
 
     @Query(

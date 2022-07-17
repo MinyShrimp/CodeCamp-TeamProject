@@ -13,6 +13,7 @@ import { NovelRepository } from './entities/novel.repository';
 import { CreateNovelInput } from './dto/createNovel.input';
 import { UpdateNovelInput } from './dto/updateNovel.input';
 import { IPayload } from 'src/commons/interfaces/Payload.interface';
+import { UpdateResult } from 'typeorm';
 
 @Injectable()
 export class NovelService {
@@ -133,6 +134,15 @@ export class NovelService {
         this.logger.log(`[Create] ${payload.nickName} - ${result.id}`);
 
         return result;
+    }
+
+    /**
+     * 완결로 전환
+     */
+    async changeFinish(
+        novelID: string, //
+    ): Promise<UpdateResult> {
+        return await this.novelRepository.changeFinish(novelID);
     }
 
     /**

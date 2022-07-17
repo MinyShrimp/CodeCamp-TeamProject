@@ -19,19 +19,20 @@ export class NovelRepository {
     private readonly take = 10;
 
     /**
-     * 전체 갯수 조회
+     * 연재중 작품 갯수 조회
      */
-    async getCount(): Promise<number> {
+    async getCountIng(): Promise<number> {
         return await this.novelRepository
             .createQueryBuilder('n')
             .where('n.user is not null')
+            .where('n.isFinish = 0')
             .getCount();
     }
 
     /**
-     * detail 조회
+     * 연재 중인 작품 조회 ( Page )
      */
-    async getPage(
+    async getPageIngLastOrder(
         page: number, //
     ): Promise<FetchNovelsOutput> {
         const novels = await this.novelRepository
@@ -42,12 +43,52 @@ export class NovelRepository {
             .leftJoinAndSelect('novel.novelTags', 'novelTags')
             .leftJoinAndSelect('novel.files', 'files')
             .where('novel.user is not null')
+            .where('n.isFinish = 0')
             .orderBy('novel.createAt', 'DESC')
             .take(this.take)
             .skip(this.take * (page - 1))
             .getMany();
 
-        const count = await this.getCount();
+        const count = await this.getCountIng();
+
+        return {
+            novels: novels,
+            count: count,
+        };
+    }
+
+    /**
+     * 완결 작품 갯수 조회
+     */
+    async getCountFin(): Promise<number> {
+        return await this.novelRepository
+            .createQueryBuilder('n')
+            .where('n.user is not null')
+            .where('n.isFinish = 1')
+            .getCount();
+    }
+
+    /**
+     * 완결 작품 조회 ( Page )
+     */
+    async getPageFinLastOrder(
+        page: number, //
+    ): Promise<FetchNovelsOutput> {
+        const novels = await this.novelRepository
+            .createQueryBuilder('novel')
+            .leftJoinAndSelect('novel.user', 'user')
+            .leftJoinAndSelect('user.userClass', 'userClass')
+            .leftJoinAndSelect('novel.novelCategory', 'novelCategory')
+            .leftJoinAndSelect('novel.novelTags', 'novelTags')
+            .leftJoinAndSelect('novel.files', 'files')
+            .where('novel.user is not null')
+            .where('n.isFinish = 1')
+            .orderBy('novel.createAt', 'DESC')
+            .take(this.take)
+            .skip(this.take * (page - 1))
+            .getMany();
+
+        const count = await this.getCountFin();
 
         return {
             novels: novels,
@@ -206,6 +247,18 @@ export class NovelRepository {
         novel: Partial<NovelEntity>, //
     ): Promise<NovelEntity> {
         return await this.novelRepository.save(novel);
+    }
+
+    /**
+     * 완결로 전환
+     */
+    async changeFinish(
+        novelID: string, //
+    ): Promise<UpdateResult> {
+        return await this.novelRepository.update(
+            { id: novelID },
+            { isFinish: true },
+        );
     }
 
     /**
