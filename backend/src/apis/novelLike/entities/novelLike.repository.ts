@@ -35,6 +35,25 @@ export class NovelLikeRepository {
             .getOne();
     }
 
+    /**
+     * 유저 기반 선호작 조회
+     */
+    async findList(
+        userID: string, //
+    ): Promise<NovelLikeEntity[]> {
+        return await this.novelLikeRepository
+            .createQueryBuilder('nl')
+            .leftJoinAndSelect('nl.novel', 'to')
+            .leftJoinAndSelect('to.user', 'tu')
+            .leftJoinAndSelect('tu.userClass', 'tuc')
+            .leftJoinAndSelect('to.novelCategory', 'tc')
+            .leftJoinAndSelect('to.novelTags', 'tt')
+            .leftJoinAndSelect('to.files', 'tf')
+            .where('nl.userID=:userID', { userID: userID })
+            .orderBy('nl.createAt')
+            .getMany();
+    }
+
     async save(
         novelLike: Partial<Omit<NovelLikeEntity, 'id'>>, //
     ): Promise<NovelLikeEntity> {

@@ -196,52 +196,6 @@ export class UserRepository {
         return findOne.userBlocks;
     }
 
-    /**
-     * 유저 기반 선호작 조회
-     */
-    async findNovelLikes(
-        userID: string, //
-    ): Promise<NovelLikeEntity[]> {
-        const findOne = await this.userRepository
-            .createQueryBuilder('user')
-            .select(['user.id'])
-            .leftJoinAndSelect('user.novelLikes', 'nl')
-            .leftJoinAndSelect('nl.novel', 'to')
-            .leftJoinAndSelect('to.user', 'tu')
-            .leftJoinAndSelect('tu.userClass', 'tuc')
-            .leftJoinAndSelect('to.novelCategory', 'tc')
-            .leftJoinAndSelect('to.novelTags', 'tt')
-            .leftJoinAndSelect('to.files', 'tf')
-            .where('user.id=:id', { id: userID })
-            .orderBy('nl.createAt')
-            .getOne();
-
-        return findOne.novelLikes;
-    }
-
-    /**
-     * 유저 기반 후원작 조회
-     */
-    async findNovelDonates(
-        userID: string, //
-    ): Promise<NovelDonateEntity[]> {
-        const findOne = await this.userRepository
-            .createQueryBuilder('user')
-            .select(['user.id'])
-            .leftJoinAndSelect('user.novelDonates', 'nd')
-            .leftJoinAndSelect('nd.novel', 'to')
-            .leftJoinAndSelect('to.user', 'tu')
-            .leftJoinAndSelect('tu.userClass', 'tuc')
-            .leftJoinAndSelect('to.novelCategory', 'tc')
-            .leftJoinAndSelect('to.novelTags', 'tt')
-            .leftJoinAndSelect('to.files', 'tf')
-            .where('user.id=:id', { id: userID })
-            .orderBy('nd.createAt')
-            .getOne();
-
-        return findOne.novelDonates;
-    }
-
     ///////////////////////////////////////////////////////////////////
     // 생성 //
 

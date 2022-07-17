@@ -35,6 +35,25 @@ export class NovelDonateRepository {
             .getOne();
     }
 
+    /**
+     * 유저 기반 후원작 조회
+     */
+    async findList(
+        userID: string, //
+    ): Promise<NovelDonateEntity[]> {
+        return await this.novelDonateRepository
+            .createQueryBuilder('nd')
+            .leftJoinAndSelect('nd.novel', 'to')
+            .leftJoinAndSelect('to.user', 'tu')
+            .leftJoinAndSelect('tu.userClass', 'tuc')
+            .leftJoinAndSelect('to.novelCategory', 'tc')
+            .leftJoinAndSelect('to.novelTags', 'tt')
+            .leftJoinAndSelect('to.files', 'tf')
+            .where('nd.userID=:id', { id: userID })
+            .orderBy('nd.createAt')
+            .getMany();
+    }
+
     async save(
         novelDonate: Partial<Omit<NovelDonateEntity, 'id'>>, //
     ): Promise<NovelDonateEntity> {
