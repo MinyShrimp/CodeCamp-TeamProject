@@ -42,6 +42,7 @@ export class NovelReviewRepository {
             .where('novel.id=:id', { id: dto.novelID })
             .take(take)
             .skip(take * (dto.page - 1))
+            .orderBy('review.createAt', 'DESC')
             .getMany();
 
         const count = await this.getCountAll(dto.novelID);

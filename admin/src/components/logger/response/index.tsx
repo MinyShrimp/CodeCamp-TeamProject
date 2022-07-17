@@ -69,6 +69,7 @@ export function ResponseLoggerIndex() {
                 setDatas(res.data.logs);
                 setCount(res.data.count);
                 nowLoadingCount.current = 100;
+                setPage(1);
                 setPending(false);
             })
             .catch((e) => {

@@ -92,6 +92,7 @@ export class NovelIndexRepository {
             .leftJoinAndSelect('novelIndex.novelIndexReviews', 'reviews')
             .where(`novelIndex.isPrivate = 0`)
             .where('novelIndex.id=:id', { id: novelIndexID })
+            .orderBy('novelIndex.createAt', 'DESC')
             .getOne();
     }
 
