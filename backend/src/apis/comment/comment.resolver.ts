@@ -1,8 +1,10 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
+import { MESSAGES } from 'src/commons/message/Message.enum';
 import { IPayload } from 'src/commons/interfaces/Payload.interface';
 import { CurrentUser } from 'src/commons/auth/gql-user.param';
+import { ResultMessage } from 'src/commons/message/ResultMessage.dto';
 import { GqlJwtAccessGuard } from 'src/commons/auth/gql-auth.guard';
 
 import { CommentEntity } from './entities/comment.entity';
@@ -90,12 +92,19 @@ export class CommentResolver {
 
     @UseGuards(GqlJwtAccessGuard)
     @Mutation(
-        () => String, //
+        () => ResultMessage, //
         { description: '댓글 삭제' },
     )
-    deleteComment(
+    async deleteComment(
         @Args('CommentID') commentID: string, //
-    ): Promise<string> {
-        return this.commentService.softDelete(commentID);
+    ): Promise<ResultMessage> {
+        const result = await this.commentService.softDelete(commentID);
+        return new ResultMessage({
+            id: commentID,
+            isSuccess: result,
+            contents: result
+                ? MESSAGES.COMMENT_SOFT_DELETE_SUCCESSED
+                : MESSAGES.COMMENT_SOFT_DELETE_FAILED,
+        });
     }
 }

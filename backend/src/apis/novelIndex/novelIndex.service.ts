@@ -97,6 +97,11 @@ export class NovelIndexService {
             novelID: novelID,
         });
 
+        // 완결이 있으면, 소설도 완결로 변환
+        if (createInput.isFinish) {
+            await this.novelService.changeFinish(novel.id);
+        }
+
         // 저장
         return await this.indexRepository.save({
             user: user,

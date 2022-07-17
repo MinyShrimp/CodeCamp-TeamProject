@@ -117,10 +117,8 @@ export class CommentService {
 
     async softDelete(
         commentID: string, //
-    ) {
+    ): Promise<boolean> {
         const result = await this.commentRepository.softDelete(commentID);
-        return result.affected
-            ? MESSAGES.COMMENT_SOFT_DELETE_SUCCESSED
-            : MESSAGES.COMMENT_SOFT_DELETE_FAILED;
+        return result.affected ? true : false;
     }
 }

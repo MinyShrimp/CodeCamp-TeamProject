@@ -1,5 +1,5 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { IPayload } from 'src/commons/interfaces/Payload.interface';
 import { MESSAGES } from 'src/commons/message/Message.enum';
@@ -8,6 +8,8 @@ import { ResultMessage } from 'src/commons/message/ResultMessage.dto';
 import { GqlJwtAccessGuard } from 'src/commons/auth/gql-auth.guard';
 
 import { NovelLikeEntity } from './entities/novelLike.entity';
+import { NovelLikeRepository } from './entities/novelLike.repository';
+
 import { NovelLikeService } from './novelLike.service';
 
 @Resolver()
@@ -15,7 +17,19 @@ import { NovelLikeService } from './novelLike.service';
 export class NovelLikeResolver {
     constructor(
         private readonly novelLikeService: NovelLikeService, //
+        private readonly novelLikeRepository: NovelLikeRepository,
     ) {}
+
+    // 선호작 목록
+    @Query(
+        () => [NovelLikeEntity], //
+        { description: '선호작 목록' },
+    )
+    fetchNovelLikeInUser(
+        @CurrentUser() payload: IPayload, //
+    ): Promise<NovelLikeEntity[]> {
+        return this.novelLikeRepository.findList(payload.id);
+    }
 
     // 선호작 등록
     @Mutation(

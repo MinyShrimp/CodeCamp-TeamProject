@@ -60,11 +60,11 @@ export class NovelIndexEntity {
     @Field(() => String, { description: '작가의 말' })
     authorText: string;
 
-    @Column()
+    @Column({ default: false })
     @Field(() => Boolean, { description: '공지 여부' })
     isNotice: boolean;
 
-    @Column()
+    @Column({ default: false })
     @Field(() => Boolean, { description: '완결 여부' })
     isFinish: boolean;
 

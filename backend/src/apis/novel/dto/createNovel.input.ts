@@ -1,5 +1,6 @@
 import { Field, InputType, PickType } from '@nestjs/graphql';
 import { NovelEntity } from '../entities/novel.entity';
+import { CYCLE_TYPE } from '../enum/cycle.type';
 
 @InputType()
 export class CreateNovelInput extends PickType(
@@ -14,6 +15,11 @@ export class CreateNovelInput extends PickType(
 
     @Field(() => String, { description: `소설 카테고리 ID. (UUID)` })
     categoryID: string;
+
+    @Field(() => [CYCLE_TYPE], {
+        description: `연재 주기. ex. [MON, THU, WED, ...] or [FREE]`,
+    })
+    cycles: Array<CYCLE_TYPE>;
 
     @Field(() => [String], { description: '파일 URLs' })
     fileURLs: Array<string>;

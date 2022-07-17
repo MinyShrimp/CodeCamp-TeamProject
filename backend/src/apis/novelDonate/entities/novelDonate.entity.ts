@@ -6,6 +6,7 @@ import {
     ManyToOne,
     CreateDateColumn,
     PrimaryGeneratedColumn,
+    Column,
 } from 'typeorm';
 
 /* NovelDonate Entity */
@@ -27,10 +28,16 @@ export class NovelDonateEntity {
     @Field(() => UserEntity)
     user: UserEntity;
 
+    @Column({ name: 'userId', nullable: true })
+    userID: string;
+
     @ManyToOne(
         () => NovelEntity, //
         { cascade: true, onDelete: 'CASCADE' },
     )
     @Field(() => NovelEntity)
     novel: NovelEntity;
+
+    @Column({ name: 'novelId', nullable: true })
+    novelID: string;
 }

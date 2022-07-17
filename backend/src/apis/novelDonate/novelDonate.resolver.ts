@@ -1,5 +1,5 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { IPayload } from 'src/commons/interfaces/Payload.interface';
 import { MESSAGES } from 'src/commons/message/Message.enum';
@@ -8,6 +8,8 @@ import { ResultMessage } from 'src/commons/message/ResultMessage.dto';
 import { GqlJwtAccessGuard } from 'src/commons/auth/gql-auth.guard';
 
 import { NovelDonateEntity } from './entities/novelDonate.entity';
+import { NovelDonateRepository } from './entities/novelDonate.repository';
+
 import { NovelDonateService } from './novelDonate.service';
 
 @Resolver()
@@ -15,7 +17,19 @@ import { NovelDonateService } from './novelDonate.service';
 export class NovelDonateResolver {
     constructor(
         private readonly novelDonateService: NovelDonateService, //
+        private readonly novelDonateRepository: NovelDonateRepository,
     ) {}
+
+    // 후원작 목록
+    @Query(
+        () => [NovelDonateEntity], //
+        { description: '후원작 목록' },
+    )
+    fetchNovelDonateInUser(
+        @CurrentUser() payload: IPayload, //
+    ): Promise<NovelDonateEntity[]> {
+        return this.novelDonateRepository.findList(payload.id);
+    }
 
     // 후원작 등록
     @Mutation(

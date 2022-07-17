@@ -1,8 +1,10 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 
+import { MESSAGES } from 'src/commons/message/Message.enum';
 import { IPayload } from 'src/commons/interfaces/Payload.interface';
 import { CurrentUser } from 'src/commons/auth/gql-user.param';
+import { ResultMessage } from 'src/commons/message/ResultMessage.dto';
 import { GqlJwtAccessGuard } from 'src/commons/auth/gql-auth.guard';
 
 import { BoardEntity } from './entities/board.entity';
@@ -122,12 +124,19 @@ export class BoardResolver {
 
     @UseGuards(GqlJwtAccessGuard)
     @Mutation(
-        () => String, //
+        () => ResultMessage, //
         { description: '게시글 삭제' },
     )
-    deleteBoard(
+    async deleteBoard(
         @Args('BoardID') boardID: string, //
-    ): Promise<string> {
-        return this.boardService.softDelete(boardID);
+    ): Promise<ResultMessage> {
+        const result = await this.boardService.softDelete(boardID);
+        return new ResultMessage({
+            id: boardID,
+            isSuccess: result,
+            contents: result
+                ? MESSAGES.BOARD_SOFT_DELETE_SUCCESSED
+                : MESSAGES.BOARD_SOFT_DELETE_FAILED,
+        });
     }
 }

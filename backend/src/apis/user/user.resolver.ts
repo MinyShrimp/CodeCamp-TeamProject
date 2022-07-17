@@ -70,30 +70,6 @@ export class UserResolver {
         return this.userRepository.findUserBlocks(payload.id);
     }
 
-    // 선호작 목록
-    @UseGuards(GqlJwtAccessGuard)
-    @Query(
-        () => [NovelLikeEntity], //
-        { description: '선호작 목록' },
-    )
-    fetchNovelLikeInUser(
-        @CurrentUser() payload: IPayload, //
-    ): Promise<NovelLikeEntity[]> {
-        return this.userRepository.findNovelLikes(payload.id);
-    }
-
-    // 후원작 목록
-    @UseGuards(GqlJwtAccessGuard)
-    @Query(
-        () => [NovelDonateEntity], //
-        { description: '후원작 목록' },
-    )
-    fetchNovelDonateInUser(
-        @CurrentUser() payload: IPayload, //
-    ): Promise<NovelDonateEntity[]> {
-        return this.userRepository.findNovelDonates(payload.id);
-    }
-
     ///////////////////////////////////////////////////////////////////
     // 생성 //
 
