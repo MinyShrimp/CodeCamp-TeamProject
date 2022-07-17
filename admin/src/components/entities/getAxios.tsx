@@ -10,7 +10,7 @@ export function getAxios() {
 }
 
 export function getAxiosWithAuth() {
-    const _axios = axios.create({
+    return axios.create({
         withCredentials: true,
         headers: {
             'Content-Type': 'application/json; charset=UTF-8',

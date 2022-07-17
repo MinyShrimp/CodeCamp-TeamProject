@@ -20,7 +20,8 @@ export class LoggerService {
                 .table('response')
                 .query(
                     `SELECT COUNT(date)
-                        FROM ${this.table}`,
+                        FROM ${this.table}
+                        WHERE operationName IS NOT NULL`,
                 )
         )[0][0]['f0_'];
     }
@@ -40,6 +41,7 @@ export class LoggerService {
                     .query(
                         `SELECT *
                         FROM ${this.table}
+                        WHERE operationName IS NOT NULL
                         ORDER BY date desc 
                         LIMIT ${this.take}
                         OFFSET ${page * (this.take - 1)};
