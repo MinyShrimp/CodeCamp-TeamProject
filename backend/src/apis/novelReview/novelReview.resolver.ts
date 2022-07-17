@@ -1,5 +1,5 @@
 import { UseGuards } from '@nestjs/common';
-import { Mutation, Resolver, Query, Args } from '@nestjs/graphql';
+import { Mutation, Resolver, Query, Args, Int } from '@nestjs/graphql';
 
 import { IPayload } from 'src/commons/interfaces/Payload.interface';
 import { CurrentUser } from 'src/commons/auth/gql-user.param';
@@ -9,25 +9,32 @@ import { NovelReviewEntity } from './entities/novelReview.entity';
 import { NovelReviewService } from './novelReview.service';
 import { CreateNovelReviewInput } from './dto/createNovelReview.input';
 import { UpdateNovelReviewInput } from './dto/updateNovelReview.input';
+import { FetchNovelReviewsOutput } from './dto/fetchNovelReviews.output';
+import { NovelReviewRepository } from './entities/novelReview.repository';
 
 /* 소설리뷰 API */
 @Resolver()
 export class NovelReviewResolver {
     constructor(
         private readonly novelReviewService: NovelReviewService, //
+        private readonly nnovelReviewRepository: NovelReviewRepository,
     ) {}
     ///////////////////////////////////////////////////////////////////
     // 조회 //
 
-    /** 해당 소설 리뷰 조회 */
+    /** 해당 소설 리뷰 조회, Page */
     @Query(
-        () => [NovelReviewEntity], //
-        { description: '해당 소설의 리뷰 전체 조회' },
+        () => FetchNovelReviewsOutput, //
+        { description: '소설 리뷰 조회, Page' },
     )
-    async fetchNovelReviewAll(
-        @Args('novel') novelID: string, //
-    ): Promise<NovelReviewEntity[]> {
-        return await this.novelReviewService.findAll(novelID);
+    async fetchNovelReviewPage(
+        @Args('novelID') novelID: string,
+        @Args({ name: 'page', type: () => Int }) page: number, //
+    ): Promise<FetchNovelReviewsOutput> {
+        return await this.nnovelReviewRepository.findPage({
+            novelID: novelID,
+            page: page,
+        });
     }
 
     /** 유저가 쓴 소설 리뷰 조회 */
@@ -37,9 +44,9 @@ export class NovelReviewResolver {
         { description: '유저가 쓴 소설 리뷰 조회' },
     )
     fetchUserNovelReview(
-        @CurrentUser() currentUser: IPayload, //
+        @CurrentUser() payload: IPayload, //
     ) {
-        return this.novelReviewService.findTargetReview(currentUser);
+        return this.novelReviewService.findTargetReview(payload);
     }
 
     ///////////////////////////////////////////////////////////////////q
