@@ -29,7 +29,7 @@ export class NovelReviewResolver {
     )
     async fetchNovelReviewPage(
         @Args('novelID') novelID: string,
-        @Args({ name: 'page', type: () => Int }) page: number, //
+        @Args({ name: 'page', type: () => Int, defaultValue: 1 }) page: number, //
     ): Promise<FetchNovelReviewsOutput> {
         return await this.nnovelReviewRepository.findPage({
             novelID: novelID,

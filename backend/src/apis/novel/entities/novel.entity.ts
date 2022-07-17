@@ -49,6 +49,9 @@ export class NovelEntity {
     @Field(() => Int, { description: '전체 조회수' })
     viewCount: number;
 
+    @Column()
+    cycle: string;
+
     @CreateDateColumn()
     @Field(() => Date, { description: '시작 시간' })
     createAt: Date;
