@@ -28,6 +28,20 @@ export class CommentResolver {
         return this.commentService.findAll();
     }
 
+    ////////////////////////////////////////////////////////////////////////
+    /** 보드ID로 해당 게시글의 댓글 조회  */
+    @Query(
+        () => [CommentEntity], //
+        { description: '해당 게시글의 모든 댓글 조회' },
+    )
+    fetchCommentsFromBoard(
+        @Args('boardID') boardID: string, //
+    ): Promise<CommentEntity[]> {
+        return this.commentService.findCommentsFromBoard(boardID);
+    }
+
+    ////////////////////////////////////////////////////////////////////////
+
     /* 유저가 쓴 댓글 조회 */
     @UseGuards(GqlJwtAccessGuard)
     @Query(
@@ -61,7 +75,7 @@ export class CommentResolver {
     )
     async createComment(
         @CurrentUser() currentUser: IPayload, //
-        @Args('board') boardID: string,
+        @Args('boardID') boardID: string,
         @Args('createCommentInput') createInput: CreateCommentInput,
     ): Promise<CommentEntity> {
         return await this.commentService.createComment(
