@@ -30,14 +30,17 @@ export class BookmarkService {
 
     /** 중복 체크 */
     async duplicateCheck(
+        userID: string,
         dto: CreateBookmarkDto, //
     ): Promise<boolean> {
-        const check = await this.bookmarkRepository.duplicateCheck(dto);
-        if (check) {
-            throw new ConflictException('이미 북마크로 등록되었습니다.');
-        }
+        const check = await this.bookmarkRepository.duplicateCheck(userID, dto);
 
-        return true;
+        console.log('여기는 듀플리케이트체크의 체크 부분 확인중====', check);
+        // if (check) {
+        //     throw new ConflictException('이미 북마크로 등록되었습니다.');
+        // }
+
+        return check ? false : true;
     }
 
     ///////////////////////////////////////////////////////////////////
@@ -50,33 +53,61 @@ export class BookmarkService {
     ///////////////////////////////////////////////////////////////////
     // 북마크 생성 //
 
-    async create(
-        dto: CreateBookmarkDto, //
-    ): Promise<BookmarkEntity> {
-        const { page } = dto;
+    // async create(
+    //     dto: CreateBookmarkDto, //
+    // ): Promise<BookmarkEntity> {
+    //     const { page } = dto;
 
-        // 중복 체크
-        await this.duplicateCheck(dto);
+    //     // 중복 체크
+    //     await this.duplicateCheck(dto);
 
-        const to = await this.userService.checkValid(dto.userID);
-        const from = await this.novelIndexService.checkValid(dto.novelIndexID);
+    //     const to = await this.userService.checkValid(dto.userID);
+    //     const from = await this.novelIndexService.checkValid(dto.novelIndexID);
 
-        return await this.bookmarkRepository.save({
-            user: to,
-            novelIndex: from,
-            page,
-        });
-    }
+    //     return await this.bookmarkRepository.save({
+    //         user: to,
+    //         novelIndex: from,
+    //         page,
+    //     });
+    // }
 
     ///////////////////////////////////////////////////////////////////
     // 북마크 해제 //
 
-    async delete(
-        dto: DeleteBookmarkDto, //
-    ): Promise<boolean> {
-        await this.checkValid(dto);
+    // async delete(
+    //     dto: DeleteBookmarkDto, //
+    // ): Promise<boolean> {
+    //     await this.checkValid(dto);
 
-        const result = await this.bookmarkRepository.delete(dto.bookmarkID);
-        return result.affected ? true : false;
+    //     const result = await this.bookmarkRepository.delete(dto.bookmarkID);
+    //     return result.affected ? true : false;
+    // }
+
+    ///////////////////////////////////////////////////////////////////
+    // 북마크 생성 및 해제 //
+
+    async switch(
+        userID: string,
+        dto: CreateBookmarkDto, //
+    ): Promise<BookmarkEntity> {
+        // 중복 체크
+        const check = await this.bookmarkRepository.duplicateCheck(userID, dto);
+
+        console.log(check);
+
+        // 유효 UUID 체크
+        const to = await this.userService.checkValid(userID);
+        const from = await this.novelIndexService.checkValid(dto.novelIndexID);
+
+        if (check === undefined || check.isBoolean === false) {
+            return await this.bookmarkRepository.save({
+                user: to,
+                novelIndex: from,
+                page: dto.page,
+                isBoolean: dto.isBoolean,
+            });
+        } else {
+            await this.bookmarkRepository.softdelete(dto.bookmarkID);
+        }
     }
 }

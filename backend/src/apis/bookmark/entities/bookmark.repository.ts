@@ -1,4 +1,4 @@
-import { DeleteResult, Repository } from 'typeorm';
+import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
@@ -31,14 +31,24 @@ export class BookmarkRepository {
     }
 
     async duplicateCheck(
+        userID: string,
         dto: CreateBookmarkDto, //
     ): Promise<BookmarkEntity> {
         return await this.bookmarkRepository
             .createQueryBuilder('bm')
-            .select(['bm.id', 'bm.userID', 'bm.novelIndexID'])
-            .where('bm.userID=:userID', { userID: dto.userID })
+            .select([
+                'bm.id',
+                'bm.userID',
+                'bm.novelIndexID',
+                'bm.isBoolean',
+                'bm.page',
+            ])
+            .where('bm.userID=:userID', { userID: userID })
             .andWhere('bm.novelIndexID=:novelIndexID', {
                 novelIndexID: dto.novelIndexID,
+            })
+            .andWhere('bm.page=:page', {
+                page: dto.page,
             })
             .getOne();
     }
@@ -55,11 +65,17 @@ export class BookmarkRepository {
     ///////////////////////////////////////////////////////////////////
     // 제거 //
 
-    async delete(
+    // async delete(
+    //     bookmarkID: string, //
+    // ): Promise<DeleteResult> {
+    //     return await this.bookmarkRepository.delete({
+    //         id: bookmarkID,
+    //     });
+    // }
+
+    async softdelete(
         bookmarkID: string, //
     ): Promise<DeleteResult> {
-        return await this.bookmarkRepository.delete({
-            id: bookmarkID,
-        });
+        return await this.bookmarkRepository.softDelete(bookmarkID);
     }
 }
