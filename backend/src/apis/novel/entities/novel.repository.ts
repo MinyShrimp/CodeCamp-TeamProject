@@ -4,9 +4,10 @@ import { Connection, Repository, UpdateResult } from 'typeorm';
 
 import { NovelIndexEntity } from 'src/apis/novelIndex/entities/novelIndex.entity';
 
-import { NovelEntity } from './novel.entity';
-import { FetchNovelsOutput } from '../dto/fetchNovels.output';
 import { NovelDto } from '../dto/novel.dto';
+import { FetchNovelsOutput } from '../dto/fetchNovels.output';
+
+import { NovelEntity } from './novel.entity';
 
 @Injectable()
 export class NovelRepository {
