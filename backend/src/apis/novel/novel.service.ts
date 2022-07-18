@@ -14,6 +14,7 @@ import { CreateNovelInput } from './dto/createNovel.input';
 import { UpdateNovelInput } from './dto/updateNovel.input';
 import { IPayload } from 'src/commons/interfaces/Payload.interface';
 import { UpdateResult } from 'typeorm';
+import { NovelDto } from './dto/novel.dto';
 
 @Injectable()
 export class NovelService {
@@ -197,6 +198,22 @@ export class NovelService {
         this.logger.log(`[Update] ${payload.nickName} - ${result.id}`);
 
         return result;
+    }
+
+    async setLikeCount(
+        dto: NovelDto & { isUp: boolean },
+    ): Promise<NovelEntity> {
+        const novel = await this.novelRepository.getOne(dto.novelID);
+        if (dto.userID === novel.user.id) {
+            throw new ConflictException(
+                '작가는 자기 작품에 좋아요를 누를 수 없습니다.',
+            );
+        }
+
+        return await this.novelRepository.update({
+            ...novel,
+            likeCount: novel.likeCount + 1 * (dto.isUp ? 1 : -1),
+        });
     }
 
     /**
