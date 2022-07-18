@@ -28,10 +28,10 @@ export class NovelIndexReviewService {
         userID: string, //
         input: CreateNovelIndexReviewInput,
     ): Promise<NovelIndexReviewEntity> {
-        const { novelIndex, ...rest } = input;
+        const { episodeID, ...rest } = input;
 
         const user = await this.userRepository.findOneByID(userID);
-        const episode = await this.episodeRepository.getOne(novelIndex);
+        const episode = await this.episodeRepository.getOne(episodeID);
 
         if (episode === undefined || episode === null) {
             throw new ConflictException(
@@ -52,10 +52,10 @@ export class NovelIndexReviewService {
     async updateReview(
         input: UpdateNovelIndexReviewInput, //
     ): Promise<NovelIndexReviewEntity> {
-        const { novelIndex, ...rest } = input;
+        const { episodeID, ...rest } = input;
 
         const review = await this.episodeReviewRepository.findOneByReview(
-            novelIndex,
+            episodeID,
         );
 
         if (!review) throw new ConflictException(MESSAGES.NOVEL_INDEX_UNVALID);

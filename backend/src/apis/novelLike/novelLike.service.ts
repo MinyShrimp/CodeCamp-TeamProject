@@ -22,23 +22,23 @@ export class NovelLikeService {
     // 존재 체크
     async checkValid(
         dto: DeleteNovelLikeDto, //
-    ): Promise<boolean> {
+    ): Promise<NovelLikeEntity> {
         const check = await this.novelLikeRepository.checkValid(dto);
         if (!check) {
             throw new ConflictException(MESSAGES.UNVLIAD_ACCESS);
         }
-        return true;
+        return check;
     }
 
     // 중복 체크
     async checkOverlap(
         dto: CreateNovelLikeDto, //
-    ): Promise<boolean> {
+    ): Promise<NovelLikeEntity> {
         const check = await this.novelLikeRepository.checkOverlap(dto);
         if (check) {
             throw new ConflictException('이미 등록된 소설입니다.');
         }
-        return true;
+        return check;
     }
 
     async create(
@@ -48,7 +48,13 @@ export class NovelLikeService {
         await this.checkOverlap(dto);
 
         const to = await this.userService.checkValid(dto.userID);
-        const from = await this.novelService.checkValid(dto.novelID);
+        await this.novelService.checkValid(dto.novelID);
+
+        // 좋아요 갯수 증가
+        const from = await this.novelService.setLikeCount({
+            ...dto,
+            isUp: true,
+        });
 
         return await this.novelLikeRepository.save({
             user: to,
@@ -60,7 +66,14 @@ export class NovelLikeService {
         dto: DeleteNovelLikeDto, //
     ): Promise<boolean> {
         // 존재 체크
-        await this.checkValid(dto);
+        const novelLike = await this.checkValid(dto);
+
+        // 좋아요 갯수 감소
+        await this.novelService.setLikeCount({
+            novelID: novelLike.novelID,
+            userID: novelLike.userID,
+            isUp: false,
+        });
 
         const result = await this.novelLikeRepository.delete(dto.novelLikeID);
         return result.affected ? true : false;

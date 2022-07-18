@@ -25,6 +25,8 @@ async function bootstrap() {
     });
 
     ///////////////////////////////////////////////////////////////////////////
+
+    // prettier-ignore
     app.enableCors({
         origin: [
             'http://localhost:8080',
@@ -32,6 +34,7 @@ async function bootstrap() {
         ], // FE가 배포하면 FE 주소를 여기에 넣어야함
         credentials: true,
         exposedHeaders: ['Authorization', 'Set-Cookie', 'Cookie'],
+        methods: ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     });
     app.useGlobalPipes(new ValidationPipe());
     app.useGlobalFilters(new HttpExceptionFilter());

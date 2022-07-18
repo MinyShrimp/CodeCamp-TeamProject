@@ -14,6 +14,7 @@ import { CreateNovelInput } from './dto/createNovel.input';
 import { NovelService } from './novel.service';
 import { UpdateNovelInput } from './dto/updateNovel.input';
 import { FetchNovelsOutput } from './dto/fetchNovels.output';
+import { FetchNovelInput } from './dto/fetchNovel.input';
 
 @Resolver()
 export class NovelResolver {
@@ -21,6 +22,16 @@ export class NovelResolver {
         private readonly novelService: NovelService, //
         private readonly novelRepository: NovelRepository,
     ) {}
+
+    @Query(
+        () => FetchNovelsOutput, //
+        { description: '작품 목록 조회' },
+    )
+    fetchNovelsPage(
+        @Args('fetchNovelInput') input: FetchNovelInput, //
+    ): Promise<FetchNovelsOutput> {
+        return this.novelRepository.getPage(input);
+    }
 
     @Query(
         () => FetchNovelsOutput, //

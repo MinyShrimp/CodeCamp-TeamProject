@@ -18,7 +18,7 @@ export class NovelLikeRepository {
     ): Promise<NovelLikeEntity> {
         return await this.novelLikeRepository
             .createQueryBuilder('nl')
-            .select(['nl.id', 'nl.userID'])
+            .select(['nl.id', 'nl.userID', 'nl.novelID'])
             .where('nl.id=:id', { id: dto.novelLikeID })
             .andWhere('nl.userID=:userID', { userID: dto.userID })
             .getOne();

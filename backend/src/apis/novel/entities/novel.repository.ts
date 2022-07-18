@@ -4,9 +4,11 @@ import { Connection, Repository, UpdateResult } from 'typeorm';
 
 import { NovelIndexEntity } from 'src/apis/novelIndex/entities/novelIndex.entity';
 
-import { NovelEntity } from './novel.entity';
-import { FetchNovelsOutput } from '../dto/fetchNovels.output';
 import { NovelDto } from '../dto/novel.dto';
+import { FetchNovelsOutput } from '../dto/fetchNovels.output';
+
+import { NovelEntity } from './novel.entity';
+import { FetchNovelInput } from '../dto/fetchNovel.input';
 
 @Injectable()
 export class NovelRepository {
@@ -17,6 +19,49 @@ export class NovelRepository {
     ) {}
 
     private readonly take = 10;
+
+    /**
+     * [전체, 카테고리, 연재 주기]별 [연재작품, 완결작품] 목록 조회, page, [최신, 좋아요]순
+     */
+    async getPage(
+        dto: FetchNovelInput, //
+    ): Promise<FetchNovelsOutput> {
+        const category = {
+            ALL: '',
+            CYCLE: `novel.cycle like "%${dto.target}%"`,
+            CATEGORY: `novelCategory.id = "${dto.target}"`,
+        }[dto.type];
+
+        const order = {
+            LAST: 'novel.createAt',
+            LIKE: 'novel.likeCount',
+        }[dto.order];
+
+        const query = this.novelRepository
+            .createQueryBuilder('novel')
+            .leftJoinAndSelect('novel.user', 'user')
+            .leftJoinAndSelect('user.userClass', 'userClass')
+            .leftJoinAndSelect('novel.novelCategory', 'novelCategory')
+            .leftJoinAndSelect('novel.novelTags', 'novelTags')
+            .leftJoinAndSelect('novel.files', 'files')
+            .where('novel.user is not null')
+            .andWhere(
+                `novel.isFinish = ${dto.isFinish ? 1 : 0} ${
+                    category !== '' ? `AND ${category}` : ''
+                }`,
+            )
+            .orderBy(order, 'DESC')
+            .take(this.take)
+            .skip(this.take * (dto.page - 1));
+
+        const count = await query.getCount();
+        const novels = await query.getMany();
+
+        return {
+            count: count,
+            novels: novels,
+        };
+    }
 
     /**
      * 연재중 작품 갯수 조회
@@ -43,7 +88,7 @@ export class NovelRepository {
             .leftJoinAndSelect('novel.novelTags', 'novelTags')
             .leftJoinAndSelect('novel.files', 'files')
             .where('novel.user is not null')
-            .where('n.isFinish = 0')
+            .where('novel.isFinish = 0')
             .orderBy('novel.createAt', 'DESC')
             .take(this.take)
             .skip(this.take * (page - 1))
@@ -71,7 +116,7 @@ export class NovelRepository {
             .leftJoinAndSelect('novel.novelTags', 'novelTags')
             .leftJoinAndSelect('novel.files', 'files')
             .where('novel.user is not null')
-            .where('n.isFinish = 0')
+            .where('novel.isFinish = 0')
             .orderBy('novel.likeCount', 'DESC')
             .take(this.take)
             .skip(this.take * (page - 1))
@@ -110,7 +155,7 @@ export class NovelRepository {
             .leftJoinAndSelect('novel.novelTags', 'novelTags')
             .leftJoinAndSelect('novel.files', 'files')
             .where('novel.user is not null')
-            .where('n.isFinish = 1')
+            .where('novel.isFinish = 1')
             .orderBy('novel.createAt', 'DESC')
             .take(this.take)
             .skip(this.take * (page - 1))
@@ -138,7 +183,7 @@ export class NovelRepository {
             .leftJoinAndSelect('novel.novelTags', 'novelTags')
             .leftJoinAndSelect('novel.files', 'files')
             .where('novel.user is not null')
-            .where('n.isFinish = 1')
+            .where('novel.isFinish = 1')
             .orderBy('novel.likeCount', 'DESC')
             .take(this.take)
             .skip(this.take * (page - 1))
