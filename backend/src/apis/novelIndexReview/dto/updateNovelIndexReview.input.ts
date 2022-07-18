@@ -6,5 +6,5 @@ export class UpdateNovelIndexReviewInput extends PartialType(
     CreateNovelIndexReviewInput,
 ) {
     @Field(() => String, { description: '에피소드 UUID' })
-    novelIndex: string;
+    episodeID: string;
 }
