@@ -11,6 +11,7 @@ import { NoticeEntity } from './entities/notice.entity';
 import { NoticeService } from './notice.service';
 import { CreateNoticeInput } from './dto/createNotice.input';
 import { UpdateNoticeInput } from './dto/updateNotice.input';
+import { ResultMessage } from 'src/commons/message/ResultMessage.dto';
 
 @Resolver()
 export class NoticeResolver {
@@ -85,13 +86,16 @@ export class NoticeResolver {
     async restoreNotice(
         @CurrentUser() currentUser: IPayload,
         @Args('noticeID') noticeID: string,
-    ): Promise<string> {
+    ): Promise<ResultMessage> {
         const result = await this.noticeService.restore(
             currentUser.id,
             noticeID,
         );
-        return result
-            ? MESSAGES.NOTICE_RESTORE_SUCCESSED
-            : MESSAGES.NOTICE_RESTORE_FAILED;
+        return new ResultMessage({
+            isSuccess: result,
+            contents: result
+                ? MESSAGES.NOTICE_RESTORE_SUCCESSED
+                : MESSAGES.NOTICE_RESTORE_FAILED,
+        });
     }
 }
