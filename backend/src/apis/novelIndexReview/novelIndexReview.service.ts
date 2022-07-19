@@ -52,17 +52,16 @@ export class NovelIndexReviewService {
     async updateReview(
         input: UpdateNovelIndexReviewInput, //
     ): Promise<NovelIndexReviewEntity> {
-        const { episodeID, ...rest } = input;
-
         const review = await this.episodeReviewRepository.findOneByReview(
-            episodeID,
+            input.id,
         );
-
-        if (!review) throw new ConflictException(MESSAGES.NOVEL_INDEX_UNVALID);
+        if (review === undefined || review === null) {
+            throw new ConflictException('에피소드 리뷰를 찾을 수 없습니다.');
+        }
 
         return await this.episodeReviewRepository.save({
             ...review,
-            ...rest,
+            ...input,
         });
     }
 

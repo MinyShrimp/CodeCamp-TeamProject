@@ -1,10 +1,9 @@
-import { Field, InputType, PartialType } from '@nestjs/graphql';
-import { CreateNovelIndexReviewInput } from './createNovelIndexReview.input';
+import { InputType, PickType } from '@nestjs/graphql';
+import { NovelIndexReviewEntity } from '../entities/novelIndexReview.entity';
 
 @InputType()
-export class UpdateNovelIndexReviewInput extends PartialType(
-    CreateNovelIndexReviewInput,
-) {
-    @Field(() => String, { description: '에피소드 UUID' })
-    episodeID: string;
-}
+export class UpdateNovelIndexReviewInput extends PickType(
+    NovelIndexReviewEntity,
+    ['id', 'contents', 'star'],
+    InputType,
+) {}

@@ -7,6 +7,6 @@ export class CreateNovelIndexReviewInput extends PickType(
     ['contents', 'star'],
     InputType,
 ) {
-    @Field(() => String, { description: '소설 인덱스 UUID' })
+    @Field(() => String, { description: '에피소드 UUID' })
     episodeID: string;
 }
