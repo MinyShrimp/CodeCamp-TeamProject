@@ -67,7 +67,6 @@ export class PaymentPointRepository {
             .leftJoinAndSelect('pp.novelIndex', 'ppni')
             .leftJoinAndSelect('ppni.user', 'ppniu')
             .leftJoinAndSelect('ppniu.userClass', 'ppniuc')
-            .leftJoinAndSelect('ppn.files', 'ppnf')
             .where('ppu.id=:userID', { userID: userID })
             .where('pp.novelIndex is not null')
             .orderBy('pp.createAt', 'ASC')
