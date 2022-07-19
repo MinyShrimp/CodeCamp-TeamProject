@@ -1,4 +1,3 @@
-import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import { Page401 } from '../pages/401';
@@ -10,6 +9,7 @@ import { DashboardPage } from '../dashboard/index';
 
 import { IndexBodySide } from './body_side';
 import { LogicMain } from '../logics';
+import { LoggerIndex } from '../logger';
 
 export function IndexBody() {
     return (
@@ -28,6 +28,7 @@ export function IndexBody() {
                     <Route path="/" element={<DashboardPage />} />
                     <Route path="/logic/*" element={<LogicMain />} />
                     <Route path="/entity/*" element={<EntityMain />} />
+                    <Route path="/logger/*" element={<LoggerIndex />} />
                     <Route path="/401" element={<Page401 />} />
                     <Route path="/404" element={<Page404 />} />
                     <Route path="/500" element={<Page500 />} />

@@ -49,6 +49,18 @@ export class NovelEntity {
     @Field(() => Int, { description: '전체 조회수' })
     viewCount: number;
 
+    @Column()
+    @Field(() => String, { description: '연재 주기' })
+    cycle: string;
+
+    @Column({ default: false })
+    @Field(() => Boolean, { description: '완결 여부' })
+    isFinish: boolean;
+
+    @Column({ default: false })
+    @Field(() => Boolean, { description: '비공개 여부' })
+    isPrivate: boolean;
+
     @CreateDateColumn()
     @Field(() => Date, { description: '시작 시간' })
     createAt: Date;
@@ -67,6 +79,9 @@ export class NovelEntity {
     @JoinColumn()
     @Field(() => UserEntity)
     user: UserEntity;
+
+    @Column({ name: 'userId', nullable: true })
+    userID: string;
 
     @ManyToOne(
         () => NovelCategoryEntity, //

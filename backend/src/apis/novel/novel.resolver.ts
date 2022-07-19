@@ -13,6 +13,8 @@ import { CreateNovelInput } from './dto/createNovel.input';
 
 import { NovelService } from './novel.service';
 import { UpdateNovelInput } from './dto/updateNovel.input';
+import { FetchNovelsOutput } from './dto/fetchNovels.output';
+import { FetchNovelInput } from './dto/fetchNovel.input';
 
 @Resolver()
 export class NovelResolver {
@@ -22,21 +24,73 @@ export class NovelResolver {
     ) {}
 
     @Query(
-        () => [NovelEntity], //
-        { description: '소설 목록 조회 ( page )' },
+        () => FetchNovelsOutput, //
+        { description: '작품 목록 조회' },
     )
     fetchNovelsPage(
-        @Args({ name: 'page', type: () => Int, defaultValue: 1 }) page: number,
-    ): Promise<Array<NovelEntity>> {
-        return this.novelRepository.getPage(page);
+        @Args('fetchNovelInput') input: FetchNovelInput, //
+    ): Promise<FetchNovelsOutput> {
+        return this.novelRepository.getPage(input);
     }
 
     @Query(
-        () => Int,
-        { description: '소설 전체 갯수 조회' }, //
+        () => FetchNovelsOutput, //
+        { description: '연재 중인 작품 목록 조회, page, 최신순' },
     )
-    fetchNovelCount(): Promise<number> {
-        return this.novelRepository.getCount();
+    fetchNovelCyclesPageLastOrder(
+        @Args({
+            name: 'page',
+            type: () => Int,
+            defaultValue: 1,
+        })
+        page: number,
+    ): Promise<FetchNovelsOutput> {
+        return this.novelRepository.getPageIngLastOrder(page);
+    }
+
+    @Query(
+        () => FetchNovelsOutput, //
+        { description: '연재 중인 작품 목록 조회, page, 좋아요순' },
+    )
+    fetchNovelCyclesPageLikeOrder(
+        @Args({
+            name: 'page',
+            type: () => Int,
+            defaultValue: 1,
+        })
+        page: number,
+    ): Promise<FetchNovelsOutput> {
+        return this.novelRepository.getPageIngLikeOrder(page);
+    }
+
+    @Query(
+        () => FetchNovelsOutput, //
+        { description: '완결된 작품 목록 조회, page, 최신순' },
+    )
+    fetchNovelFinsPageLastOrder(
+        @Args({
+            name: 'page',
+            type: () => Int,
+            defaultValue: 1,
+        })
+        page: number,
+    ): Promise<FetchNovelsOutput> {
+        return this.novelRepository.getPageFinLastOrder(page);
+    }
+
+    @Query(
+        () => FetchNovelsOutput, //
+        { description: '완결된 작품 목록 조회, page, 좋아요순' },
+    )
+    fetchNovelFinsPageLikeOrder(
+        @Args({
+            name: 'page',
+            type: () => Int,
+            defaultValue: 1,
+        })
+        page: number,
+    ): Promise<FetchNovelsOutput> {
+        return this.novelRepository.getPageFinLikeOrder(page);
     }
 
     @Query(
@@ -50,15 +104,50 @@ export class NovelResolver {
     }
 
     @UseGuards(GqlJwtAccessGuard)
+    @Query(
+        () => FetchNovelsOutput, //
+        { description: '내가 쓴 소설 목록 조회, page' },
+    )
+    fetchMyNovels(
+        @CurrentUser() payload: IPayload, //
+        @Args({
+            name: 'page',
+            type: () => Int,
+            defaultValue: 1,
+        })
+        page: number,
+    ): Promise<FetchNovelsOutput> {
+        return this.novelRepository.getMyListPage({
+            userID: payload.id,
+            page: page,
+        });
+    }
+
+    @UseGuards(GqlJwtAccessGuard)
+    @Query(
+        () => NovelEntity, //
+        { description: '내가 쓴 소설 Detail 조회' },
+    )
+    fetchMyNovelDetail(
+        @CurrentUser() payload: IPayload, //
+        @Args('novelID') novelID: string, //
+    ): Promise<NovelEntity> {
+        return this.novelRepository.getMyDetail({
+            userID: payload.id,
+            novelID: novelID,
+        });
+    }
+
+    @UseGuards(GqlJwtAccessGuard)
     @Mutation(
         () => NovelEntity,
         { description: '소설 등록' }, //
     )
     createNovel(
-        @CurrentUser() user: IPayload,
+        @CurrentUser() payload: IPayload,
         @Args('createNovelInput') input: CreateNovelInput,
     ): Promise<NovelEntity> {
-        return this.novelService.create(user, input);
+        return this.novelService.create(payload, input);
     }
 
     @UseGuards(GqlJwtAccessGuard)
@@ -67,10 +156,10 @@ export class NovelResolver {
         { description: '소설 정보 수정' }, //
     )
     async updateNovel(
-        @CurrentUser() user: IPayload,
+        @CurrentUser() payload: IPayload,
         @Args('updateNovelInput') input: UpdateNovelInput,
     ): Promise<NovelEntity> {
-        return await this.novelService.update(user, input);
+        return await this.novelService.update(payload, input);
     }
 
     @UseGuards(GqlJwtAccessGuard)
@@ -79,10 +168,10 @@ export class NovelResolver {
         { description: '소설 삭제 취소' }, //
     )
     async restoreNovel(
-        @CurrentUser() user: IPayload,
+        @CurrentUser() payload: IPayload,
         @Args('novelID') novelID: string,
     ): Promise<ResultMessage> {
-        const result = await this.novelService.restore(user, novelID);
+        const result = await this.novelService.restore(payload, novelID);
         return new ResultMessage({
             isSuccess: result,
             contents: result
@@ -97,10 +186,10 @@ export class NovelResolver {
         { description: '소설 삭제' }, //
     )
     async deleteNovel(
-        @CurrentUser() user: IPayload,
+        @CurrentUser() payload: IPayload,
         @Args('novelID') novelID: string,
     ): Promise<ResultMessage> {
-        const result = await this.novelService.delete(user, novelID);
+        const result = await this.novelService.delete(payload, novelID);
         return new ResultMessage({
             isSuccess: result,
             contents: result

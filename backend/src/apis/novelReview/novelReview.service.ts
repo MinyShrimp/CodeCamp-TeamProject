@@ -21,18 +21,11 @@ export class NovelReviewService {
     ///////////////////////////////////////////////////////////////////
     // 조회 //
 
-    /** 해당 소설의 모든 리뷰 조회 */
-    async findAll(
-        novelID: string, //
-    ): Promise<NovelReviewEntity[]> {
-        return await this.novelReviewRepository.findAll(novelID);
-    }
-
     /** 해당 유저가 쓴 모든 리뷰 조회 */
     async findTargetReview(
-        userID: IPayload, //
+        payload: IPayload, //
     ): Promise<NovelReviewEntity[]> {
-        return await this.novelReviewRepository.findByIDFromNReview(userID.id);
+        return await this.novelReviewRepository.findByIDFromNReview(payload.id);
     }
 
     ///////////////////////////////////////////////////////////////////
@@ -83,10 +76,8 @@ export class NovelReviewService {
 
     async softDelete(
         reviewID: string, //
-    ): Promise<string> {
+    ): Promise<boolean> {
         const result = await this.novelReviewRepository.softDelete(reviewID);
-        return result.affected
-            ? MESSAGES.NOVEL_REVIEW_SOFT_DELETE_SUCCESSED
-            : MESSAGES.NOVEL_REVIEW_SOFT_DELETE_FAILED;
+        return result.affected ? true : false;
     }
 }

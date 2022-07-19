@@ -1,6 +1,6 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { ConflictException, Injectable } from '@nestjs/common';
-import { Connection, QueryRunner, Repository } from 'typeorm';
+import { Connection, IsNull, Not, QueryRunner, Repository } from 'typeorm';
 
 import { MESSAGES } from 'src/commons/message/Message.enum';
 import { UserEntity } from 'src/apis/user/entities/user.entity';
@@ -25,7 +25,56 @@ export class PaymentPointRepository {
         private readonly userRepository: UserRepository,
     ) {}
 
+    private readonly take = 10;
     private readonly point = 100;
+
+    /**
+     * 유저 기반 소설 결제 조회
+     */
+    async findPointPaymentsInNovel(
+        userID: string, //
+        page: number,
+    ): Promise<PaymentPointEntity[]> {
+        return await this.paymentPointRepository
+            .createQueryBuilder('pp')
+            .leftJoinAndSelect('pp.status', 'pps')
+            .leftJoinAndSelect('pp.user', 'ppu')
+            .leftJoinAndSelect('ppu.userClass', 'ppuc')
+            .leftJoinAndSelect('pp.novel', 'ppn')
+            .leftJoinAndSelect('ppn.user', 'ppnu')
+            .leftJoinAndSelect('ppnu.userClass', 'ppnuc')
+            .leftJoinAndSelect('ppn.files', 'ppnf')
+            .where('ppu.id=:userID', { userID: userID })
+            .where('pp.novel is not null')
+            .orderBy('pp.createAt', 'ASC')
+            .take(this.take)
+            .skip(this.take * (page - 1))
+            .getMany();
+    }
+
+    /**
+     * 유저 기반 에피소드 결제 조회
+     */
+    async findPointPaymentsInIndex(
+        userID: string, //
+        page: number,
+    ): Promise<PaymentPointEntity[]> {
+        return await this.paymentPointRepository
+            .createQueryBuilder('pp')
+            .leftJoinAndSelect('pp.status', 'pps')
+            .leftJoinAndSelect('pp.user', 'ppu')
+            .leftJoinAndSelect('ppu.userClass', 'ppuc')
+            .leftJoinAndSelect('pp.novelIndex', 'ppni')
+            .leftJoinAndSelect('ppni.user', 'ppniu')
+            .leftJoinAndSelect('ppniu.userClass', 'ppniuc')
+            .leftJoinAndSelect('ppn.files', 'ppnf')
+            .where('ppu.id=:userID', { userID: userID })
+            .where('pp.novelIndex is not null')
+            .orderBy('pp.createAt', 'ASC')
+            .take(this.take)
+            .skip(this.take * (page - 1))
+            .getMany();
+    }
 
     // 존재 확인
     async checkValid(

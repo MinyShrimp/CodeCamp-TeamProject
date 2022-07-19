@@ -10,6 +10,7 @@ import { EventEntity } from './entities/event.entity';
 import { EventService } from './event.service';
 import { CreateEventInput } from './dto/createEvent.input';
 import { UpdateEventInput } from './dto/updateEvent.input';
+import { ResultMessage } from 'src/commons/message/ResultMessage.dto';
 
 @Resolver()
 export class EventResolver {
@@ -63,14 +64,24 @@ export class EventResolver {
 
     @UseGuards(GqlJwtAccessGuard)
     @Mutation(
-        () => String, //
+        () => ResultMessage, //
         { description: '이벤트 삭제' },
     )
     async deleteEvent(
         @CurrentUser() currentUser: IPayload, //
         @Args('eventID') eventID: string,
-    ) {
-        return await this.eventService.softDelete(currentUser.id, eventID);
+    ): Promise<ResultMessage> {
+        const result = await this.eventService.softDelete(
+            currentUser.id,
+            eventID,
+        );
+        return new ResultMessage({
+            id: eventID,
+            isSuccess: result,
+            contents: result
+                ? MESSAGES.EVENT_SOFT_DELETE_SUCCESSED
+                : MESSAGES.EVENT_SOFT_DELETE_FAILED,
+        });
     }
 
     ///////////////////////////////////////////////////////////////////
@@ -78,16 +89,20 @@ export class EventResolver {
 
     @UseGuards(GqlJwtAccessGuard)
     @Mutation(
-        () => String, //
+        () => ResultMessage, //
         { description: '이벤트 삭제 취소' },
     )
     async restoreEvent(
         @CurrentUser() currentUser: IPayload,
         @Args('eventID') eventID: string,
-    ): Promise<string> {
+    ): Promise<ResultMessage> {
         const result = await this.eventService.restore(currentUser.id, eventID);
-        return result
-            ? MESSAGES.EVENT_RESTORE_SUCCESSED
-            : MESSAGES.EVENT_RESTORE_FAILED;
+        return new ResultMessage({
+            id: eventID,
+            isSuccess: result,
+            contents: result
+                ? MESSAGES.EVENT_RESTORE_SUCCESSED
+                : MESSAGES.EVENT_RESTORE_FAILED,
+        });
     }
 }

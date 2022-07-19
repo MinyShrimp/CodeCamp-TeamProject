@@ -106,15 +106,12 @@ export class EventService {
     async softDelete(
         userID: string, //
         eventID: string,
-    ): Promise<String> {
+    ): Promise<boolean> {
         // 관리자 여부 판별
         await this.checkAdmin(userID);
 
         const result = await this.eventRepository.softDelete(eventID);
-
-        return result.affected
-            ? MESSAGES.EVENT_SOFT_DELETE_SUCCESSED
-            : MESSAGES.EVENT_SOFT_DELETE_FAILED;
+        return result.affected ? true : false;
     }
 
     ///////////////////////////////////////////////////////////////////

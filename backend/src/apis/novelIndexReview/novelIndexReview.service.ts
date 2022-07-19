@@ -1,29 +1,25 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { MESSAGES } from 'src/commons/message/Message.enum';
-import { NovelIndexRepository } from '../novelIndex/entities/novelIndex.repository';
+
 import { UserRepository } from '../user/entities/user.repository';
+import { NovelIndexRepository } from '../novelIndex/entities/novelIndex.repository';
+
 import { CreateNovelIndexReviewInput } from './dto/createNovelIndexReview.input';
 import { UpdateNovelIndexReviewInput } from './dto/updateNovelIndexReview.input';
+
 import { NovelIndexReviewEntity } from './entities/novelIndexReview.entity';
 import { NovelIndexReviewRepository } from './entities/novelIndexReview.repository';
 
 @Injectable()
 export class NovelIndexReviewService {
     constructor(
-        private readonly novelIndexRepository: NovelIndexRepository,
-        private readonly episodeRepository: NovelIndexReviewRepository, //
         private readonly userRepository: UserRepository,
+        private readonly episodeRepository: NovelIndexRepository,
+        private readonly episodeReviewRepository: NovelIndexReviewRepository, //
     ) {}
 
     ///////////////////////////////////////////////////////////////////
     // 조회 //
-
-    /** 해당 에피소드의 모든 리뷰 조회 */
-    async findAll(
-        episodeID: string, //
-    ): Promise<NovelIndexReviewEntity[]> {
-        return await this.episodeRepository.findAll(episodeID);
-    }
 
     ///////////////////////////////////////////////////////////////////
     // 생성
@@ -32,10 +28,10 @@ export class NovelIndexReviewService {
         userID: string, //
         input: CreateNovelIndexReviewInput,
     ): Promise<NovelIndexReviewEntity> {
-        const { novelIndex, ...rest } = input;
+        const { episodeID, ...rest } = input;
 
         const user = await this.userRepository.findOneByID(userID);
-        const episode = await this.novelIndexRepository.getOne(novelIndex);
+        const episode = await this.episodeRepository.getOne(episodeID);
 
         if (episode === undefined || episode === null) {
             throw new ConflictException(
@@ -43,7 +39,7 @@ export class NovelIndexReviewService {
             );
         }
 
-        return await this.episodeRepository.save({
+        return await this.episodeReviewRepository.save({
             user,
             novelIndex: episode,
             ...rest,
@@ -56,13 +52,15 @@ export class NovelIndexReviewService {
     async updateReview(
         input: UpdateNovelIndexReviewInput, //
     ): Promise<NovelIndexReviewEntity> {
-        const { novelIndex, ...rest } = input;
+        const { episodeID, ...rest } = input;
 
-        const review = await this.episodeRepository.findOneByReview(novelIndex);
+        const review = await this.episodeReviewRepository.findOneByReview(
+            episodeID,
+        );
 
         if (!review) throw new ConflictException(MESSAGES.NOVEL_INDEX_UNVALID);
 
-        return await this.episodeRepository.save({
+        return await this.episodeReviewRepository.save({
             ...review,
             ...rest,
         });
@@ -73,10 +71,8 @@ export class NovelIndexReviewService {
 
     async softDelete(
         reviewID: string, //
-    ): Promise<string> {
-        const result = await this.episodeRepository.softDelete(reviewID);
-        return result.affected
-            ? MESSAGES.NOVEL_INDEX_REVIEW_SOFT_DELETE_SUCCESSED
-            : MESSAGES.NOVEL_INDEX_REVIEW_SOFT_DELETE_FAILED;
+    ): Promise<boolean> {
+        const result = await this.episodeReviewRepository.softDelete(reviewID);
+        return result.affected ? true : false;
     }
 }

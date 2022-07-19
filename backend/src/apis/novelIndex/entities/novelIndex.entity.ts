@@ -1,26 +1,27 @@
 import { Field, Float, ID, Int, ObjectType } from '@nestjs/graphql';
 import { IsInt, Max, Min } from 'class-validator';
-import { NovelEntity } from 'src/apis/novel/entities/novel.entity';
-import { NovelIndexReviewEntity } from 'src/apis/novelIndexReview/entities/novelIndexReview.entity';
-import { UserEntity } from 'src/apis/user/entities/user.entity';
 import {
     Entity,
     Column,
+    OneToMany,
     ManyToOne,
     JoinColumn,
     CreateDateColumn,
     UpdateDateColumn,
     DeleteDateColumn,
     PrimaryGeneratedColumn,
-    OneToMany,
 } from 'typeorm';
+
+import { UserEntity } from 'src/apis/user/entities/user.entity';
+import { NovelEntity } from 'src/apis/novel/entities/novel.entity';
+import { NovelIndexReviewEntity } from 'src/apis/novelIndexReview/entities/novelIndexReview.entity';
 
 /* NovelIndex Entity */
 @Entity({ name: 'novel_index' })
 @ObjectType({ description: 'NovelIndex Entity' })
 export class NovelIndexEntity {
     @PrimaryGeneratedColumn('uuid')
-    @Field(() => ID, { description: 'UUID' })
+    @Field(() => ID, { description: '에피소드 UUID' })
     id: string;
 
     @Column()
@@ -31,7 +32,7 @@ export class NovelIndexEntity {
     @Field(() => String, { description: '내용' })
     contents: string;
 
-    @Min(1)
+    @Min(0)
     @IsInt()
     @Column({ unsigned: true })
     @Field(() => Int, { description: '몇 화' })
@@ -54,6 +55,22 @@ export class NovelIndexEntity {
     @Column({ default: 0, unsigned: true })
     @Field(() => Int, { description: '조회수' })
     viewCount: number;
+
+    @Column({ type: 'text' })
+    @Field(() => String, { description: '작가의 말' })
+    authorText: string;
+
+    @Column({ default: false })
+    @Field(() => Boolean, { description: '공지 여부' })
+    isNotice: boolean;
+
+    @Column({ default: false })
+    @Field(() => Boolean, { description: '완결 여부' })
+    isFinish: boolean;
+
+    @Column({ default: false })
+    @Field(() => Boolean, { description: '비공개 여부' })
+    isPrivate: boolean;
 
     @CreateDateColumn()
     @Field(() => Date, { description: '생성 시간' })

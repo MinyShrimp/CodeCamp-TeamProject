@@ -13,6 +13,8 @@ import { NovelRepository } from './entities/novel.repository';
 import { CreateNovelInput } from './dto/createNovel.input';
 import { UpdateNovelInput } from './dto/updateNovel.input';
 import { IPayload } from 'src/commons/interfaces/Payload.interface';
+import { UpdateResult } from 'typeorm';
+import { NovelDto } from './dto/novel.dto';
 
 @Injectable()
 export class NovelService {
@@ -79,13 +81,30 @@ export class NovelService {
     }
 
     /**
+     * 연재 주기 검사
+     */
+    private getCycle(cycles: number[]) {
+        const cycle = cycles.join('|');
+        if (cycles.length === 0) {
+            throw new ConflictException('연재 주기 값을 확인해주세요.');
+        }
+        if (cycle.includes('0')) {
+            if (cycles.length !== 1) {
+                throw new ConflictException('연재 주기 값을 확인해주세요.');
+            }
+        }
+        return cycle;
+    }
+
+    /**
      * 생성
      */
     async create(
         payload: IPayload,
         createNovelInput: CreateNovelInput, //
     ): Promise<NovelEntity> {
-        const { categoryID, tags, fileURLs, ...input } = createNovelInput;
+        const { categoryID, tags, fileURLs, cycles, ...input } =
+            createNovelInput;
 
         // 유저 찾기
         const user = await this.userService.checkValid(payload.id);
@@ -99,12 +118,16 @@ export class NovelService {
         // 이미지 업로드
         const uploadFiles = await this.fileRepository.findBulkByUrl(fileURLs);
 
+        // 연재 주기
+        const cycle = this.getCycle(cycles);
+
         // 저장
         const result = await this.novelRepository.save({
             user: user,
             novelCategory: category,
             novelTags: tagEntities,
             files: uploadFiles,
+            cycle: cycle,
             ...input,
         });
 
@@ -115,13 +138,23 @@ export class NovelService {
     }
 
     /**
+     * 완결로 전환
+     */
+    async changeFinish(
+        novelID: string, //
+    ): Promise<UpdateResult> {
+        return await this.novelRepository.changeFinish(novelID);
+    }
+
+    /**
      * 수정
      */
     async update(
         payload: IPayload,
         updateNovelInput: UpdateNovelInput, //
     ): Promise<NovelEntity> {
-        const { categoryID, tags, fileURLs, ...input } = updateNovelInput;
+        const { categoryID, tags, fileURLs, cycles, ...input } =
+            updateNovelInput;
 
         // 검사
         await this.checkValidWithUser(payload.id, updateNovelInput.id);
@@ -147,12 +180,17 @@ export class NovelService {
                 ? await this.fileRepository.findBulkByUrl(fileURLs)
                 : novel.files;
 
+        // 연재 주기
+        const cycle =
+            cycles !== undefined ? this.getCycle(cycles) : novel.cycle;
+
         // 수정
         const result = await this.novelRepository.update({
             ...novel,
             novelCategory: category,
             novelTags: tagEntities,
             files: uploadFiles,
+            cycle: cycle,
             ...input,
         });
 
@@ -160,6 +198,22 @@ export class NovelService {
         this.logger.log(`[Update] ${payload.nickName} - ${result.id}`);
 
         return result;
+    }
+
+    async setLikeCount(
+        dto: NovelDto & { isUp: boolean },
+    ): Promise<NovelEntity> {
+        const novel = await this.novelRepository.getOne(dto.novelID);
+        if (dto.userID === novel.user.id) {
+            throw new ConflictException(
+                '작가는 자기 작품에 좋아요를 누를 수 없습니다.',
+            );
+        }
+
+        return await this.novelRepository.update({
+            ...novel,
+            likeCount: novel.likeCount + 1 * (dto.isUp ? 1 : -1),
+        });
     }
 
     /**

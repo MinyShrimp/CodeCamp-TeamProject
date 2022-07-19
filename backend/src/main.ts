@@ -1,7 +1,9 @@
 import * as morgan from 'morgan';
+const morgan_json = require('morgan-json');
+import { Request } from 'express';
+import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { graphqlUploadExpress } from 'graphql-upload';
-import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app.module';
 
@@ -12,9 +14,8 @@ import {
     createLogger,
     ConsoleLoggerStream,
     ResponseLoggerStream,
-} from './logger/winston.config';
-import { AppLoggerService } from './logger/logger.service';
-import { Request } from 'express';
+} from './commons/logger/winston.config';
+import { AppLoggerService } from './commons/logger/logger.service';
 
 async function bootstrap() {
     createLogger();
@@ -24,6 +25,8 @@ async function bootstrap() {
     });
 
     ///////////////////////////////////////////////////////////////////////////
+
+    // prettier-ignore
     app.enableCors({
         origin: [
             'http://localhost:8080',
@@ -31,19 +34,40 @@ async function bootstrap() {
         ], // FE가 배포하면 FE 주소를 여기에 넣어야함
         credentials: true,
         exposedHeaders: ['Authorization', 'Set-Cookie', 'Cookie'],
+        methods: ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     });
     app.useGlobalPipes(new ValidationPipe());
     app.useGlobalFilters(new HttpExceptionFilter());
     app.use(graphqlUploadExpress());
 
     morgan.token('operationName', (req: Request) => {
-        return req.body.operationName;
+        if (req.body) {
+            if (req.body.operationName) {
+                return req.body.operationName;
+            }
+        }
+        return '-';
     });
 
     app.use(
         morgan(
-            ':remote-addr - :remote-user ":method :url :operationName HTTP/:http-version" :status :res[content-length] :response-time ":referrer" ":user-agent"',
-            { stream: ResponseLoggerStream },
+            morgan_json(
+                ':date[iso] :remote-addr :remote-user :method :url :operationName :http-version :status :res[content-length] :response-time :referrer :user-agent',
+                { stringify: true },
+            ),
+            {
+                stream: ResponseLoggerStream,
+                skip: (req: Request) => {
+                    if (req.body) {
+                        if (req.body.operationName) {
+                            return (
+                                req.body.operationName === 'IntrospectionQuery'
+                            );
+                        }
+                    }
+                    return false;
+                },
+            },
         ),
     );
     app.use(
@@ -51,6 +75,16 @@ async function bootstrap() {
             ':remote-addr - :remote-user ":method :url :operationName HTTP/:http-version" :status (:response-time ms)',
             {
                 stream: ConsoleLoggerStream,
+                skip: (req: Request) => {
+                    if (req.body) {
+                        if (req.body.operationName) {
+                            return (
+                                req.body.operationName === 'IntrospectionQuery'
+                            );
+                        }
+                    }
+                    return false;
+                },
             },
         ),
     );

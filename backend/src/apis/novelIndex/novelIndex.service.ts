@@ -9,6 +9,7 @@ import { NovelIndexEntity } from './entities/novelIndex.entity';
 import { NovelIndexRepository } from './entities/novelIndex.repository';
 import { CreateNovelIndexInput } from './dto/createNovelIndex.input';
 import { UpdateNovelIndexInput } from './dto/updateNovelIndex.input';
+import { NovelIndexDto } from './dto/novelIndex.dto';
 
 @Injectable()
 export class NovelIndexService {
@@ -35,13 +36,9 @@ export class NovelIndexService {
      * 존재 확인
      */
     async checkValidWithUser(
-        userID: string, //
-        novelIndexID: string,
+        dto: NovelIndexDto, //
     ): Promise<NovelIndexEntity> {
-        const index = await this.indexRepository.getOnlyIDWithUser(
-            userID,
-            novelIndexID,
-        );
+        const index = await this.indexRepository.getOnlyIDWithUser(dto);
         if (index === undefined) {
             throw new ConflictException(MESSAGES.NOVEL_INDEX_UNVALID);
         }
@@ -52,12 +49,10 @@ export class NovelIndexService {
      * 존재 확인 ( 삭제 포함 )
      */
     async checkValidWithDeleted(
-        userID: string, //
-        novelIndexID: string,
+        dto: NovelIndexDto, //
     ): Promise<NovelIndexEntity> {
         const index = await this.indexRepository.getOnlyIDWithUserWithDeleted(
-            userID,
-            novelIndexID,
+            dto,
         );
         if (index === undefined) {
             throw new ConflictException(MESSAGES.NOVEL_INDEX_UNVALID);
@@ -68,14 +63,14 @@ export class NovelIndexService {
     /**
      * ID 기반 단일 조회
      */
-    async findOne(
-        userID: string,
-        novelIndexID: string, //
-    ): Promise<NovelIndexEntity> {
+    async findOne(dto: NovelIndexDto): Promise<NovelIndexEntity> {
         // TODO: 구매 확인
 
-        //
-        return await this.indexRepository.getOne(novelIndexID);
+        // 조회수 1 증가
+        await this.indexRepository.view(dto);
+
+        // 조회
+        return await this.indexRepository.getOne(dto.novelIndexID);
     }
 
     /**
@@ -97,7 +92,15 @@ export class NovelIndexService {
         const novel = await this.novelService.checkValid(novelID);
 
         // 마지막 화 index 가져오기
-        const index = await this.indexRepository.getLastIndex(userID, novelID);
+        const index = await this.indexRepository.getLastIndex({
+            userID: userID,
+            novelID: novelID,
+        });
+
+        // 완결이 있으면, 소설도 완결로 변환
+        if (createInput.isFinish) {
+            await this.novelService.changeFinish(novel.id);
+        }
 
         // 저장
         return await this.indexRepository.save({
@@ -116,7 +119,10 @@ export class NovelIndexService {
         input: UpdateNovelIndexInput, //
     ): Promise<NovelIndexEntity> {
         // 검사
-        await this.checkValidWithUser(userID, input.id);
+        await this.checkValidWithUser({
+            userID: userID,
+            novelIndexID: input.id,
+        });
 
         const entity = await this.indexRepository.getOne(input.id);
 
@@ -128,17 +134,33 @@ export class NovelIndexService {
     }
 
     /**
+     * 비공개 전환 ( switch )
+     */
+    async changePrivate(
+        dto: NovelIndexDto, //
+    ): Promise<NovelIndexEntity> {
+        // 검사
+        await this.checkValidWithUser(dto);
+
+        const entity = await this.indexRepository.getOne(dto.novelIndexID);
+
+        return await this.indexRepository.update({
+            ...entity,
+            isPrivate: !entity.isPrivate,
+        });
+    }
+
+    /**
      * 삭제 취소
      */
     async restore(
-        userID: string, //
-        novelIndexID: string,
+        dto: NovelIndexDto, //
     ): Promise<boolean> {
         // 검사
-        await this.checkValidWithDeleted(userID, novelIndexID);
+        await this.checkValidWithDeleted(dto);
 
         // 삭제 취소
-        const result = await this.indexRepository.restore(novelIndexID);
+        const result = await this.indexRepository.restore(dto.novelIndexID);
         return result.affected ? true : false;
     }
 
@@ -146,14 +168,13 @@ export class NovelIndexService {
      * 삭제 ( Soft )
      */
     async delete(
-        userID: string, //
-        novelIndexID: string,
+        dto: NovelIndexDto, //
     ): Promise<boolean> {
         // 검사
-        await this.checkValidWithUser(userID, novelIndexID);
+        await this.checkValidWithUser(dto);
 
         // 삭제
-        const result = await this.indexRepository.delete(novelIndexID);
+        const result = await this.indexRepository.delete(dto.novelIndexID);
         return result.affected ? true : false;
     }
 }

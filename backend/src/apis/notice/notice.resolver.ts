@@ -5,6 +5,7 @@ import { Mutation, Query } from '@nestjs/graphql';
 import { MESSAGES } from 'src/commons/message/Message.enum';
 import { IPayload } from 'src/commons/interfaces/Payload.interface';
 import { CurrentUser } from 'src/commons/auth/gql-user.param';
+import { ResultMessage } from 'src/commons/message/ResultMessage.dto';
 import { GqlJwtAccessGuard } from 'src/commons/auth/gql-auth.guard';
 
 import { NoticeEntity } from './entities/notice.entity';
@@ -65,14 +66,24 @@ export class NoticeResolver {
 
     @UseGuards(GqlJwtAccessGuard)
     @Mutation(
-        () => String, //
+        () => ResultMessage, //
         { description: '공지사항 삭제' },
     )
     async deleteNotice(
         @CurrentUser() currentUser: IPayload,
         @Args('noticeID') noticeID: string, //
-    ) {
-        return await this.noticeService.softDelete(currentUser.id, noticeID);
+    ): Promise<ResultMessage> {
+        const result = await this.noticeService.softDelete(
+            currentUser.id,
+            noticeID,
+        );
+        return new ResultMessage({
+            id: noticeID,
+            isSuccess: result,
+            contents: result
+                ? MESSAGES.NOTICE_SOFT_DELETE_SUCCESSED
+                : MESSAGES.NOTICE_SOFT_DELETE_FAILED,
+        });
     }
 
     ///////////////////////////////////////////////////////////////////
@@ -80,7 +91,7 @@ export class NoticeResolver {
 
     @UseGuards(GqlJwtAccessGuard)
     @Mutation(
-        () => String, //
+        () => ResultMessage, //
         { description: '공지사항 삭제 취소' },
     )
     async restoreNotice(
@@ -92,6 +103,7 @@ export class NoticeResolver {
             noticeID,
         );
         return new ResultMessage({
+            id: noticeID,
             isSuccess: result,
             contents: result
                 ? MESSAGES.NOTICE_RESTORE_SUCCESSED

@@ -63,6 +63,7 @@ import { ReportEnumModule } from './apis/reportEnum/reportEnum.module';
 
 import { FileModule } from './apis/file/file.module';
 import { TempStorageModule } from './apis/tempStorage/tempStorage.module';
+import { LoggerModule } from './apis/logger/logger.module';
 
 ///////////////////////////////////////////////////////////////////////////
 @Module({
@@ -77,6 +78,8 @@ import { TempStorageModule } from './apis/tempStorage/tempStorage.module';
 
         ///////////////////////////////////////////////////////////////////////////
         // GrapthQL //
+
+        // prettier-ignore
         GraphQLModule.forRoot<ApolloDriverConfig>({
             driver: ApolloDriver,
             autoSchemaFile: 'src/commons/graphql/schema.gql',
@@ -90,7 +93,9 @@ import { TempStorageModule } from './apis/tempStorage/tempStorage.module';
                 ], // FE가 배포하면 FE 주소를 여기에 넣어야함
                 credentials: 'include',
                 exposedHeaders: ['Authorization', 'Set-Cookie', 'Cookie'],
+                methods: ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
             },
+            playground: process.env.MODE !== 'PRODUCTION',
         }),
 
         ///////////////////////////////////////////////////////////////////////////
@@ -161,6 +166,8 @@ import { TempStorageModule } from './apis/tempStorage/tempStorage.module';
 
         FileModule,
         TempStorageModule,
+
+        LoggerModule,
     ],
     controllers: [AppController],
     providers: [],

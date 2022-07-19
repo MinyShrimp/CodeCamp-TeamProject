@@ -19,8 +19,6 @@ import { UpdateUserInput } from './dto/updateUser.input';
 import { CreateUserOutput } from './dto/createUser.output';
 
 import { UserService } from './user.service';
-import { FetchPaymentOutput } from '../payment/dto/fetchPayments.output';
-import { PaymentPointEntity } from '../paymentPoint/entities/paymentPoint.entity';
 
 /* 유저 API */
 @Resolver()
@@ -48,19 +46,6 @@ export class UserResolver {
         return this.userRepository.findOneByID(payload.id);
     }
 
-    // 결제 목록
-    @UseGuards(GqlJwtAccessGuard)
-    @Query(
-        () => FetchPaymentOutput, //
-        { description: '회원 결제 목록, Pagenation' },
-    )
-    fetchPaymentsInUser(
-        @CurrentUser() payload: IPayload, //
-        @Args({ name: 'page', type: () => Int }) page: number,
-    ): Promise<FetchPaymentOutput> {
-        return this.userRepository.findPaymentsPage(payload.id, page);
-    }
-
     // 선호 작가 목록
     @UseGuards(GqlJwtAccessGuard)
     @Query(
@@ -83,56 +68,6 @@ export class UserResolver {
         @CurrentUser() payload: IPayload, //
     ): Promise<UserBlockEntity[]> {
         return this.userRepository.findUserBlocks(payload.id);
-    }
-
-    // 선호작 목록
-    @UseGuards(GqlJwtAccessGuard)
-    @Query(
-        () => [NovelLikeEntity], //
-        { description: '선호작 목록' },
-    )
-    fetchNovelLikeInUser(
-        @CurrentUser() payload: IPayload, //
-    ): Promise<NovelLikeEntity[]> {
-        return this.userRepository.findNovelLikes(payload.id);
-    }
-
-    // 후원작 목록
-    @UseGuards(GqlJwtAccessGuard)
-    @Query(
-        () => [NovelDonateEntity], //
-        { description: '후원작 목록' },
-    )
-    fetchNovelDonateInUser(
-        @CurrentUser() payload: IPayload, //
-    ): Promise<NovelDonateEntity[]> {
-        return this.userRepository.findNovelDonates(payload.id);
-    }
-
-    // 에피소드 ( 회차 ) 결제 목록
-    @UseGuards(GqlJwtAccessGuard)
-    @Query(
-        () => [PaymentPointEntity], //
-        { description: '에피소드 ( 회차 ) 결제 목록' },
-    )
-    fetchPaidPoints(
-        @CurrentUser() payload: IPayload, //
-        @Args({ name: 'page', type: () => Int }) page: number,
-    ): Promise<PaymentPointEntity[]> {
-        return this.userRepository.findPointPaymentsInIndex(payload.id, page);
-    }
-
-    // 후원 결제 목록
-    @UseGuards(GqlJwtAccessGuard)
-    @Query(
-        () => [PaymentPointEntity], //
-        { description: '후원 결제 목록' },
-    )
-    fetchDonatePoints(
-        @CurrentUser() payload: IPayload, //
-        @Args({ name: 'page', type: () => Int }) page: number,
-    ): Promise<PaymentPointEntity[]> {
-        return this.userRepository.findPointPaymentsInNovel(payload.id, page);
     }
 
     ///////////////////////////////////////////////////////////////////

@@ -1,5 +1,5 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { IPayload } from 'src/commons/interfaces/Payload.interface';
 import { CurrentUser } from 'src/commons/auth/gql-user.param';
@@ -10,13 +10,45 @@ import { PaymentPointEntity } from './entities/paymentPoint.entity';
 import { DonatePaymentPointInput } from './dto/donate.input';
 
 import { PaymentPointService } from './paymentPoint.service';
+import { PaymentPointRepository } from './entities/paymentPoint.repository';
 
 @Resolver()
 @UseGuards(GqlJwtAccessGuard)
 export class PaymentPointResolver {
     constructor(
         private readonly paymentPointService: PaymentPointService, //
+        private readonly paymentPointRepository: PaymentPointRepository,
     ) {}
+
+    // 에피소드 ( 회차 ) 결제 목록
+    @Query(
+        () => [PaymentPointEntity], //
+        { description: '에피소드 ( 회차 ) 결제 목록' },
+    )
+    fetchPaidPoints(
+        @CurrentUser() payload: IPayload, //
+        @Args({ name: 'page', type: () => Int }) page: number,
+    ): Promise<PaymentPointEntity[]> {
+        return this.paymentPointRepository.findPointPaymentsInIndex(
+            payload.id,
+            page,
+        );
+    }
+
+    // 후원 결제 목록
+    @Query(
+        () => [PaymentPointEntity], //
+        { description: '후원 결제 목록' },
+    )
+    fetchDonatePoints(
+        @CurrentUser() payload: IPayload, //
+        @Args({ name: 'page', type: () => Int }) page: number,
+    ): Promise<PaymentPointEntity[]> {
+        return this.paymentPointRepository.findPointPaymentsInNovel(
+            payload.id,
+            page,
+        );
+    }
 
     // 일반 결제
     @Mutation(
