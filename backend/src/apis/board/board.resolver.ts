@@ -8,11 +8,10 @@ import { ResultMessage } from 'src/commons/message/ResultMessage.dto';
 import { GqlJwtAccessGuard } from 'src/commons/auth/gql-auth.guard';
 
 import { BoardEntity } from './entities/board.entity';
+import { BoardService } from './board.service';
 import { BoardRepository } from './entities/board.repository';
 import { CreateBoardInput } from './dto/createBoard.input';
 import { UpdateBoardInput } from './dto/updateBoard.input';
-
-import { BoardService } from './board.service';
 
 /* 게시판 API */
 @Resolver()

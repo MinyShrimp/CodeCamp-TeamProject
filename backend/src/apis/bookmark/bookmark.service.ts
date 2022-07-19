@@ -1,18 +1,19 @@
 import { ConflictException, Injectable } from '@nestjs/common';
+
 import { MESSAGES } from 'src/commons/message/Message.enum';
-import { NovelIndexService } from '../novelIndex/novelIndex.service';
 import { UserService } from '../user/user.service';
+import { NovelIndexService } from '../novelIndex/novelIndex.service';
+
+import { BookmarkEntity } from './entities/bookmark.entity';
 import { CreateBookmarkDto } from './dto/createBookmark.dto';
 import { DeleteBookmarkDto } from './dto/deleteBookmark.dto';
-import { BookmarkEntity } from './entities/bookmark.entity';
-
 import { BookmarkRepository } from './entities/bookmark.repository';
 
 @Injectable()
 export class BookmarkService {
     constructor(
-        private readonly bookmarkRepository: BookmarkRepository, //
         private readonly userService: UserService,
+        private readonly bookmarkRepository: BookmarkRepository, //
         private readonly novelIndexService: NovelIndexService,
     ) {}
 
@@ -28,18 +29,6 @@ export class BookmarkService {
         return true;
     }
 
-    /** 중복 체크 */
-    async duplicateCheck(
-        dto: CreateBookmarkDto, //
-    ): Promise<boolean> {
-        const check = await this.bookmarkRepository.duplicateCheck(dto);
-        if (check) {
-            throw new ConflictException('이미 북마크로 등록되었습니다.');
-        }
-
-        return true;
-    }
-
     ///////////////////////////////////////////////////////////////////
     // 북마크 조회 //
 
@@ -48,35 +37,58 @@ export class BookmarkService {
     }
 
     ///////////////////////////////////////////////////////////////////
-    // 북마크 생성 //
+    // 북마크 생성 및 해제 //
 
-    async create(
+    async switch(
+        userID: string,
         dto: CreateBookmarkDto, //
-    ): Promise<BookmarkEntity> {
-        const { page } = dto;
-
+    ): Promise<boolean> {
         // 중복 체크
-        await this.duplicateCheck(dto);
+        const check = await this.bookmarkRepository.duplicateCheck(userID, dto);
 
-        const to = await this.userService.checkValid(dto.userID);
+        // 유효 UUID 체크
+        const to = await this.userService.checkValid(userID);
         const from = await this.novelIndexService.checkValid(dto.novelIndexID);
 
-        return await this.bookmarkRepository.save({
-            user: to,
-            novelIndex: from,
-            page,
-        });
-    }
+        if (check === undefined) {
+            const target = await this.bookmarkRepository.findOne(
+                userID,
+                dto.novelIndexID,
+                dto.page,
+            );
 
-    ///////////////////////////////////////////////////////////////////
-    // 북마크 해제 //
+            if (!target) {
+                await this.bookmarkRepository.save({
+                    user: to,
+                    novelIndex: from,
+                    page: dto.page,
+                    isBoolean: dto.isBoolean,
+                });
+            } else {
+                await this.bookmarkRepository.restore(target.id);
+                await this.bookmarkRepository.save({
+                    id: target.id,
+                    user: to,
+                    novelIndex: from,
+                    page: dto.page,
+                    isBoolean: true,
+                });
+            }
+            return true;
+        } else if (check !== undefined) {
+            const result = await this.bookmarkRepository.softdelete(
+                dto.bookmarkID,
+            );
+            await this.bookmarkRepository.save({
+                id: dto.bookmarkID,
+                user: to,
+                novelIndex: from,
+                page: dto.page,
+                isBoolean: false,
+            });
+            const isSuccess = result.affected ? false : true;
 
-    async delete(
-        dto: DeleteBookmarkDto, //
-    ): Promise<boolean> {
-        await this.checkValid(dto);
-
-        const result = await this.bookmarkRepository.delete(dto.bookmarkID);
-        return result.affected ? true : false;
+            return isSuccess;
+        }
     }
 }

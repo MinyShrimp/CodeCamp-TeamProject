@@ -84,7 +84,14 @@ export class BoardRepository {
         boardID: string, //
     ): Promise<BoardEntity> {
         return await this.boardRepository.findOne({
-            relations: ['user', 'comments'],
+            relations: [
+                'user',
+                'comments',
+                'comments.parent',
+                'comments.children',
+                'comments.board',
+                'comments.user',
+            ],
             where: { id: boardID },
         });
     }

@@ -1,4 +1,5 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { AnswerEntity } from 'src/apis/answer/entities/answer.entity';
 import { UserEntity } from 'src/apis/user/entities/user.entity';
 import {
     Entity,
@@ -9,6 +10,7 @@ import {
     UpdateDateColumn,
     DeleteDateColumn,
     PrimaryGeneratedColumn,
+    OneToOne,
 } from 'typeorm';
 
 /* Question Entity */
@@ -45,4 +47,11 @@ export class QuestionEntity {
     @JoinColumn()
     @Field(() => UserEntity, { nullable: true })
     user: UserEntity;
+
+    @OneToOne(
+        () => AnswerEntity, //
+        (answer) => answer.question,
+    )
+    @Field(() => AnswerEntity)
+    answer: AnswerEntity;
 }

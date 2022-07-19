@@ -10,6 +10,15 @@ export class CommentRepository {
         private readonly commentRepository: Repository<CommentEntity>, //
     ) {}
 
+    private readonly _selector = [
+        'cm.id',
+        'cm.contents',
+        'cm.likeCount',
+        'cm.dislikeCount',
+        'cm.createAt',
+        'cm.updateAt',
+    ];
+
     ///////////////////////////////////////////////////////////////////
     // 조회 //
 
@@ -30,7 +39,13 @@ export class CommentRepository {
     ): Promise<CommentEntity[]> {
         console.log('여기 레포 =====', commentID);
         return await this.commentRepository.find({
-            relations: ['board', 'user', 'parent', 'children'],
+            relations: [
+                'board',
+                'user',
+                'parent',
+                'children',
+                'children.children',
+            ],
             where: { id: commentID },
         });
     }
@@ -48,7 +63,7 @@ export class CommentRepository {
     }
 
     /**
-     *  보드 ID & 유저 ID 기반 조회
+     *  유저 ID 기반 조회
      */
 
     async findByIDFromComments(
@@ -59,6 +74,31 @@ export class CommentRepository {
             where: { user: userID },
         });
     }
+
+    /**
+     * 보드ID 기반 조회
+     */
+    async findByBoardIDFromComment(
+        boardID: string, //
+    ): Promise<CommentEntity[]> {
+        return await this.commentRepository.find({
+            relations: ['board', 'user', 'parent', 'children'],
+            where: { board: boardID },
+        });
+    }
+
+    // async findByBoardIDFromComment(
+    //     boardID: string, //
+    // ): Promise<CommentEntity[]> {
+    //     return await this.commentRepository
+    //         .createQueryBuilder('cm')
+    //         .select([...this._selector, 'board.id', 'user.id', 'parent.id'])
+    //         .leftJoin('cm.board', 'board')
+    //         .leftJoin('cm.user', 'user')
+    //         .where('cm.deleteAt is NULL')
+    //         .andWhere('board.id=:boardID', { boarID: boardID })
+    //         .getMany();
+    // }
 
     ///////////////////////////////////////////////////////////////////
     // 생성 //

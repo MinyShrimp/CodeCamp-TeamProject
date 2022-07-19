@@ -1,32 +1,32 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { BookmarkEntity } from './entities/bookmark.entity';
-import { BookmarkAdminRepository } from './entities/bookmark.admin.repository';
-
-import { BookmarkAdminController } from './bookmark.admin.controller';
-import { BookmarkResolver } from './bookmark.resolver';
-import { BookmarkService } from './bookmark.service';
-import { BookmarkRepository } from './entities/bookmark.repository';
 import { UserModule } from '../user/user.module';
 import { NovelIndexModule } from '../novelIndex/novelIndex.module';
+
+import { BookmarkEntity } from './entities/bookmark.entity';
+import { BookmarkService } from './bookmark.service';
+import { BookmarkResolver } from './bookmark.resolver';
+import { BookmarkRepository } from './entities/bookmark.repository';
+import { BookmarkAdminController } from './bookmark.admin.controller';
+import { BookmarkAdminRepository } from './entities/bookmark.admin.repository';
 
 @Module({
     imports: [
         TypeOrmModule.forFeature([
             BookmarkEntity, //
         ]),
-        NovelIndexModule,
         UserModule,
+        NovelIndexModule,
     ],
     controllers: [
         BookmarkAdminController, //
     ],
     providers: [
-        BookmarkAdminRepository, //
-        BookmarkRepository,
-        BookmarkResolver,
         BookmarkService,
+        BookmarkResolver,
+        BookmarkRepository,
+        BookmarkAdminRepository, //
     ],
 })
 export class BookmarkModule {}
