@@ -73,6 +73,9 @@ export class CommentEntity {
     @TreeParent()
     parent: CommentEntity;
 
+    @Column({ name: 'parentId', nullable: true })
+    parentID: string;
+
     // 댓글 자식 - 대댓글
     @TreeChildren()
     @Field(() => [CommentEntity], { description: '대댓글' })
