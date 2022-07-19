@@ -15,6 +15,7 @@ import { NovelService } from './novel.service';
 import { UpdateNovelInput } from './dto/updateNovel.input';
 import { FetchNovelsOutput } from './dto/fetchNovels.output';
 import { FetchNovelInput } from './dto/fetchNovel.input';
+import { SearchNovelInput } from './dto/searchNovel.input';
 
 @Resolver()
 export class NovelResolver {
@@ -29,68 +30,10 @@ export class NovelResolver {
     )
     fetchNovelsPage(
         @Args('fetchNovelInput') input: FetchNovelInput, //
+        @Args({ name: 'searchInput', nullable: true })
+        search?: SearchNovelInput,
     ): Promise<FetchNovelsOutput> {
-        return this.novelRepository.getPage(input);
-    }
-
-    @Query(
-        () => FetchNovelsOutput, //
-        { description: '연재 중인 작품 목록 조회, page, 최신순' },
-    )
-    fetchNovelCyclesPageLastOrder(
-        @Args({
-            name: 'page',
-            type: () => Int,
-            defaultValue: 1,
-        })
-        page: number,
-    ): Promise<FetchNovelsOutput> {
-        return this.novelRepository.getPageIngLastOrder(page);
-    }
-
-    @Query(
-        () => FetchNovelsOutput, //
-        { description: '연재 중인 작품 목록 조회, page, 좋아요순' },
-    )
-    fetchNovelCyclesPageLikeOrder(
-        @Args({
-            name: 'page',
-            type: () => Int,
-            defaultValue: 1,
-        })
-        page: number,
-    ): Promise<FetchNovelsOutput> {
-        return this.novelRepository.getPageIngLikeOrder(page);
-    }
-
-    @Query(
-        () => FetchNovelsOutput, //
-        { description: '완결된 작품 목록 조회, page, 최신순' },
-    )
-    fetchNovelFinsPageLastOrder(
-        @Args({
-            name: 'page',
-            type: () => Int,
-            defaultValue: 1,
-        })
-        page: number,
-    ): Promise<FetchNovelsOutput> {
-        return this.novelRepository.getPageFinLastOrder(page);
-    }
-
-    @Query(
-        () => FetchNovelsOutput, //
-        { description: '완결된 작품 목록 조회, page, 좋아요순' },
-    )
-    fetchNovelFinsPageLikeOrder(
-        @Args({
-            name: 'page',
-            type: () => Int,
-            defaultValue: 1,
-        })
-        page: number,
-    ): Promise<FetchNovelsOutput> {
-        return this.novelRepository.getPageFinLikeOrder(page);
+        return this.novelRepository.getPage(input, search);
     }
 
     @Query(

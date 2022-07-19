@@ -5,6 +5,9 @@ export function getAxios() {
         withCredentials: true,
         headers: {
             'Content-Type': 'application/json; charset=UTF-8',
+            Authorization: `Bearer ${
+                localStorage.getItem('access_token') ?? ''
+            }`,
         },
     });
 }

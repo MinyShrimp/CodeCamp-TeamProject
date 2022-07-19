@@ -9,6 +9,7 @@ import { FetchNovelsOutput } from '../dto/fetchNovels.output';
 
 import { NovelEntity } from './novel.entity';
 import { FetchNovelInput } from '../dto/fetchNovel.input';
+import { SearchNovelInput } from '../dto/searchNovel.input';
 
 @Injectable()
 export class NovelRepository {
@@ -25,17 +26,31 @@ export class NovelRepository {
      */
     async getPage(
         dto: FetchNovelInput, //
+        search?: SearchNovelInput,
     ): Promise<FetchNovelsOutput> {
         const category = {
             ALL: '',
-            CYCLE: `novel.cycle like "%${dto.target}%"`,
-            CATEGORY: `novelCategory.id = "${dto.target}"`,
+            CYCLE: `AND novel.cycle like "%${dto.target}%"`,
+            CATEGORY: `AND novelCategory.id = "${dto.target}"`,
         }[dto.type];
 
         const order = {
             LAST: 'novel.createAt',
             LIKE: 'novel.likeCount',
         }[dto.order];
+
+        const isFinish = {
+            ALL: '',
+            TRUE: 'AND novel.isFinish = 1',
+            FALSE: 'AND novel.isFinish = 0',
+        }[dto.isFinish];
+
+        const sType = search
+            ? {
+                  TITLE: `AND novel.title like "%${search.keyword}%"`,
+                  NICKNAME: `AND user.nickName like "%${search.keyword}%"`,
+              }[search.type]
+            : '';
 
         const query = this.novelRepository
             .createQueryBuilder('novel')
@@ -44,12 +59,7 @@ export class NovelRepository {
             .leftJoinAndSelect('novel.novelCategory', 'novelCategory')
             .leftJoinAndSelect('novel.novelTags', 'novelTags')
             .leftJoinAndSelect('novel.files', 'files')
-            .where('novel.user is not null')
-            .andWhere(
-                `novel.isFinish = ${dto.isFinish ? 1 : 0} ${
-                    category !== '' ? `AND ${category}` : ''
-                }`,
-            )
+            .where(`novel.user is not null ${category} ${isFinish} ${sType}`)
             .orderBy(order, 'DESC')
             .take(this.take)
             .skip(this.take * (dto.page - 1));
@@ -60,140 +70,6 @@ export class NovelRepository {
         return {
             count: count,
             novels: novels,
-        };
-    }
-
-    /**
-     * 연재중 작품 갯수 조회
-     */
-    async getCountIng(): Promise<number> {
-        return await this.novelRepository
-            .createQueryBuilder('n')
-            .where('n.user is not null')
-            .where('n.isFinish = 0')
-            .getCount();
-    }
-
-    /**
-     * 연재 중인 작품 조회 ( Page, 최신순 )
-     */
-    async getPageIngLastOrder(
-        page: number, //
-    ): Promise<FetchNovelsOutput> {
-        const novels = await this.novelRepository
-            .createQueryBuilder('novel')
-            .leftJoinAndSelect('novel.user', 'user')
-            .leftJoinAndSelect('user.userClass', 'userClass')
-            .leftJoinAndSelect('novel.novelCategory', 'novelCategory')
-            .leftJoinAndSelect('novel.novelTags', 'novelTags')
-            .leftJoinAndSelect('novel.files', 'files')
-            .where('novel.user is not null')
-            .where('novel.isFinish = 0')
-            .orderBy('novel.createAt', 'DESC')
-            .take(this.take)
-            .skip(this.take * (page - 1))
-            .getMany();
-
-        const count = await this.getCountIng();
-
-        return {
-            novels: novels,
-            count: count,
-        };
-    }
-
-    /**
-     * 연재 중인 작품 조회 ( Page, 좋아요 순 )
-     */
-    async getPageIngLikeOrder(
-        page: number, //
-    ): Promise<FetchNovelsOutput> {
-        const novels = await this.novelRepository
-            .createQueryBuilder('novel')
-            .leftJoinAndSelect('novel.user', 'user')
-            .leftJoinAndSelect('user.userClass', 'userClass')
-            .leftJoinAndSelect('novel.novelCategory', 'novelCategory')
-            .leftJoinAndSelect('novel.novelTags', 'novelTags')
-            .leftJoinAndSelect('novel.files', 'files')
-            .where('novel.user is not null')
-            .where('novel.isFinish = 0')
-            .orderBy('novel.likeCount', 'DESC')
-            .take(this.take)
-            .skip(this.take * (page - 1))
-            .getMany();
-
-        const count = await this.getCountIng();
-
-        return {
-            novels: novels,
-            count: count,
-        };
-    }
-
-    /**
-     * 완결 작품 갯수 조회
-     */
-    async getCountFin(): Promise<number> {
-        return await this.novelRepository
-            .createQueryBuilder('n')
-            .where('n.user is not null')
-            .where('n.isFinish = 1')
-            .getCount();
-    }
-
-    /**
-     * 완결 작품 조회 ( Page, 최신순 )
-     */
-    async getPageFinLastOrder(
-        page: number, //
-    ): Promise<FetchNovelsOutput> {
-        const novels = await this.novelRepository
-            .createQueryBuilder('novel')
-            .leftJoinAndSelect('novel.user', 'user')
-            .leftJoinAndSelect('user.userClass', 'userClass')
-            .leftJoinAndSelect('novel.novelCategory', 'novelCategory')
-            .leftJoinAndSelect('novel.novelTags', 'novelTags')
-            .leftJoinAndSelect('novel.files', 'files')
-            .where('novel.user is not null')
-            .where('novel.isFinish = 1')
-            .orderBy('novel.createAt', 'DESC')
-            .take(this.take)
-            .skip(this.take * (page - 1))
-            .getMany();
-
-        const count = await this.getCountFin();
-
-        return {
-            novels: novels,
-            count: count,
-        };
-    }
-
-    /**
-     * 완결 작품 조회 ( Page, 좋아요 순 )
-     */
-    async getPageFinLikeOrder(
-        page: number, //
-    ): Promise<FetchNovelsOutput> {
-        const novels = await this.novelRepository
-            .createQueryBuilder('novel')
-            .leftJoinAndSelect('novel.user', 'user')
-            .leftJoinAndSelect('user.userClass', 'userClass')
-            .leftJoinAndSelect('novel.novelCategory', 'novelCategory')
-            .leftJoinAndSelect('novel.novelTags', 'novelTags')
-            .leftJoinAndSelect('novel.files', 'files')
-            .where('novel.user is not null')
-            .where('novel.isFinish = 1')
-            .orderBy('novel.likeCount', 'DESC')
-            .take(this.take)
-            .skip(this.take * (page - 1))
-            .getMany();
-
-        const count = await this.getCountFin();
-
-        return {
-            novels: novels,
-            count: count,
         };
     }
 
