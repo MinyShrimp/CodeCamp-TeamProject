@@ -13,7 +13,7 @@ export class GoogleStorageSerivce {
     constructor() {}
 
     private readonly logger = new Logger('Google Storage');
-    private readonly key = `./key/${process.env.FILE_KEY}`;
+    private readonly key = process.env.FILE_KEY;
 
     /**
      * GCP Storage Upload

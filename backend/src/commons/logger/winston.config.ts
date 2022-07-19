@@ -108,7 +108,7 @@ export const createLogger = () => {
 
             const _json = JSON.parse(res);
             const bigquery = new BigQuery({
-                keyFilename: `./key/${process.env.FILE_BIGQUERY_KEY}`,
+                keyFilename: process.env.FILE_BIGQUERY_KEY,
                 projectId: process.env.FILE_PROJECT_ID,
             });
 
