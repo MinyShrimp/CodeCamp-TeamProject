@@ -9,7 +9,7 @@ export class LoggerService {
     private readonly take = 100;
     private readonly table = `\`${process.env.FILE_PROJECT_ID}.teamproject.response\``;
     private readonly bigQuery = new BigQuery({
-        keyFilename: `./key/${process.env.FILE_BIGQUERY_KEY}`,
+        keyFilename: process.env.FILE_BIGQUERY_KEY,
         projectId: process.env.FILE_PROJECT_ID,
     });
 
