@@ -1,38 +1,38 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { AnswerEntity } from './entities/answer.entity';
-import { AnswerAdminRepository } from './entities/answer.admin.repository';
+import { UserEntity } from '../user/entities/user.entity';
+import { UserModule } from '../user/user.module';
+import { QuestionModule } from '../question/question.module';
+import { QuestionEntity } from '../question/entities/question.entity';
+import { QuestionRepository } from '../question/entities/question.repository';
 
-import { AnswerAdminController } from './answer.admin.controller';
+import { AnswerEntity } from './entities/answer.entity';
 import { AnswerService } from './answer.service';
 import { AnswerResolver } from './answer.resolver';
 import { AnswerRepository } from './entities/answer.repository';
-import { UserEntity } from '../user/entities/user.entity';
-import { UserModule } from '../user/user.module';
-import { QuestionEntity } from '../question/entities/question.entity';
-import { QuestionModule } from '../question/question.module';
-import { QuestionRepository } from '../question/entities/question.repository';
+import { AnswerAdminController } from './answer.admin.controller';
+import { AnswerAdminRepository } from './entities/answer.admin.repository';
 
 @Module({
     imports: [
         TypeOrmModule.forFeature([
-            QuestionEntity,
-            AnswerEntity, //
             UserEntity,
+            AnswerEntity, //
+            QuestionEntity,
         ]),
-        QuestionModule,
         UserModule,
+        QuestionModule,
     ],
     controllers: [
         AnswerAdminController, //
     ],
     providers: [
-        AnswerAdminRepository, //
-        QuestionRepository,
-        AnswerRepository,
-        AnswerResolver,
         AnswerService,
+        AnswerResolver,
+        AnswerRepository,
+        QuestionRepository,
+        AnswerAdminRepository, //
     ],
 })
 export class AnswerModule {}

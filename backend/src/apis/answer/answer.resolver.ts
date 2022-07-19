@@ -1,14 +1,16 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { GqlJwtAccessGuard } from 'src/commons/auth/gql-auth.guard';
-import { CurrentUser } from 'src/commons/auth/gql-user.param';
-import { IPayload } from 'src/commons/interfaces/Payload.interface';
+
 import { MESSAGES } from 'src/commons/message/Message.enum';
+import { IPayload } from 'src/commons/interfaces/Payload.interface';
+import { CurrentUser } from 'src/commons/auth/gql-user.param';
 import { ResultMessage } from 'src/commons/message/ResultMessage.dto';
+import { GqlJwtAccessGuard } from 'src/commons/auth/gql-auth.guard';
+
+import { AnswerEntity } from './entities/answer.entity';
 import { AnswerService } from './answer.service';
 import { CreateAnswerInput } from './dto/createAnswer.input';
 import { UpdateAnswerInput } from './dto/updateAnswer.input';
-import { AnswerEntity } from './entities/answer.entity';
 
 @Resolver()
 export class AnswerResolver {

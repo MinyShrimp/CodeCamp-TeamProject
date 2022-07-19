@@ -1,12 +1,14 @@
 import { ConflictException, Injectable } from '@nestjs/common';
-import { IPayload } from 'src/commons/interfaces/Payload.interface';
+
 import { MESSAGES } from 'src/commons/message/Message.enum';
-import { QuestionRepository } from '../question/entities/question.repository';
+import { IPayload } from 'src/commons/interfaces/Payload.interface';
 import { UserRepository } from '../user/entities/user.repository';
-import { CreateAnswerInput } from './dto/createAnswer.input';
-import { UpdateAnswerInput } from './dto/updateAnswer.input';
+import { QuestionRepository } from '../question/entities/question.repository';
+
 import { AnswerEntity } from './entities/answer.entity';
 import { AnswerRepository } from './entities/answer.repository';
+import { CreateAnswerInput } from './dto/createAnswer.input';
+import { UpdateAnswerInput } from './dto/updateAnswer.input';
 
 @Injectable()
 export class AnswerService {
