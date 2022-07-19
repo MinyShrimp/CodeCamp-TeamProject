@@ -1,6 +1,7 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 
 import { MESSAGES } from 'src/commons/message/Message.enum';
+import { ResultMessage } from 'src/commons/message/ResultMessage.dto';
 
 import { UserService } from '../user/user.service';
 import { NovelService } from '../novel/novel.service';
@@ -41,6 +42,36 @@ export class NovelLikeService {
         return check;
     }
 
+    // 선호작 등록, 취소
+    async switch(
+        dto: CreateNovelLikeDto, //
+    ): Promise<ResultMessage> {
+        const check = await this.novelLikeRepository.checkOverlap(dto);
+        if (check) {
+            // 있으면, 삭제
+            const result = await this.delete({
+                userID: dto.userID,
+                novelLikeID: check.id,
+            });
+
+            return new ResultMessage({
+                isSuccess: result,
+                contents: result
+                    ? '선호작 등록 취소 성공'
+                    : '선호작 등록 취소 실패',
+            });
+        } else {
+            // 없으면, 만들기
+            const result = await this.create(dto);
+
+            return new ResultMessage({
+                isSuccess: result ? true : false,
+                contents: result ? '선호작 등록 성공' : '선호작 등록 실패',
+            });
+        }
+    }
+
+    // 선호작 등록
     async create(
         dto: CreateNovelLikeDto, //
     ): Promise<NovelLikeEntity> {
@@ -62,6 +93,7 @@ export class NovelLikeService {
         });
     }
 
+    // 선호작 등록 취소
     async delete(
         dto: DeleteNovelLikeDto, //
     ): Promise<boolean> {

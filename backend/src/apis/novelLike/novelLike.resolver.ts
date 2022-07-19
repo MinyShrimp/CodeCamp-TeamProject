@@ -31,6 +31,24 @@ export class NovelLikeResolver {
         return this.novelLikeRepository.findList(payload.id);
     }
 
+    @Mutation(
+        () => ResultMessage,
+        { description: '선호작 switch' }, //
+    )
+    async switchNovelLike(
+        @CurrentUser() payload: IPayload,
+        @Args({
+            name: 'novelID', //
+            description: '소설 UUID',
+        })
+        novelID: string, //
+    ): Promise<ResultMessage> {
+        return await this.novelLikeService.switch({
+            userID: payload.id,
+            novelID: novelID,
+        });
+    }
+
     // 선호작 등록
     @Mutation(
         () => NovelLikeEntity,

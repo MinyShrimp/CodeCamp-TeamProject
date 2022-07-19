@@ -203,7 +203,7 @@ export class NovelService {
     async setLikeCount(
         dto: NovelDto & { isUp: boolean },
     ): Promise<NovelEntity> {
-        const novel = await this.novelRepository.getOne(dto.novelID);
+        const novel = await this.novelRepository.getOneWithDeleted(dto.novelID);
         if (dto.userID === novel.user.id) {
             throw new ConflictException(
                 '작가는 자기 작품에 좋아요를 누를 수 없습니다.',

@@ -35,8 +35,10 @@ export class PaymentPointRepository {
         userID: string, //
         page: number,
     ): Promise<PaymentPointEntity[]> {
-        return await this.paymentPointRepository
+        const result = await this.paymentPointRepository
             .createQueryBuilder('pp')
+            .withDeleted()
+            .andWhere('pp.deletedAt IS NULL')
             .leftJoinAndSelect('pp.status', 'pps')
             .leftJoinAndSelect('pp.user', 'ppu')
             .leftJoinAndSelect('ppu.userClass', 'ppuc')
@@ -45,11 +47,15 @@ export class PaymentPointRepository {
             .leftJoinAndSelect('ppnu.userClass', 'ppnuc')
             .leftJoinAndSelect('ppn.files', 'ppnf')
             .where('ppu.id=:userID', { userID: userID })
-            .where('pp.novel is not null')
+            .andWhere('pp.novel IS NOT NULL')
             .orderBy('pp.createAt', 'ASC')
             .take(this.take)
             .skip(this.take * (page - 1))
             .getMany();
+
+        // console.log(result.map((v) => ({ id: v.novelID, novel: v.novel })));
+
+        return result;
     }
 
     /**
@@ -61,6 +67,8 @@ export class PaymentPointRepository {
     ): Promise<PaymentPointEntity[]> {
         return await this.paymentPointRepository
             .createQueryBuilder('pp')
+            .withDeleted()
+            .andWhere('pp.deletedAt IS NULL')
             .leftJoinAndSelect('pp.status', 'pps')
             .leftJoinAndSelect('pp.user', 'ppu')
             .leftJoinAndSelect('ppu.userClass', 'ppuc')
@@ -68,7 +76,7 @@ export class PaymentPointRepository {
             .leftJoinAndSelect('ppni.user', 'ppniu')
             .leftJoinAndSelect('ppniu.userClass', 'ppniuc')
             .where('ppu.id=:userID', { userID: userID })
-            .where('pp.novelIndex is not null')
+            .andWhere('pp.novelIndex IS NOT NULL')
             .orderBy('pp.createAt', 'ASC')
             .take(this.take)
             .skip(this.take * (page - 1))

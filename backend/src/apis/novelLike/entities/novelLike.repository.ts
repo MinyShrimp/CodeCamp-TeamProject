@@ -43,6 +43,8 @@ export class NovelLikeRepository {
     ): Promise<NovelLikeEntity[]> {
         return await this.novelLikeRepository
             .createQueryBuilder('nl')
+            .withDeleted()
+            .andWhere('nl.deletedAt IS NULL')
             .leftJoinAndSelect('nl.novel', 'to')
             .leftJoinAndSelect('to.user', 'tu')
             .leftJoinAndSelect('tu.userClass', 'tuc')

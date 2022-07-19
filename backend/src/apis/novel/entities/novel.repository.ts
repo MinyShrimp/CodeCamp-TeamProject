@@ -157,6 +157,27 @@ export class NovelRepository {
     }
 
     /**
+     * ID 기반 조회
+     */
+    async getOneWithDeleted(
+        novelID: string, //
+    ): Promise<NovelEntity> {
+        return await this.novelRepository
+            .createQueryBuilder('novel')
+            .withDeleted()
+            .leftJoinAndSelect('novel.user', 'user')
+            .leftJoinAndSelect('novel.novelCategory', 'novelCategory')
+            .leftJoinAndSelect('novel.novelTags', 'novelTags')
+            .leftJoinAndSelect('novel.novelIndexs', 'novelIndexs')
+            .leftJoinAndSelect('novel.files', 'files')
+            .where('novel.user is not null')
+            .where(`novelIndexs.isPrivate = 0`)
+            .where('novel.id=:novelID', { novelID: novelID })
+            .orderBy('novelIndexs.createAt', 'DESC')
+            .getOne();
+    }
+
+    /**
      * ID 기반 조회 ( Only ID )
      */
     async getOnlyID(
