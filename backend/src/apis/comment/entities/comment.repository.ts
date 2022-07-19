@@ -39,7 +39,13 @@ export class CommentRepository {
     ): Promise<CommentEntity[]> {
         console.log('여기 레포 =====', commentID);
         return await this.commentRepository.find({
-            relations: ['board', 'user', 'parent', 'children'],
+            relations: [
+                'board',
+                'user',
+                'parent',
+                'children',
+                'children.children',
+            ],
             where: { id: commentID },
         });
     }

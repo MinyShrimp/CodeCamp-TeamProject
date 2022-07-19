@@ -7,10 +7,10 @@ import { UserRepository } from '../user/entities/user.repository';
 import { UserCheckService } from '../user/userCheck.service';
 
 import { BoardEntity } from './entities/board.entity';
+import { FileRepository } from '../file/entities/file.repository';
 import { BoardRepository } from './entities/board.repository';
 import { CreateBoardInput } from './dto/createBoard.input';
 import { UpdateBoardInput } from './dto/updateBoard.input';
-import { FileRepository } from '../file/entities/file.repository';
 
 @Injectable()
 export class BoardService {
