@@ -103,7 +103,7 @@ export class AnswerService {
         const user = await this.checkAdmin(userID);
 
         // 문의 존재여부 확인
-        const question = await this.questionRepository.findOneByID(questionID);
+        const question = await this.questionRepository.findOneByQID(questionID);
         if (!question) throw new ConflictException(MESSAGES.QUESTION_UNVALID);
 
         return await this.answerRepository.save({

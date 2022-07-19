@@ -33,12 +33,35 @@ export class QuestionRepository {
     }
 
     /** 문의 ID 기반 조회 */
-    async findOneByID(
+    async findOneByQID(
         id: string, //
     ): Promise<QuestionEntity> {
         return await this.questionRepository.findOne({
             relations: ['user', 'user.userClass', 'answer'],
             where: { id },
+        });
+    }
+
+    /** 유저ID 기반 문의 조회 */
+    async findOneByID(
+        userID: string, //
+    ): Promise<QuestionEntity[]> {
+        const aaa = await this.questionRepository.find({
+            relations: ['user', 'user.userClass', 'answer'],
+            where: { user: userID },
+        });
+
+        console.log('질문 레포====', ...aaa);
+
+        return await this.questionRepository.find({
+            relations: [
+                'user',
+                'user.userClass',
+                'answer',
+                'answer.user',
+                'answer.user.userClass',
+            ],
+            where: { user: userID },
         });
     }
 

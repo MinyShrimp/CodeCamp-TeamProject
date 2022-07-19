@@ -65,7 +65,7 @@ export class BoardEntity {
         () => FileEntity,
         (file) => file.board, //
     )
-    @Field(() => [FileEntity])
+    @Field(() => [FileEntity], { nullable: true })
     files: FileEntity[];
 
     @ManyToOne(
