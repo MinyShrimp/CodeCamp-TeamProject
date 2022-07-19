@@ -34,6 +34,12 @@ export class BookmarkEntity {
     @DeleteDateColumn()
     deleteAt: Date;
 
+    @Column()
+    @Field(() => Boolean, {
+        description: '북마크 체크 여부',
+    })
+    isBoolean?: boolean;
+
     @ManyToOne(
         () => UserEntity, //
         { cascade: true, onDelete: 'CASCADE' },

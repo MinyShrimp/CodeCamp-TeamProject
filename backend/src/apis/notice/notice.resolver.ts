@@ -12,6 +12,7 @@ import { NoticeEntity } from './entities/notice.entity';
 import { NoticeService } from './notice.service';
 import { CreateNoticeInput } from './dto/createNotice.input';
 import { UpdateNoticeInput } from './dto/updateNotice.input';
+import { ResultMessage } from 'src/commons/message/ResultMessage.dto';
 
 @Resolver()
 export class NoticeResolver {

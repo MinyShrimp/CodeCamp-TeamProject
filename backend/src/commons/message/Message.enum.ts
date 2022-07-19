@@ -146,6 +146,32 @@ export const MESSAGES = {
 
     DO_NOT_SELF_PAID: '자기 자신 작품은 결제할 수 없습니다.',
     DO_NOT_SELF_DONATE: '자기 자신은 후원할 수 없습니다.',
+
+    ///////////////////////////////////////////////////////////////////
+    // 문의 //
+    QUESTION_AUTHORIZATION: '작업 권한이 없습니다.',
+
+    QUESTION_UNVALID: '해당 문의를 찾을 수 없습니다.',
+
+    QUESTION_SOFT_DELETE_SUCCESSED: '문의 삭제 성공',
+    QUESTION_SOFT_DELETE_FAILED: '문의 삭제 실패',
+
+    ///////////////////////////////////////////////////////////////////
+    // 답변 //
+    ANSWER_AUTHORIZATION: '작업 권한이 없습니다.',
+
+    ANSWER_UNVALID: '해당 답변을 찾을 수 없습니다.',
+
+    ANSWER_SOFT_DELETE_SUCCESSED: '답변 삭제 성공',
+    ANSWER_SOFT_DELETE_FAILED: '답변 삭제 실패',
+
+    ANSWER_RESTORE_SUCCESSED: '답변 삭제 취소 성공',
+    ANSWER_RESTORE_FAILED: '답변 삭제 취소 실패',
+
+    ///////////////////////////////////////////////////////////////////
+    // 북마크 //
+    BOOKMARK_SUCCESSED: '북마크 성공',
+    BOOKMARK_CANCEL: '북마크 해제',
 } as const;
 
 export type MESSAGES = typeof MESSAGES[keyof typeof MESSAGES];

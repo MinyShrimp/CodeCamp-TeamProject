@@ -36,6 +36,15 @@ export class CommentService {
     }
 
     /**
+     *  해당 게시글의 모든 댓글 조회
+     */
+    async findCommentsFromBoard(
+        boardID: string, //
+    ): Promise<CommentEntity[]> {
+        return await this.commentRepository.findByBoardIDFromComment(boardID);
+    }
+
+    /**
      * 특정 댓글 조회
      */
     async find(
@@ -61,10 +70,12 @@ export class CommentService {
         boardID: string,
         input: CreateCommentInput, //
     ): Promise<CommentEntity> {
-        const { parent, ...contents } = input;
+        const { parent, children, ...contents } = input;
         const user = await this.userRepository.findOneByID(userID);
         const board = await this.boardRepository.findOneByBoard(boardID);
         const manager = this.manager.getTreeRepository(CommentEntity);
+
+        console.log(input);
 
         // 게시글이 존재하지 않을 시 에러
         if (board === undefined || board === null) {
@@ -89,6 +100,7 @@ export class CommentService {
                 user,
                 ...input,
                 parent,
+                children,
             });
         }
     }
