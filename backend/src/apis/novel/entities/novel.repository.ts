@@ -47,8 +47,10 @@ export class NovelRepository {
 
         const sType = search
             ? {
+                  ALL: `AND (novel.title like "%${search.keyword}%" OR user.nickName like "%${search.keyword}%" OR novelTags.name like "%${search.keyword}%")`,
                   TITLE: `AND novel.title like "%${search.keyword}%"`,
                   NICKNAME: `AND user.nickName like "%${search.keyword}%"`,
+                  TAG: `AND novelTags.name like "%${search.keyword}%"`,
               }[search.type]
             : '';
 
@@ -126,12 +128,17 @@ export class NovelRepository {
         return await this.novelRepository
             .createQueryBuilder('novel')
             .leftJoinAndSelect('novel.user', 'user')
+            .leftJoinAndSelect('user.userClass', 'userClass')
+            .leftJoinAndSelect('user.paymentPoints', 'upp')
+            .leftJoinAndSelect('upp.novelIndex', 'uppni')
+            .leftJoinAndSelect('uppni.novel', 'uppnin')
             .leftJoinAndSelect('novel.novelCategory', 'novelCategory')
             .leftJoinAndSelect('novel.novelTags', 'novelTags')
             .leftJoinAndSelect('novel.novelIndexs', 'novelIndexs')
             .leftJoinAndSelect('novel.files', 'files')
             .where('novel.id=:novelID', { novelID: dto.novelID })
             .andWhere('user.id=:userID', { userID: dto.userID })
+            .where('uppnin.id=:novelID')
             .orderBy('novelIndexs.createAt', 'DESC')
             .getOne();
     }

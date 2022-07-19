@@ -1,6 +1,8 @@
 import { Field, InputType, registerEnumType } from '@nestjs/graphql';
 
 export const SearchNovelType = {
+    ALL: 'ALL',
+    TAG: 'TAG',
     TITLE: 'TITLE',
     NICKNAME: 'NICKNAME',
 };
