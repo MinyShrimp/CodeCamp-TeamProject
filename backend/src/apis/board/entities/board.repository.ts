@@ -93,21 +93,12 @@ export class BoardRepository {
             .leftJoinAndSelect('cu.userClass', 'cuc')
             .leftJoinAndSelect('cc.user', 'ccu')
             .leftJoinAndSelect('ccu.userClass', 'ccuc')
+            .leftJoinAndSelect('b.files', 'file')
             .where('b.id = :id', { id: boardID })
             .andWhere('comment.parentID is null')
             .orderBy('comment.createAt')
             .addOrderBy('cc.createAt')
             .getOne();
-
-        return await this.boardRepository.findOne({
-            relations: [
-                'user',
-                'comments',
-                'comments.children',
-                'comments.user',
-            ],
-            where: { id: boardID },
-        });
     }
 
     /**
