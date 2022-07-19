@@ -63,7 +63,7 @@ export class EmailUtil {
         return await this.sendEmail({
             email: email,
             subject: `[${process.env.PROJECT_NAME}] 인증 메일`,
-            html: `링크 : ${process.env.FE_URL}/auth/email?token=${token}`,
+            html: `링크 : ${process.env.BE_URL}/auth/email?token=${token}`,
         });
     };
 }

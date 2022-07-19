@@ -141,12 +141,10 @@ export class GoogleStorageSerivce {
     async delete(
         files: Array<FileEntity>, //
     ): Promise<Array<FileEntity>> {
-        const key = `./key/${process.env.FILE_KEY}`;
-
         // 구글 Storage 연결
         const storage = new Storage({
             projectId: process.env.PROJECT_ID,
-            keyFilename: key,
+            keyFilename: this.key,
         }).bucket(process.env.FILE_BUCKET);
 
         // 구글 삭제
@@ -154,7 +152,7 @@ export class GoogleStorageSerivce {
             (await Promise.all(
                 files.map((file) => {
                     return new Promise((resolve, reject) => {
-                        storage.file(`${file.url}`).delete((e) => {
+                        storage.file(file.url).delete((e) => {
                             if (e) {
                                 reject(null);
                             } else {
