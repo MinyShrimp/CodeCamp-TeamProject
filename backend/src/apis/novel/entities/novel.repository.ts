@@ -103,6 +103,7 @@ export class NovelRepository {
             .leftJoinAndSelect('novel.novelIndexs', 'novelIndexs')
             .leftJoinAndSelect('novel.files', 'files')
             .where('user.id=:id', { id: dto.userID })
+            .andWhere('novel.deleteAt is null')
             .orderBy('novel.createAt', 'DESC')
             .take(this.take)
             .skip(this.take * (dto.page - 1))
@@ -131,6 +132,7 @@ export class NovelRepository {
             .leftJoinAndSelect('novel.files', 'files')
             .where('novel.id=:novelID', { novelID: dto.novelID })
             .andWhere('user.id=:userID', { userID: dto.userID })
+            .orderBy('novelIndexs.createAt', 'DESC')
             .getOne();
     }
 
@@ -150,6 +152,7 @@ export class NovelRepository {
             .where('novel.user is not null')
             .where(`novelIndexs.isPrivate = 0`)
             .where('novel.id=:novelID', { novelID: novelID })
+            .orderBy('novelIndexs.createAt', 'DESC')
             .getOne();
     }
 
@@ -259,6 +262,7 @@ export class NovelRepository {
             result = await queryRunner.manager.restore(NovelEntity, {
                 id: novelID,
             });
+            await queryRunner.commitTransaction();
         } catch (e) {
             await queryRunner.rollbackTransaction();
         } finally {
@@ -288,6 +292,7 @@ export class NovelRepository {
             result = await queryRunner.manager.softDelete(NovelEntity, {
                 id: novelID,
             });
+            await queryRunner.commitTransaction();
         } catch (e) {
             await queryRunner.rollbackTransaction();
         } finally {
