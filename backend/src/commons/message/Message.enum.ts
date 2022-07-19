@@ -167,6 +167,11 @@ export const MESSAGES = {
 
     ANSWER_RESTORE_SUCCESSED: '답변 삭제 취소 성공',
     ANSWER_RESTORE_FAILED: '답변 삭제 취소 실패',
+
+    ///////////////////////////////////////////////////////////////////
+    // 북마크 //
+    BOOKMARK_SUCCESSED: '북마크 성공',
+    BOOKMARK_CANCEL: '북마크 해제',
 } as const;
 
 export type MESSAGES = typeof MESSAGES[keyof typeof MESSAGES];
