@@ -83,13 +83,27 @@ export class BoardRepository {
     async findOneByBoard(
         boardID: string, //
     ): Promise<BoardEntity> {
+        return await this.boardRepository
+            .createQueryBuilder('b')
+            .leftJoinAndSelect('b.user', 'user')
+            .leftJoinAndSelect('user.userClass', 'userClass')
+            .leftJoinAndSelect('b.comments', 'comment')
+            .leftJoinAndSelect('comment.children', 'cc')
+            .leftJoinAndSelect('comment.user', 'cu')
+            .leftJoinAndSelect('cu.userClass', 'cuc')
+            .leftJoinAndSelect('cc.user', 'ccu')
+            .leftJoinAndSelect('ccu.userClass', 'ccuc')
+            .where('b.id = :id', { id: boardID })
+            .andWhere('comment.parentID is null')
+            .orderBy('comment.createAt')
+            .addOrderBy('cc.createAt')
+            .getOne();
+
         return await this.boardRepository.findOne({
             relations: [
                 'user',
                 'comments',
-                'comments.parent',
                 'comments.children',
-                'comments.board',
                 'comments.user',
             ],
             where: { id: boardID },
