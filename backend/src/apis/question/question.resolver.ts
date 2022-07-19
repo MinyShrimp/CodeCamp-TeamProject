@@ -39,6 +39,18 @@ export class QuestionResolver {
         return await this.questionService.findOne(questionID);
     }
 
+    /** 유저ID로 문의 조회 */
+    @UseGuards(GqlJwtAccessGuard)
+    @Query(
+        () => [QuestionEntity], //
+        { description: '유저ID로 문의사항 조회' },
+    )
+    async fetchQuestionByID(
+        @CurrentUser() currentUser: IPayload, //
+    ): Promise<QuestionEntity[]> {
+        return await this.questionService.findByID(currentUser);
+    }
+
     ///////////////////////////////////////////////////////////////////
     // 생성 //
 

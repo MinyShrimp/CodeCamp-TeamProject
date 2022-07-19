@@ -52,6 +52,6 @@ export class QuestionEntity {
         () => AnswerEntity, //
         (answer) => answer.question,
     )
-    @Field(() => AnswerEntity)
+    @Field(() => AnswerEntity, { nullable: true })
     answer: AnswerEntity;
 }
