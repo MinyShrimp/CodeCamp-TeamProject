@@ -23,8 +23,8 @@ export class BookmarkEntity {
 
     @Min(0)
     @IsInt()
-    @Column()
-    @Field(() => Int, { description: '페이지' })
+    @Column({ nullable: true })
+    @Field(() => Int, { description: '페이지', nullable: true })
     page: number;
 
     @CreateDateColumn()
@@ -34,15 +34,9 @@ export class BookmarkEntity {
     @DeleteDateColumn()
     deleteAt: Date;
 
-    @Column()
-    @Field(() => Boolean, {
-        description: '북마크 체크 여부',
-    })
-    isBoolean?: boolean;
-
     @ManyToOne(
         () => UserEntity, //
-        { cascade: true, onDelete: 'CASCADE' },
+        { cascade: true, onDelete: 'CASCADE', nullable: true },
     )
     @JoinColumn()
     @Field(() => UserEntity)
@@ -50,7 +44,7 @@ export class BookmarkEntity {
 
     @ManyToOne(
         () => NovelIndexEntity, //
-        { cascade: true, onDelete: 'CASCADE' },
+        { cascade: true, onDelete: 'CASCADE', nullable: true },
     )
     @JoinColumn()
     @Field(() => NovelIndexEntity)
