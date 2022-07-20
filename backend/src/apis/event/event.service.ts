@@ -4,6 +4,7 @@ import { MESSAGES } from 'src/commons/message/Message.enum';
 import { UserRepository } from '../user/entities/user.repository';
 
 import { EventEntity } from './entities/event.entity';
+import { FileRepository } from '../file/entities/file.repository';
 import { EventRepository } from './entities/event.repository';
 import { CreateEventInput } from './dto/createEvent.input';
 import { UpdateEventInput } from './dto/updateEvent.input';
@@ -13,6 +14,7 @@ export class EventService {
     constructor(
         private readonly eventRepository: EventRepository, //
         private readonly userRepository: UserRepository,
+        private readonly fileRepository: FileRepository,
     ) {}
 
     /** 관리자 여부 판별 */
@@ -69,11 +71,17 @@ export class EventService {
         userID: string, //
         input: CreateEventInput,
     ): Promise<EventEntity> {
+        const { fileURLs, ...rest } = input;
+
         // 관리자 여부 판별
         const user = await this.checkAdmin(userID);
 
+        // 이미지 업로드
+        const uploadFiles = await this.fileRepository.findBulkByUrl(fileURLs);
+
         return await this.eventRepository.save({
             user,
+            files: uploadFiles,
             ...input,
         });
     }

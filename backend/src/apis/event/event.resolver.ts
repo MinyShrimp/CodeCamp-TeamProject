@@ -4,13 +4,13 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { MESSAGES } from 'src/commons/message/Message.enum';
 import { IPayload } from 'src/commons/interfaces/Payload.interface';
 import { CurrentUser } from 'src/commons/auth/gql-user.param';
+import { ResultMessage } from 'src/commons/message/ResultMessage.dto';
 import { GqlJwtAccessGuard } from 'src/commons/auth/gql-auth.guard';
 
 import { EventEntity } from './entities/event.entity';
 import { EventService } from './event.service';
 import { CreateEventInput } from './dto/createEvent.input';
 import { UpdateEventInput } from './dto/updateEvent.input';
-import { ResultMessage } from 'src/commons/message/ResultMessage.dto';
 
 @Resolver()
 export class EventResolver {
