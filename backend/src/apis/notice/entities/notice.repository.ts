@@ -17,14 +17,15 @@ export class NoticeRepository {
     /** 전체 조회 (삭제 데이터 포함X) */
     async findAll(): Promise<NoticeEntity[]> {
         return await this.noticeRepository.find({
-            relations: ['user'],
+            relations: ['user', 'user.userClass', 'files'],
+            order: { createAt: 'DESC' },
         });
     }
 
     /** 전체 조회(삭제 데이터 포함) */
     async find(): Promise<NoticeEntity[]> {
         return await this.noticeRepository.find({
-            relations: ['user'],
+            relations: ['user', 'user.userClass', 'files'],
             withDeleted: true,
         });
     }

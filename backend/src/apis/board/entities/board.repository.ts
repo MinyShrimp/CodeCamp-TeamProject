@@ -61,7 +61,8 @@ export class BoardRepository {
      */
     async findAll(): Promise<BoardEntity[]> {
         return await this.boardRepository.find({
-            relations: ['user', 'comments'],
+            relations: ['user', 'comments', 'user.userClass', 'files'],
+            order: { createAt: 'DESC' },
         });
     }
 
