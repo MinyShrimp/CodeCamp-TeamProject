@@ -8,9 +8,6 @@ export class CreateCommentInput extends PickType(
     ['contents'], //
     InputType,
 ) {
-    @Field(() => String, { description: '댓글', nullable: true })
-    parent?: CommentEntity;
-
-    @Field(() => [String], { description: '대댓글', nullable: true })
-    children?: CommentEntity[];
+    @Field(() => String, { description: '댓글 ID', nullable: true })
+    parentID?: string;
 }

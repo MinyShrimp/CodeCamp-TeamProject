@@ -11,20 +11,32 @@ export class EventRepository {
         private readonly eventRepository: Repository<EventEntity>,
     ) {}
 
+    private readonly _selector = [
+        'e.id',
+        'e.contents',
+        'e.title',
+        'e.isEvent',
+        'e.startAt',
+        'e.endAt',
+        'e.createAt',
+        'e.updateAt',
+    ];
+
     ///////////////////////////////////////////////////////////////////
     // 조회 //
 
     /** 전체 조회 (삭제 데이터 포함X) */
     async findAll(): Promise<EventEntity[]> {
         return await this.eventRepository.find({
-            relations: ['user', 'user.userClass'],
+            relations: ['user', 'user.userClass', 'files'],
+            order: { createAt: 'DESC' },
         });
     }
 
     /** 전체 조회(삭제 데이터 포함) */
     async find(): Promise<EventEntity[]> {
         return await this.eventRepository.find({
-            relations: ['user'],
+            relations: ['user', 'user.userClass', 'files'],
             withDeleted: true,
         });
     }
@@ -34,7 +46,7 @@ export class EventRepository {
         id: string, //
     ): Promise<EventEntity> {
         return await this.eventRepository.findOne({
-            relations: ['user', 'user.userClass'],
+            relations: ['user', 'user.userClass', 'files'],
             where: { id },
         });
     }

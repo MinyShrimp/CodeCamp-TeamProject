@@ -72,6 +72,9 @@ export class NovelIndexEntity {
     @Field(() => Boolean, { description: '비공개 여부' })
     isPrivate: boolean;
 
+    @Field(() => Boolean, { description: '구매 여부', defaultValue: false })
+    isBuy: boolean;
+
     @CreateDateColumn()
     @Field(() => Date, { description: '생성 시간' })
     createAt: Date;

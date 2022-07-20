@@ -1,26 +1,27 @@
+import { UpdateResult } from 'typeorm';
 import { ConflictException, Injectable, Logger } from '@nestjs/common';
 
 import { MESSAGES } from 'src/commons/message/Message.enum';
-
-import { FileRepository } from '../file/entities/file.repository';
+import { IPayload } from 'src/commons/interfaces/Payload.interface';
 
 import { UserService } from '../user/user.service';
+import { UserRepository } from '../user/entities/user.repository';
+import { FileRepository } from '../file/entities/file.repository';
 import { NovelTagService } from '../novelTag/novelTag.service';
 import { NovelCategoryService } from '../novelCategory/novelCategory.service';
 
+import { NovelDto } from './dto/novel.dto';
 import { NovelEntity } from './entities/novel.entity';
 import { NovelRepository } from './entities/novel.repository';
 import { CreateNovelInput } from './dto/createNovel.input';
 import { UpdateNovelInput } from './dto/updateNovel.input';
-import { IPayload } from 'src/commons/interfaces/Payload.interface';
-import { UpdateResult } from 'typeorm';
-import { NovelDto } from './dto/novel.dto';
 
 @Injectable()
 export class NovelService {
     constructor(
         private readonly fileRepository: FileRepository,
         private readonly userService: UserService,
+        private readonly userRepository: UserRepository,
         private readonly novelTagService: NovelTagService,
         private readonly novelCategoryService: NovelCategoryService,
 
@@ -83,7 +84,9 @@ export class NovelService {
     /**
      * 연재 주기 검사
      */
-    private getCycle(cycles: number[]) {
+    private getCycle(
+        cycles: number[], //
+    ) {
         const cycle = cycles.join('|');
         if (cycles.length === 0) {
             throw new ConflictException('연재 주기 값을 확인해주세요.');
@@ -94,6 +97,38 @@ export class NovelService {
             }
         }
         return cycle;
+    }
+
+    async getDetail(dto: {
+        userEmail?: string;
+        novelID: string;
+    }): Promise<NovelEntity> {
+        const novel = await this.novelRepository.getOne(dto.novelID);
+
+        if (!novel) {
+            throw new ConflictException('소설 정보를 찾을 수 없습니다.');
+        }
+
+        if (dto.userEmail !== undefined) {
+            const userID = (
+                await this.userRepository.findOneByEmail(dto.userEmail)
+            ).id;
+            const paids = await this.novelRepository.getPointPayments({
+                userID: userID,
+                novelID: dto.novelID,
+            });
+            const paid_ids = paids.map((v) => v.id);
+
+            novel.novelIndexs.forEach((ni) => {
+                paid_ids.forEach((pi) => {
+                    if (ni.id === pi) {
+                        ni.isBuy = true;
+                    }
+                });
+            });
+        }
+
+        return novel;
     }
 
     /**

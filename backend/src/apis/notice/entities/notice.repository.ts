@@ -17,26 +17,38 @@ export class NoticeRepository {
     /** 전체 조회 (삭제 데이터 포함X) */
     async findAll(): Promise<NoticeEntity[]> {
         return await this.noticeRepository.find({
-            relations: ['user'],
+            relations: ['user', 'user.userClass', 'files'],
+            order: { createAt: 'DESC' },
         });
     }
 
     /** 전체 조회(삭제 데이터 포함) */
     async find(): Promise<NoticeEntity[]> {
         return await this.noticeRepository.find({
-            relations: ['user'],
+            relations: ['user', 'user.userClass', 'files'],
             withDeleted: true,
         });
     }
 
     /** ID 기반 조회 */
+    // async findOneByID(
+    //     id: string, //
+    // ): Promise<NoticeEntity> {
+    //     return await this.noticeRepository.findOne({
+    //         relations: ['user', 'user.userClass'],
+    //         where: { id },
+    //     });
+    // }
     async findOneByID(
         id: string, //
     ): Promise<NoticeEntity> {
-        return await this.noticeRepository.findOne({
-            relations: ['user', 'user.userClass'],
-            where: { id },
-        });
+        return await this.noticeRepository
+            .createQueryBuilder('n')
+            .leftJoinAndSelect('n.user', 'user')
+            .leftJoinAndSelect('n.files', 'file')
+            .where('n.id=:id', { id })
+            .orderBy('n.createAt')
+            .getOne();
     }
 
     /** 유저 ID 기반 조회( 삭제 데이터 포함 ) */

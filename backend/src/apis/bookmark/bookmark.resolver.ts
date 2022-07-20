@@ -29,21 +29,48 @@ export class BookmarkResolver {
     }
 
     // 북마크 등록 및 해제
+    // @UseGuards(GqlJwtAccessGuard)
+    // @Mutation(
+    //     () => ResultMessage, //
+    //     { description: '북마크 등록 및 해제' },
+    // )
+    // async toggleBookmark(
+    //     @CurrentUser() currentUser: IPayload, //
+    //     @Args('createBookmarkInput') dto: CreateBookmarkDto,
+    // ): Promise<ResultMessage> {
+    //     const result = await this.bookmarkService.switch(currentUser.id, dto);
+    //     return new ResultMessage({
+    //         isSuccess: result,
+    //         contents: result
+    //             ? MESSAGES.BOOKMARK_SUCCESSED
+    //             : MESSAGES.BOOKMARK_CANCEL,
+    //     });
+    // }
+
+    // 북마크 등록
     @UseGuards(GqlJwtAccessGuard)
     @Mutation(
-        () => ResultMessage, //
-        { description: '북마크 등록 및 해제' },
+        () => ResultMessage,
+        { description: '북마크 등록 및 해제' }, //
     )
-    async toggleBookmark(
-        @CurrentUser() currentUser: IPayload, //
-        @Args('createBookmarkInput') dto: CreateBookmarkDto,
+    async switchBookmark(
+        @CurrentUser() currentUser: IPayload,
+        @Args({
+            name: 'novelIndexID', //
+            description: '소설 인덱스 UUID',
+        })
+        novelIndexID: string, //
+
+        @Args({
+            name: 'page', //
+            description: '북마크 페이지',
+        })
+        page: number,
     ): Promise<ResultMessage> {
-        const result = await this.bookmarkService.switch(currentUser.id, dto);
-        return new ResultMessage({
-            isSuccess: result,
-            contents: result
-                ? MESSAGES.BOOKMARK_SUCCESSED
-                : MESSAGES.BOOKMARK_CANCEL,
+        return await this.bookmarkService.switch({
+            userID: currentUser.id,
+            novelIndexID: novelIndexID,
+            page,
         });
     }
 }

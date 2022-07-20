@@ -41,9 +41,13 @@ export class NovelResolver {
         { description: '소설 Detail 조회' },
     )
     fetchNovelDetail(
+        @Args({ name: 'userEmail', nullable: true }) userEmail: string, //
         @Args('novelID') novelID: string, //
     ): Promise<NovelEntity> {
-        return this.novelRepository.getOne(novelID);
+        return this.novelService.getDetail({
+            userEmail: userEmail,
+            novelID: novelID,
+        });
     }
 
     @UseGuards(GqlJwtAccessGuard)

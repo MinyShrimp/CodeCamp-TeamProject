@@ -32,15 +32,15 @@ export class CommentResolver {
 
     ////////////////////////////////////////////////////////////////////////
     /** 보드ID로 해당 게시글의 댓글 조회  */
-    @Query(
-        () => [CommentEntity], //
-        { description: '해당 게시글의 모든 댓글 조회' },
-    )
-    fetchCommentsFromBoard(
-        @Args('boardID') boardID: string, //
-    ): Promise<CommentEntity[]> {
-        return this.commentService.findCommentsFromBoard(boardID);
-    }
+    // @Query(
+    //     () => [CommentEntity], //
+    //     { description: '해당 게시글의 모든 댓글 조회' },
+    // )
+    // fetchCommentsFromBoard(
+    //     @Args('boardID') boardID: string, //
+    // ): Promise<CommentEntity[]> {
+    //     return this.commentService.findCommentsFromBoard(boardID);
+    // }
 
     ////////////////////////////////////////////////////////////////////////
 

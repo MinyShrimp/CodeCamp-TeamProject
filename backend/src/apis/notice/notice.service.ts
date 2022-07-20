@@ -1,6 +1,7 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 
 import { MESSAGES } from 'src/commons/message/Message.enum';
+import { FileRepository } from '../file/entities/file.repository';
 import { UserRepository } from '../user/entities/user.repository';
 
 import { NoticeEntity } from './entities/notice.entity';
@@ -13,6 +14,7 @@ export class NoticeService {
     constructor(
         private readonly noticeRepository: NoticeRepository, //
         private readonly userRepository: UserRepository,
+        private readonly fileRepository: FileRepository,
     ) {}
 
     /** 관리자 여부 판별 */
@@ -69,11 +71,20 @@ export class NoticeService {
         userID: string, //
         input: CreateNoticeInput,
     ): Promise<NoticeEntity> {
+        const { fileURLs, ...rest } = input;
+
         // 관리자 여부 판별
-        const user = await this.checkAdmin(userID);
+        // const user = await this.checkAdmin(userID);
+
+        // 권한X 유저 존재 유무 판별
+        const user = await this.userRepository.findOneByID(userID);
+
+        // 이미지 업로드
+        const uploadFiles = await this.fileRepository.findBulkByUrl(fileURLs);
 
         return await this.noticeRepository.save({
             user,
+            files: uploadFiles,
             ...input,
         });
     }

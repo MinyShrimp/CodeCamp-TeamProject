@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { FileModule } from '../file/file.module';
 import { UserModule } from '../user/user.module';
 import { NovelTagModule } from '../novelTag/novelTag.module';
+import { PaymentPointEntity } from '../paymentPoint/entities/paymentPoint.entity';
 import { NovelCategoryModule } from '../novelCategory/novelCategory.module';
 
 import { NovelEntity } from './entities/novel.entity';
@@ -18,6 +19,7 @@ import { NovelAdminController } from './novel.admin.controller';
     imports: [
         TypeOrmModule.forFeature([
             NovelEntity, //
+            PaymentPointEntity,
         ]),
 
         FileModule,
