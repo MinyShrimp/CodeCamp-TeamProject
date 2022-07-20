@@ -38,11 +38,11 @@ export class CommentService {
     /**
      *  해당 게시글의 모든 댓글 조회
      */
-    async findCommentsFromBoard(
-        boardID: string, //
-    ): Promise<CommentEntity[]> {
-        return await this.commentRepository.findByBoardIDFromComment(boardID);
-    }
+    // async findCommentsFromBoard(
+    //     boardID: string, //
+    // ): Promise<CommentEntity[]> {
+    //     return await this.commentRepository.findByBoardIDFromComment(boardID);
+    // }
 
     /**
      * 특정 댓글 조회

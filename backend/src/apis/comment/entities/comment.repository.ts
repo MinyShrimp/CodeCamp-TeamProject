@@ -78,14 +78,14 @@ export class CommentRepository {
     /**
      * 보드ID 기반 조회
      */
-    async findByBoardIDFromComment(
-        boardID: string, //
-    ): Promise<CommentEntity[]> {
-        return await this.commentRepository.find({
-            relations: ['board', 'user', 'parent', 'children'],
-            where: { board: boardID },
-        });
-    }
+    // async findByBoardIDFromComment(
+    //     boardID: string, //
+    // ): Promise<CommentEntity[]> {
+    //     return await this.commentRepository.find({
+    //         relations: ['board', 'user', 'parent', 'children'],
+    //         where: { board: boardID },
+    //     });
+    // }
 
     // async findByBoardIDFromComment(
     //     boardID: string, //
