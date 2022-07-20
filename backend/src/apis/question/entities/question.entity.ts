@@ -54,4 +54,11 @@ export class QuestionEntity {
     )
     @Field(() => AnswerEntity, { nullable: true })
     answer: AnswerEntity;
+
+    @Column()
+    @Field(() => Boolean, {
+        description: '답변 등록 여부',
+        defaultValue: false,
+    })
+    status: boolean;
 }
