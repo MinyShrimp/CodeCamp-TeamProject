@@ -52,10 +52,9 @@ export class BookmarkRepository {
         return await this.bookmarkRepository
             .createQueryBuilder('bm')
             .select([
-                'bm.id',
+                'bm.id', //
                 'bm.userID',
                 'bm.novelIndexID',
-                'bm.isBoolean',
                 'bm.page',
             ])
             .where('bm.userID=:userID', { userID: userID })
@@ -64,6 +63,33 @@ export class BookmarkRepository {
             })
             .andWhere('bm.page=:page', {
                 page: dto.page,
+            })
+            .getOne();
+    }
+
+    async checkOverlap(
+        dto: CreateBookmarkDto, //
+    ): Promise<BookmarkEntity> {
+        console.log(
+            await this.bookmarkRepository
+                .createQueryBuilder('bm')
+                .select(['bm.id', 'bm.user', 'bm.novelIndex', 'bm.page'])
+                .leftJoinAndSelect('bm.user', 'UserEntity')
+                .leftJoinAndSelect('bm.novelIndex', 'NovelIndexEntity')
+                .where('bm.user=:userID', { userID: dto.userID })
+                .andWhere('bm.novelIndex=:novelIndexID', {
+                    novelIndexID: dto.novelIndexID,
+                })
+                .getOne(),
+        );
+        return await this.bookmarkRepository
+            .createQueryBuilder('bm')
+            .select(['bm.id', 'bm.user', 'bm.novelIndex', 'bm.page'])
+            .leftJoinAndSelect('bm.user', 'UserEntity')
+            .leftJoinAndSelect('bm.novelIndex', 'NovelIndexEntity')
+            .where('bm.user=:userID', { userID: dto.userID })
+            .andWhere('bm.novelIndex=:novelIndexID', {
+                novelIndexID: dto.novelIndexID,
             })
             .getOne();
     }
