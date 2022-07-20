@@ -1,4 +1,5 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { FileEntity } from 'src/apis/file/entities/file.entity';
 import { UserEntity } from 'src/apis/user/entities/user.entity';
 import {
     Entity,
@@ -9,6 +10,7 @@ import {
     UpdateDateColumn,
     DeleteDateColumn,
     PrimaryGeneratedColumn,
+    OneToMany,
 } from 'typeorm';
 
 /* Notice Entity */
@@ -41,6 +43,13 @@ export class NoticeEntity {
 
     @DeleteDateColumn()
     deleteAt: Date;
+
+    @OneToMany(
+        () => FileEntity, //
+        (file) => file.notice,
+    )
+    @Field(() => [FileEntity], { nullable: true })
+    files?: FileEntity[];
 
     @ManyToOne(
         () => UserEntity,

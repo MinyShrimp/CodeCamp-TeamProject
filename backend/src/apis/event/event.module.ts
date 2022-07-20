@@ -3,7 +3,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { UserModule } from '../user/user.module';
 import { UserEntity } from '../user/entities/user.entity';
+import { FileEntity } from '../file/entities/file.entity';
+import { FileModule } from '../file/file.module';
 import { UserRepository } from '../user/entities/user.repository';
+import { FileRepository } from '../file/entities/file.repository';
 
 import { EventEntity } from './entities/event.entity';
 import { EventService } from './event.service';
@@ -17,8 +20,10 @@ import { EventAdminRepository } from './entities/event.admin.repository';
         TypeOrmModule.forFeature([
             EventEntity, //
             UserEntity,
+            FileEntity,
         ]),
         UserModule,
+        FileModule,
     ],
     controllers: [
         EventAdminController, //
@@ -26,6 +31,7 @@ import { EventAdminRepository } from './entities/event.admin.repository';
     providers: [
         EventAdminRepository, //
         EventRepository,
+        FileRepository,
         UserRepository,
         EventResolver,
         EventService,

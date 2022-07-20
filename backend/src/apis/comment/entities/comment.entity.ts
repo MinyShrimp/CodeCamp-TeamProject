@@ -1,17 +1,15 @@
 import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
 import { IsInt, Min } from 'class-validator';
 import {
-    Tree,
     Entity,
     Column,
     ManyToOne,
     JoinColumn,
-    TreeParent,
-    TreeChildren,
     CreateDateColumn,
     UpdateDateColumn,
     DeleteDateColumn,
     PrimaryGeneratedColumn,
+    OneToMany,
 } from 'typeorm';
 
 import { UserEntity } from 'src/apis/user/entities/user.entity';
@@ -19,7 +17,6 @@ import { BoardEntity } from 'src/apis/board/entities/board.entity';
 
 /* Comment Entity */
 @Entity({ name: 'comment' })
-@Tree('closure-table')
 @ObjectType({ description: '댓글 Entity' })
 export class CommentEntity {
     @PrimaryGeneratedColumn('uuid')
@@ -70,14 +67,14 @@ export class CommentEntity {
     user: UserEntity;
 
     // 댓글 부모
-    @TreeParent()
+    @ManyToOne(() => CommentEntity, (cmt) => cmt.children)
     parent: CommentEntity;
 
     @Column({ name: 'parentId', nullable: true })
     parentID: string;
 
     // 댓글 자식 - 대댓글
-    @TreeChildren()
+    @OneToMany(() => CommentEntity, (cmt) => cmt.parent)
     @Field(() => [CommentEntity], { description: '대댓글' })
     children: CommentEntity[];
 }
