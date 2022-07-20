@@ -1,4 +1,3 @@
-import { EntityManager } from 'typeorm';
 import { ConflictException, Injectable } from '@nestjs/common';
 
 import { MESSAGES } from 'src/commons/message/Message.enum';
@@ -11,7 +10,6 @@ import { CommentEntity } from './entities/comment.entity';
 import { CommentRepository } from './entities/comment.repository';
 import { CreateCommentInput } from './dto/createComment.input';
 import { UpdateCommentInput } from './dto/updateComment.input';
-import { InjectEntityManager } from '@nestjs/typeorm';
 
 @Injectable()
 export class CommentService {
@@ -19,9 +17,6 @@ export class CommentService {
         private readonly commentRepository: CommentRepository, //
         private readonly boardRepository: BoardRepository,
         private readonly userRepository: UserRepository,
-
-        @InjectEntityManager()
-        private readonly manager: EntityManager,
     ) {}
 
     ///////////////////////////////////////////////////////////////////
@@ -31,8 +26,7 @@ export class CommentService {
      *  모든 댓글 조회
      */
     async findAll(): Promise<CommentEntity[]> {
-        const manager = this.manager.getTreeRepository(CommentEntity);
-        return await manager.findTrees();
+        return await this.commentRepository.findAll();
     }
 
     /**
@@ -50,7 +44,7 @@ export class CommentService {
     async find(
         commentID: string, //
     ): Promise<CommentEntity> {
-        return await this.commentRepository.findOneByCommentOnlyOne(commentID);
+        return await this.commentRepository.findOneByComment(commentID);
     }
 
     /**
@@ -70,38 +64,38 @@ export class CommentService {
         boardID: string,
         input: CreateCommentInput, //
     ): Promise<CommentEntity> {
-        const { parent, children, ...contents } = input;
+        const { parentID, ...contents } = input;
         const user = await this.userRepository.findOneByID(userID);
         const board = await this.boardRepository.findOneByBoard(boardID);
-        const manager = this.manager.getTreeRepository(CommentEntity);
-
-        console.log(input);
 
         // 게시글이 존재하지 않을 시 에러
-        if (board === undefined || board === null) {
+        if (!board || !user) {
             throw new ConflictException(
                 MESSAGES.BOARD_FIND_ONE_FAILED, //
             );
         }
 
         // 부모ID 입력 여부로 댓글 과 대댓글 분류
-        if (!input.parent) {
-            return await this.commentRepository.save({
-                user,
-                board,
-                ...contents,
+        if (!parentID) {
+            const cmt = this.commentRepository.create({
+                user: user,
+                board: board,
+                contents: input.contents,
             });
+            return await this.commentRepository.save(cmt);
         } else {
-            const parent = await manager.findOne({
-                where: { id: input.parent },
+            const parent = await this.commentRepository.findOneByComment(
+                parentID,
+            );
+
+            const cmt = this.commentRepository.create({
+                user: user,
+                board: board,
+                parent: parent,
+                contents: input.contents,
             });
-            return await this.commentRepository.save({
-                board,
-                user,
-                ...input,
-                parent,
-                children,
-            });
+
+            return await this.commentRepository.save(cmt);
         }
     }
 
@@ -112,6 +106,7 @@ export class CommentService {
         input: UpdateCommentInput, //
     ): Promise<CommentEntity> {
         const comment = await this.commentRepository.findOneByComment(input.id);
+
         if (!comment) {
             throw new ConflictException(
                 MESSAGES.COMMENT_UPDATE_FAILED, //
@@ -120,7 +115,7 @@ export class CommentService {
 
         return await this.commentRepository.save({
             ...comment,
-            ...input,
+            contents: input.contents,
         });
     }
 

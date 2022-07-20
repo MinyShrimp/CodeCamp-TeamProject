@@ -16,6 +16,7 @@ import { EmailEntity } from '../email/entities/email.entity';
 import { AuthController } from './auth.controller';
 import { AuthResolver } from './auth.resolver';
 import { AuthService } from './auth.service';
+import { JwtAdminStrategy } from 'src/commons/auth/jwt-admin.strategy';
 
 @Module({
     imports: [
@@ -33,6 +34,7 @@ import { AuthService } from './auth.service';
         OAuthNaverStrategy,
         JwtRefreshStrategy,
         JwtAccessStrategy,
+        JwtAdminStrategy,
 
         AuthResolver,
         AuthService,
