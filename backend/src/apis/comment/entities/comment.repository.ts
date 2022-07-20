@@ -1,23 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 import { CommentEntity } from './comment.entity';
 
 @Injectable()
 export class CommentRepository {
     constructor(
         @InjectRepository(CommentEntity)
-        private readonly commentRepository: Repository<CommentEntity>, //
+        private readonly commentRepository: Repository<CommentEntity>,
     ) {}
-
-    private readonly _selector = [
-        'cm.id',
-        'cm.contents',
-        'cm.likeCount',
-        'cm.dislikeCount',
-        'cm.createAt',
-        'cm.updateAt',
-    ];
 
     ///////////////////////////////////////////////////////////////////
     // 조회 //
@@ -26,9 +17,18 @@ export class CommentRepository {
      * 모든 댓글 조회
      */
     async findAll(): Promise<CommentEntity[]> {
-        return await this.commentRepository.find({
-            relations: ['board', 'user'],
-        });
+        return await this.commentRepository
+            .createQueryBuilder('c')
+            .leftJoinAndSelect('c.board', 'board')
+            .leftJoinAndSelect('c.user', 'user')
+            .leftJoinAndSelect('user.userClass', 'uc')
+            .leftJoinAndSelect('c.children', 'children')
+            .leftJoinAndSelect('children.user', 'cu')
+            .leftJoinAndSelect('cu.userClass', 'cuc')
+            .where('c.parentID is null')
+            .orderBy('c.createAt')
+            .addOrderBy('children.createAt')
+            .getMany();
     }
 
     /**
@@ -36,72 +36,69 @@ export class CommentRepository {
      */
     async findOneByComment(
         commentID: string, //
-    ): Promise<CommentEntity[]> {
-        console.log('여기 레포 =====', commentID);
-        return await this.commentRepository.find({
-            relations: [
-                'board',
-                'user',
-                'parent',
-                'children',
-                'children.children',
-            ],
-            where: { id: commentID },
-        });
-    }
-
-    /**
-     * 댓글 ID 기반 조회
-     */
-    async findOneByCommentOnlyOne(
-        commentID: string, //
     ): Promise<CommentEntity> {
-        return await this.commentRepository.findOne({
-            relations: ['user', 'board', 'parent', 'children'],
-            where: { id: commentID },
-        });
+        return await this.commentRepository
+            .createQueryBuilder('c')
+            .leftJoinAndSelect('c.board', 'board')
+            .leftJoinAndSelect('c.user', 'user')
+            .leftJoinAndSelect('user.userClass', 'uc')
+            .leftJoinAndSelect('c.children', 'children')
+            .leftJoinAndSelect('children.user', 'cu')
+            .leftJoinAndSelect('cu.userClass', 'cuc')
+            .where('c.id=:id', { id: commentID })
+            .orderBy('c.createAt')
+            .addOrderBy('children.createAt')
+            .getOne();
     }
 
     /**
      *  유저 ID 기반 조회
      */
-
     async findByIDFromComments(
         userID: string, //
     ): Promise<CommentEntity[]> {
-        return await this.commentRepository.find({
-            relations: ['board', 'user', 'parent', 'children'],
-            where: { user: userID },
-        });
+        return await this.commentRepository
+            .createQueryBuilder('c')
+            .leftJoinAndSelect('c.board', 'board')
+            .leftJoinAndSelect('c.user', 'user')
+            .leftJoinAndSelect('user.userClass', 'uc')
+            .leftJoinAndSelect('c.children', 'children')
+            .leftJoinAndSelect('children.user', 'cu')
+            .leftJoinAndSelect('cu.userClass', 'cuc')
+            .where('c.parentID is null')
+            .andWhere('user.id=:id', { id: userID })
+            .orderBy('c.createAt')
+            .addOrderBy('children.createAt')
+            .getMany();
     }
 
     /**
      * 보드ID 기반 조회
      */
-    // async findByBoardIDFromComment(
-    //     boardID: string, //
-    // ): Promise<CommentEntity[]> {
-    //     return await this.commentRepository.find({
-    //         relations: ['board', 'user', 'parent', 'children'],
-    //         where: { board: boardID },
-    //     });
-    // }
-
-    // async findByBoardIDFromComment(
-    //     boardID: string, //
-    // ): Promise<CommentEntity[]> {
-    //     return await this.commentRepository
-    //         .createQueryBuilder('cm')
-    //         .select([...this._selector, 'board.id', 'user.id', 'parent.id'])
-    //         .leftJoin('cm.board', 'board')
-    //         .leftJoin('cm.user', 'user')
-    //         .where('cm.deleteAt is NULL')
-    //         .andWhere('board.id=:boardID', { boarID: boardID })
-    //         .getMany();
-    // }
+    async findByBoardIDFromComment(
+        boardID: string, //
+    ): Promise<CommentEntity[]> {
+        return await this.commentRepository
+            .createQueryBuilder('c')
+            .leftJoinAndSelect('c.board', 'board')
+            .leftJoinAndSelect('c.user', 'user')
+            .leftJoinAndSelect('user.userClass', 'uc')
+            .leftJoinAndSelect('c.children', 'children')
+            .leftJoinAndSelect('children.user', 'cu')
+            .leftJoinAndSelect('cu.userClass', 'cuc')
+            .where('c.parentID is null')
+            .andWhere('board.id=:id', { id: boardID })
+            .getMany();
+    }
 
     ///////////////////////////////////////////////////////////////////
     // 생성 //
+    create(
+        entity: Partial<CommentEntity>, //
+    ): CommentEntity {
+        return this.commentRepository.create(entity);
+    }
+
     async save(
         entity: Partial<CommentEntity>, //
     ): Promise<CommentEntity> {
@@ -113,7 +110,9 @@ export class CommentRepository {
 
     async softDelete(
         commentID: string, //
-    ) {
-        return await this.commentRepository.softDelete(commentID);
+    ): Promise<UpdateResult> {
+        return await this.commentRepository.softDelete({
+            id: commentID,
+        });
     }
 }

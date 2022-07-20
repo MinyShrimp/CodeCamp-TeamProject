@@ -62,8 +62,8 @@ import { ReportModule } from './apis/report/report.module';
 import { ReportEnumModule } from './apis/reportEnum/reportEnum.module';
 
 import { FileModule } from './apis/file/file.module';
-import { TempStorageModule } from './apis/tempStorage/tempStorage.module';
 import { LoggerModule } from './apis/logger/logger.module';
+import { TempStorageModule } from './apis/tempStorage/tempStorage.module';
 
 ///////////////////////////////////////////////////////////////////////////
 @Module({
