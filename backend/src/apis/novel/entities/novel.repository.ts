@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Connection, Repository, UpdateResult } from 'typeorm';
 
 import { NovelIndexEntity } from 'src/apis/novelIndex/entities/novelIndex.entity';
+import { PaymentPointEntity } from 'src/apis/paymentPoint/entities/paymentPoint.entity';
 
 import { NovelDto } from '../dto/novel.dto';
 import { FetchNovelsOutput } from '../dto/fetchNovels.output';
@@ -16,10 +17,37 @@ export class NovelRepository {
     constructor(
         @InjectRepository(NovelEntity)
         private readonly novelRepository: Repository<NovelEntity>,
+        @InjectRepository(PaymentPointEntity)
+        private readonly paymentPointRepository: Repository<PaymentPointEntity>,
         private readonly connection: Connection,
     ) {}
 
     private readonly take = 10;
+
+    async getPointPayments(
+        dto: NovelDto, //
+    ): Promise<NovelIndexEntity[]> {
+        const paids = await this.paymentPointRepository
+            .createQueryBuilder('pp')
+            .withDeleted()
+            .andWhere('pp.deletedAt IS NULL')
+            .leftJoinAndSelect('pp.status', 'pps')
+            .leftJoinAndSelect('pp.user', 'ppu')
+            .leftJoinAndSelect('ppu.userClass', 'ppuc')
+            .leftJoinAndSelect('pp.novelIndex', 'ppni')
+            .leftJoinAndSelect('ppni.novel', 'ppnin')
+            .leftJoinAndSelect('ppni.user', 'ppniu')
+            .leftJoinAndSelect('ppniu.userClass', 'ppniuc')
+            .where('pp.novelIndexID is not null')
+            .andWhere('ppu.id=:userID', { userID: dto.userID })
+            .andWhere('ppnin.id=:novelID', {
+                novelID: dto.novelID,
+            })
+            .orderBy('pp.createAt', 'ASC')
+            .getMany();
+
+        return paids.map((v) => v.novelIndex);
+    }
 
     /**
      * [전체, 카테고리, 연재 주기]별 [연재작품, 완결작품] 목록 조회, page, [최신, 좋아요]순
@@ -152,6 +180,7 @@ export class NovelRepository {
         return await this.novelRepository
             .createQueryBuilder('novel')
             .leftJoinAndSelect('novel.user', 'user')
+            .leftJoinAndSelect('user.userClass', 'userClass')
             .leftJoinAndSelect('novel.novelCategory', 'novelCategory')
             .leftJoinAndSelect('novel.novelTags', 'novelTags')
             .leftJoinAndSelect('novel.novelIndexs', 'novelIndexs')

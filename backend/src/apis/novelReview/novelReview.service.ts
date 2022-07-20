@@ -58,12 +58,13 @@ export class NovelReviewService {
     async updateReview(
         input: UpdateNovelReviewInput, //
     ): Promise<NovelReviewEntity> {
-        const novel = await this.novelRepository.getOne(input.id);
         const review = await this.novelReviewRepository.findOneByReview(
             input.id,
         );
 
-        if (!review) throw new ConflictException(MESSAGES.NOVEL_REVIEW_UNVALID);
+        if (!review) {
+            throw new ConflictException(MESSAGES.NOVEL_REVIEW_UNVALID);
+        }
 
         return await this.novelReviewRepository.save({
             ...review,

@@ -5,6 +5,7 @@ import { UserModule } from '../user/user.module';
 import { NovelModule } from '../novel/novel.module';
 import { NovelEntity } from '../novel/entities/novel.entity';
 import { NovelRepository } from '../novel/entities/novel.repository';
+import { PaymentPointEntity } from '../paymentPoint/entities/paymentPoint.entity';
 
 import { NovelReviewEntity } from './entities/novelReview.entity';
 import { NovelReviewService } from './novelReview.service';
@@ -16,8 +17,9 @@ import { NovelReviewAdminRepository } from './entities/novelReview.admin.reposit
 @Module({
     imports: [
         TypeOrmModule.forFeature([
-            NovelReviewEntity, //
             NovelEntity,
+            NovelReviewEntity, //
+            PaymentPointEntity,
         ]),
         UserModule,
         NovelModule,
