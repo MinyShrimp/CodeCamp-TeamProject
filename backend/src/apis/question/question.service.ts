@@ -8,11 +8,13 @@ import { QuestionEntity } from './entities/question.entity';
 import { QuestionRepository } from './entities/question.repository';
 import { CreateQuestionInput } from './dto/createQuestion.input';
 import { UpdateQuestionInput } from './dto/updateQuestion.input';
+import { AnswerRepository } from '../answer/entities/answer.repository';
 
 @Injectable()
 export class QuestionService {
     constructor(
         private readonly questionRepository: QuestionRepository, //
+        private readonly answerRepository: AnswerRepository,
         private readonly userRepository: UserRepository,
     ) {}
 
@@ -116,6 +118,11 @@ export class QuestionService {
         // 본인이 작성했는지 여부
         await this.checkMyself(userID, questionID);
 
+        // 문의에 달린 답변도 삭제
+        const answer = await this.questionRepository.findOneByQID(questionID);
+        await this.answerRepository.softDelete(answer.answer.id);
+
+        // 문의 삭제
         const result = await this.questionRepository.softDelete(questionID);
 
         return result.affected

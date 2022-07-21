@@ -82,7 +82,7 @@ export class BookmarkService {
             });
             console.log(result);
             return new ResultMessage({
-                isSuccess: result ? false : true,
+                isSuccess: result ? true : false,
                 contents: result ? '북마크 해제' : '북마크 등록',
             });
         } else {
