@@ -52,9 +52,7 @@ export class AnswerEntity {
     @OneToOne(
         () => QuestionEntity, //
         (question) => question.answer,
-        { cascade: true, onDelete: 'SET NULL' },
     )
-    @JoinColumn()
     @Field(() => QuestionEntity, { nullable: true })
     question: QuestionEntity;
 

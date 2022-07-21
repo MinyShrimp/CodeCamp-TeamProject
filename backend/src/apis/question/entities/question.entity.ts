@@ -22,11 +22,11 @@ export class QuestionEntity {
     id: string;
 
     @Column()
-    @Field(() => String, { description: '제목' })
+    @Field(() => String, { description: '제목', nullable: true })
     title: string;
 
     @Column({ type: 'text' })
-    @Field(() => String, { description: '내용' })
+    @Field(() => String, { description: '내용', nullable: true })
     contents: string;
 
     @CreateDateColumn()
@@ -52,12 +52,14 @@ export class QuestionEntity {
         () => AnswerEntity, //
         (answer) => answer.question,
     )
+    @JoinColumn()
     @Field(() => AnswerEntity, { nullable: true })
     answer: AnswerEntity;
 
-    @Column()
+    @Column({ default: false })
     @Field(() => Boolean, {
         description: '답변 등록 여부',
+        nullable: true,
         defaultValue: false,
     })
     status: boolean;

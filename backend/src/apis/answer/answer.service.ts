@@ -106,9 +106,18 @@ export class AnswerService {
         const question = await this.questionRepository.findOneByQID(questionID);
         if (!question) throw new ConflictException(MESSAGES.QUESTION_UNVALID);
 
+        const { status, ...rest } = question;
+
+        const isStatus = await this.questionRepository.save({
+            ...rest,
+            status: true,
+        });
+
+        console.log(isStatus);
+
         return await this.answerRepository.save({
             user,
-            question,
+            question: isStatus,
             ...input,
         });
     }

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, UpdateResult } from 'typeorm';
+import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 
 import { QuestionEntity } from './question.entity';
 
@@ -81,5 +81,11 @@ export class QuestionRepository {
         questionID: string, //
     ): Promise<UpdateResult> {
         return await this.questionRepository.softDelete(questionID);
+    }
+
+    async delete(
+        questionID: string, //
+    ): Promise<DeleteResult> {
+        return await this.questionRepository.delete(questionID);
     }
 }

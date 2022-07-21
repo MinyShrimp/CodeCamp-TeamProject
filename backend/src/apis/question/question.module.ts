@@ -11,11 +11,14 @@ import { QuestionResolver } from './question.resolver';
 import { QuestionRepository } from './entities/question.repository';
 import { QuestionAdminController } from './question.admin.controller';
 import { QuestionAdminRepository } from './entities/question.admin.repository';
+import { AnswerRepository } from '../answer/entities/answer.repository';
+import { AnswerEntity } from '../answer/entities/answer.entity';
 
 @Module({
     imports: [
         TypeOrmModule.forFeature([
             QuestionEntity, //
+            AnswerEntity,
             UserEntity,
         ]),
         UserModule,
@@ -27,6 +30,7 @@ import { QuestionAdminRepository } from './entities/question.admin.repository';
         UserRepository,
         QuestionService,
         QuestionResolver,
+        AnswerRepository,
         QuestionRepository,
         QuestionAdminRepository, //
     ],
