@@ -21,40 +21,6 @@ services:
             - 6379:6379
         restart: always
 
-    # Elastic Search
-    elasticsearch:
-        image: elasticsearch:7.17.0
-        container_name: codecamp-teamproject-elastic
-        environment:
-            discovery.type: single-node
-        ports:
-            - 9200:9200
-
-    # Media Server
-    media:
-        build:
-            context: ./media
-
-        container_name: codecamp-teamproject-media
-
-        ports:
-            - 8500:8500
-
-        env_file: ./media/.env.dev
-
-        volumes:
-            - ./media/src:/app/src
-            - ./media/resource:/app/resource
-            - ./media/dist:/app/dist
-
-            - ./media/.env.dev:/app/.env
-
-            - ./media/package.json:/app/package.json
-            - ./media/yarn.lock:/app/yarn.lock
-            - ./media/tsconfig.json:/app/tsconfig.json
-
-        restart: always
-
     # NestJS
     backend:
         # Dockerfile 설정

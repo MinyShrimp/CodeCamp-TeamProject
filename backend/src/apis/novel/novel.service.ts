@@ -109,18 +109,21 @@ export class NovelService {
             throw new ConflictException('소설 정보를 찾을 수 없습니다.');
         }
 
-        if (novel.novelReviews) {
-            const sum = novel.novelReviews.reduce(
-                (acc, cur) => acc + Number(cur.star),
-                0,
-            );
-            novel.star =
-                novel.novelReviews.length === 0
-                    ? 0
-                    : sum / novel.novelReviews.length;
-        } else {
-            novel.star = 0;
-        }
+        // 평균 별점
+        const sum = novel.novelReviews.reduce(
+            (acc, cur) => acc + Number(cur.star),
+            0,
+        );
+        novel.star =
+            novel.novelReviews.length === 0
+                ? 0
+                : sum / novel.novelReviews.length;
+
+        // 총 조회수
+        novel.viewCount = novel.novelIndexs.reduce(
+            (acc, cur) => acc + Number(cur.viewCount),
+            0,
+        );
 
         if (dto.userEmail !== undefined) {
             const userID = (
@@ -141,7 +144,7 @@ export class NovelService {
             });
         }
 
-        return novel;
+        return await this.novelRepository.update(novel);
     }
 
     /**
