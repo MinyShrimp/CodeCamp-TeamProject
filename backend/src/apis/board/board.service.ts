@@ -64,7 +64,9 @@ export class BoardService {
         this.userCheckService.checkValidUser(user);
 
         // 이미지 업로드
-        const uploadFiles = await this.fileRepository.findBulkByUrl(fileURLs);
+        const uploadFiles = await this.fileRepository.findBulkByUrl(
+            fileURLs.filter((v) => v !== ''),
+        );
 
         // 게시글 생성
         return await this.boardRepository.save({
