@@ -5,7 +5,7 @@ import { INovelTagColumn, DummyNovelTagColumn } from './interface';
 export const NovelTagIndex = EntityFactory.getEntity<INovelTagColumn>({
     name: '소설 태그',
     dummyData: DummyNovelTagColumn,
-    beURL: '/admin/novel-tag',
+    beURL: '/api/admin/novel-tag',
     baseURL: '/admin/entity/novelTag',
     list: {
         column: [

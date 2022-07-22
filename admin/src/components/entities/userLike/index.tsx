@@ -5,7 +5,7 @@ import { IUserLikeColumn, DummyUserLikeColumn } from './interface';
 export const UserLikeIndex = EntityFactory.getEntity<IUserLikeColumn>({
     name: '선호 작가',
     dummyData: DummyUserLikeColumn,
-    beURL: '/admin/userLike',
+    beURL: '/api/admin/userLike',
     baseURL: '/admin/entity/userLike',
     list: {
         column: [

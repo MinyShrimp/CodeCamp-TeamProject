@@ -5,7 +5,7 @@ import { EmailEntity } from './entities/email.entity';
 import { EmailAdminRepository } from './entities/email.admin.repository';
 
 @ApiTags('관리자/회원/이메일 인증')
-@Controller('admin/email')
+@Controller('api/admin/email')
 export class EmailAdminController {
     constructor(
         private readonly emailAdminRepository: EmailAdminRepository, //

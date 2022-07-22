@@ -11,7 +11,7 @@ module.exports = merge(common, {
     devtool: 'cheap-module-source-map',
     output: {
         filename: '[name].[contenthash].js',
-        path: path.resolve(__dirname, '../public'),
+        path: path.resolve(__dirname, '../../backend/src/admin'),
         publicPath: '/',
         clean: true,
     },

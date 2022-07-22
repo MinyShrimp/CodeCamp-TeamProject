@@ -6,7 +6,7 @@ import { FileAdminRepository } from './entities/file.admin.repository';
 import { FileAdminService } from './file.admin.service';
 
 @ApiTags('관리자/파일')
-@Controller('admin/file')
+@Controller('api/admin/file')
 export class FileAdminController {
     constructor(
         private readonly fileAdminService: FileAdminService, //

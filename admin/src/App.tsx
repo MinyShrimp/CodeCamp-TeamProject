@@ -4,6 +4,7 @@ import { genSaltSync, hashSync, compareSync } from 'bcryptjs';
 
 import { Index } from './components/index';
 import { LoginPage } from './components/login';
+import { AuthIndex } from './components/auth';
 
 function App() {
     const navigate = useNavigate();
@@ -36,8 +37,9 @@ function App() {
     return (
         <div className="App" style={{ height: '100vh' }}>
             <Routes>
-                <Route path="/login" element={<LoginPage />}></Route>
-                <Route path="/*" element={<Index />}></Route>
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/auth/*" element={<AuthIndex />} />
+                <Route path="/*" element={<Index />} />
             </Routes>
         </div>
     );

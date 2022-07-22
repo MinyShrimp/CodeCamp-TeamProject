@@ -5,8 +5,8 @@ import { IProductColumn, DummyProductColumn } from './interface';
 export const ProductIndex = EntityFactory.getEntity<IProductColumn>({
     name: '상품',
     dummyData: DummyProductColumn,
+    beURL: '/api/admin/product',
     baseURL: '/admin/entity/product',
-    beURL: '/admin/product',
     list: {
         column: [
             'id', 'name', 'description', 'price', 'point',

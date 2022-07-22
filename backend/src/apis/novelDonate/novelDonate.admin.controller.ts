@@ -6,7 +6,7 @@ import { NovelDonateEntity } from './entities/novelDonate.entity';
 import { NovelDonateAdminRepository } from './entities/novelDonate.admin.repository';
 
 @ApiTags('관리자/회원/후원작')
-@Controller('admin/novel-donate')
+@Controller('api/admin/novel-donate')
 export class NovelDonateAdminController {
     constructor(
         private readonly novelDonateAdminRepository: NovelDonateAdminRepository, //

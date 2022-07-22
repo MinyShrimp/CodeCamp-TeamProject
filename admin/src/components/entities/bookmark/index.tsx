@@ -5,7 +5,7 @@ import { IBookmarkColumn, DummyBookmarkColumn } from './interface';
 export const BookmarkIndex = EntityFactory.getEntity<IBookmarkColumn>({
     name: '북마크',
     dummyData: DummyBookmarkColumn,
-    beURL: '/admin/bookmark',
+    beURL: '/api/admin/bookmark',
     baseURL: '/admin/entity/bookmark',
     list: {
         column: [

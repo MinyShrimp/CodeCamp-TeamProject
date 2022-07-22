@@ -8,7 +8,7 @@ const now = getDefaultDate();
 export const EventIndex = EntityFactory.getEntity<IEventColumn>({
     name: '이벤트',
     dummyData: DummyEventColumn,
-    beURL: '/admin/event',
+    beURL: '/api/admin/event',
     baseURL: '/admin/entity/event',
     list: {
         column: [

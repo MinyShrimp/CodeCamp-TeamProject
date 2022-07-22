@@ -9,7 +9,7 @@ import { NovelLikeAdminRepository } from './entities/novelLike.admin.repository'
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('관리자/회원/선호작')
-@Controller('admin/novel-like')
+@Controller('api/admin/novel-like')
 export class NovelLikeAdminController {
     constructor(
         private readonly novelLikeAdminRepository: NovelLikeAdminRepository, //

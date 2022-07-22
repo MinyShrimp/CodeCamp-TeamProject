@@ -5,8 +5,8 @@ import { IPaymentStatusColumn, DummyPaymentStatusColumn } from './interface';
 export const PaymentStatusIndex = EntityFactory.getEntity<IPaymentStatusColumn>({
     name: '결제 상태',
     dummyData: DummyPaymentStatusColumn,
+    beURL: '/api/admin/payment-status',
     baseURL: '/admin/entity/paymentStatus',
-    beURL: '/admin/payment-status',
     list: {
         column: [
             'id', 'description',

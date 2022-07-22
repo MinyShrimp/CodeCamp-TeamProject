@@ -9,7 +9,7 @@ import { ProductEntity } from './entities/product.entity';
 import { ProductAdminRepository } from './entities/product.admin.repository';
 
 @ApiTags('관리자/상품')
-@Controller('admin/product')
+@Controller('api/admin/product')
 export class ProductAdminController {
     constructor(
         private readonly productAdminRepository: ProductAdminRepository, //

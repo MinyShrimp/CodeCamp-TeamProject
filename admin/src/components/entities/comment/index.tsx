@@ -5,7 +5,7 @@ import { ICommentColumn, DummyCommentColumn } from './interface';
 export const CommentIndex = EntityFactory.getEntity<ICommentColumn>({
     name: '게시판 댓글',
     dummyData: DummyCommentColumn,
-    beURL: '/admin/comment',
+    beURL: '/api/admin/comment',
     baseURL: '/admin/entity/comment',
     list: {
         column: [

@@ -5,7 +5,7 @@ import { IAnswerColumn, DummyAnswerColumn } from './interface';
 export const AnswerIndex = EntityFactory.getEntity<IAnswerColumn>({
     name: '답변',
     dummyData: DummyAnswerColumn,
-    beURL: '/admin/answer',
+    beURL: '/api/admin/answer',
     baseURL: '/admin/entity/answer',
     list: {
         column: [

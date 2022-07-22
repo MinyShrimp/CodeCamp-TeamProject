@@ -9,7 +9,7 @@ import { UserClassEntity } from './entities/userClass.entity';
 import { UserClassAdminRepository } from './entities/userClass.admin.repository';
 
 @ApiTags('관리자/회원/등급')
-@Controller('admin/user-class')
+@Controller('api/admin/user-class')
 export class UserClassAdminController {
     constructor(
         private readonly userClassRepository: UserClassAdminRepository,

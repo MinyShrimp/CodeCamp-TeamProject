@@ -5,8 +5,8 @@ import { IPaymentColumn, DummyPaymentColumn } from './interface';
 export const PaymentIndex = EntityFactory.getEntity<IPaymentColumn>({
     name: '결제 정보',
     dummyData: DummyPaymentColumn,
+    beURL: '/api/admin/payment',
     baseURL: '/admin/entity/payment',
-    beURL: '/admin/payment',
     list: {
         column: [
             'id', 'impUid', 'merchantUid', 'amount', 

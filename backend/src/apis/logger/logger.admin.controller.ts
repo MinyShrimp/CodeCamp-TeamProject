@@ -3,8 +3,8 @@ import { Controller, Get, Param } from '@nestjs/common';
 import { LoggerService } from './logger.service';
 
 @ApiTags('로깅')
-@Controller('admin')
-export class LoggerController {
+@Controller('api/admin')
+export class LoggerAdminController {
     constructor(
         private readonly loggerService: LoggerService, //
     ) {}

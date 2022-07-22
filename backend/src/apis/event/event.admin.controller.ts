@@ -9,7 +9,7 @@ import { EventEntity } from './entities/event.entity';
 import { EventAdminRepository } from './entities/event.admin.repository';
 
 @ApiTags('관리자/이벤트')
-@Controller('admin/event')
+@Controller('api/admin/event')
 export class EventAdminController {
     constructor(
         private readonly eventAdminRepository: EventAdminRepository, //

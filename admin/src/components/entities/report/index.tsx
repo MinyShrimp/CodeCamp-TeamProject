@@ -5,7 +5,7 @@ import { IReportColumn, DummyReportColumn } from './interface';
 export const ReportIndex = EntityFactory.getEntity<IReportColumn>({
     name: '신고',
     dummyData: DummyReportColumn,
-    beURL: '/admin/report',
+    beURL: '/api/admin/report',
     baseURL: '/admin/entity/report',
     list: {
         column: [

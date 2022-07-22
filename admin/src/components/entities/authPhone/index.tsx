@@ -5,8 +5,8 @@ import { DummyPhoneColumn, IPhoneColumn } from './interface';
 export const PhoneIndex = EntityFactory.getEntity<IPhoneColumn>({
     name: '핸드폰 인증',
     dummyData: DummyPhoneColumn,
+    beURL: '/api/admin/phone',
     baseURL: '/admin/entity/authPhone',
-    beURL: '/admin/phone',
 
     list: {
         column: [
