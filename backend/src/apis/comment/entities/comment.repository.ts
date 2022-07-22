@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, UpdateResult } from 'typeorm';
+import { FetchCommentOutput } from '../dto/fetchComment.output';
 import { CommentEntity } from './comment.entity';
 
 @Injectable()
@@ -76,9 +77,12 @@ export class CommentRepository {
      * 보드ID 기반 조회
      */
     async findByBoardIDFromComment(
+        page: number,
         boardID: string, //
-    ): Promise<CommentEntity[]> {
-        return await this.commentRepository
+    ): Promise<FetchCommentOutput> {
+        const take = 10;
+
+        const query = this.commentRepository
             .createQueryBuilder('c')
             .leftJoinAndSelect('c.board', 'board')
             .leftJoinAndSelect('c.user', 'user')
@@ -87,8 +91,18 @@ export class CommentRepository {
             .leftJoinAndSelect('children.user', 'cu')
             .leftJoinAndSelect('cu.userClass', 'cuc')
             .where('c.parentID is null')
-            .andWhere('board.id=:id', { id: boardID })
-            .getMany();
+            .andWhere('board.id=:id', { id: boardID });
+
+        const comments = await query
+            .take(take)
+            .skip(take * (page - 1))
+            .getMany(); // 조회
+        const count = await query.getCount(); // 갯수
+
+        return {
+            comments: comments,
+            count: count,
+        };
     }
 
     ///////////////////////////////////////////////////////////////////

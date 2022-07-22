@@ -11,11 +11,14 @@ import { CommentEntity } from './entities/comment.entity';
 import { CommentService } from './comment.service';
 import { CreateCommentInput } from './dto/createComment.input';
 import { UpdateCommentInput } from './dto/updateComment.input';
+import { CommentRepository } from './entities/comment.repository';
+import { FetchCommentOutput } from './dto/fetchComment.output';
 
 @Resolver()
 export class CommentResolver {
     constructor(
         private readonly commentService: CommentService, //
+        private readonly commentRepository: CommentRepository,
     ) {}
 
     ///////////////////////////////////////////////////////////////////
@@ -32,15 +35,16 @@ export class CommentResolver {
 
     ////////////////////////////////////////////////////////////////////////
     /** 보드ID로 해당 게시글의 댓글 조회  */
-    // @Query(
-    //     () => [CommentEntity], //
-    //     { description: '해당 게시글의 모든 댓글 조회' },
-    // )
-    // fetchCommentsFromBoard(
-    //     @Args('boardID') boardID: string, //
-    // ): Promise<CommentEntity[]> {
-    //     return this.commentService.findCommentsFromBoard(boardID);
-    // }
+    @Query(
+        () => FetchCommentOutput, //
+        { description: '해당 게시글의 모든 댓글 조회' },
+    )
+    fetchCommentsFromBoard(
+        @Args({ name: 'page', defaultValue: 1 }) page: number,
+        @Args('boardID') boardID: string, //
+    ): Promise<FetchCommentOutput> {
+        return this.commentRepository.findByBoardIDFromComment(page, boardID);
+    }
 
     ////////////////////////////////////////////////////////////////////////
 
