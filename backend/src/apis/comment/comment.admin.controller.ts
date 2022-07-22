@@ -6,7 +6,7 @@ import { CommentEntity } from './entities/comment.entity';
 import { CommentAdminRepository } from './entities/comment.admin.repository';
 
 @ApiTags('관리자/게시판/댓글')
-@Controller('admin/comment')
+@Controller('api/admin/comment')
 export class CommentAdminController {
     constructor(
         private readonly commentAdminRepository: CommentAdminRepository, //

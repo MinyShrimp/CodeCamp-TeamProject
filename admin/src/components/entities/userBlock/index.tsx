@@ -5,7 +5,7 @@ import { IUserBlockColumn, DummyUserBlockColumn } from './interface';
 export const UserBlockIndex = EntityFactory.getEntity<IUserBlockColumn>({
     name: '차단 회원',
     dummyData: DummyUserBlockColumn,
-    beURL: '/admin/userBlock',
+    beURL: '/api/admin/userBlock',
     baseURL: '/admin/entity/userBlock',
     list: {
         column: [

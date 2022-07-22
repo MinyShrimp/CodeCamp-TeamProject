@@ -6,7 +6,7 @@ import { BoardEntity } from './entities/board.entity';
 import { BoardAdminRepository } from './entities/board.admin.repository';
 
 @ApiTags('관리자/게시판')
-@Controller('admin/board')
+@Controller('api/admin/board')
 export class BoardAdminController {
     constructor(
         private readonly boardAdminRepository: BoardAdminRepository, //

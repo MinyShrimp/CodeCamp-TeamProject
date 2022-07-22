@@ -5,7 +5,7 @@ import { IPointPaymentColumn, DummyPointPaymentColumn } from './interface';
 export const PointPaymentIndex = EntityFactory.getEntity<IPointPaymentColumn>({
     name: '포인트 결제',
     dummyData: DummyPointPaymentColumn,
-    beURL: '/admin/payment-point',
+    beURL: '/api/admin/payment-point',
     baseURL: '/admin/entity/pointPayment',
     list: {
         column: [

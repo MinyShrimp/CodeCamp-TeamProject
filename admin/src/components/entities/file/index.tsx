@@ -5,8 +5,8 @@ import { DummyFile, DummyFileColumn, IFileColumn } from './interface';
 export const FileIndex = EntityFactory.getEntity<IFileColumn>({
     name: '파일',
     dummyData: DummyFileColumn,
+    beURL: '/api/admin/file',
     baseURL: '/admin/entity/file',
-    beURL: '/admin/file',
     list: {
         column: ['id', 'name', 'path', 'url', 'createAt'],
     },

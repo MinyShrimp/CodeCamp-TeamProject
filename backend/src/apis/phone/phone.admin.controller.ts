@@ -5,7 +5,7 @@ import { PhoneEntity } from './entities/phone.entity';
 import { PhoneAdminRepository } from './entities/phone.admin.repository';
 
 @ApiTags('관리자/회원/핸드폰 인증')
-@Controller('admin/phone')
+@Controller('api/admin/phone')
 export class PhoneAdminController {
     constructor(
         private readonly phoneAdminRepository: PhoneAdminRepository, //

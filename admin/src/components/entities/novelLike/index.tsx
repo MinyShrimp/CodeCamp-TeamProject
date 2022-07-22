@@ -5,7 +5,7 @@ import { INovelLikeColumn, DummyNovelLikeColumn } from './interface';
 export const NovelLikeIndex = EntityFactory.getEntity<INovelLikeColumn>({
     name: '선호작',
     dummyData: DummyNovelLikeColumn,
-    beURL: '/admin/novel-like',
+    beURL: '/api/admin/novel-like',
     baseURL: '/admin/entity/novelLike',
     list: {
         column: [

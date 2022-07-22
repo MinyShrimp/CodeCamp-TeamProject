@@ -7,7 +7,7 @@ import { UserEntity } from './entities/user.entity';
 import { UserAdminRepository } from './entities/user.admin.repository';
 
 @ApiTags('관리자/회원')
-@Controller('admin/user')
+@Controller('api/admin/user')
 export class UserAdminController {
     constructor(
         private readonly userAdminRepository: UserAdminRepository, //

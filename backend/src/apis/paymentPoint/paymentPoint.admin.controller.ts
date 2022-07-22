@@ -6,7 +6,7 @@ import { PaymentPointEntity } from './entities/paymentPoint.entity';
 import { PaymentPointAdminRepository } from './entities/paymentPoint.admin.repository';
 
 @ApiTags('관리자/결제/포인트')
-@Controller('admin/payment-point')
+@Controller('api/admin/payment-point')
 export class PaymentPointAdminController {
     constructor(
         private readonly paymentPointAdminRepository: PaymentPointAdminRepository, //

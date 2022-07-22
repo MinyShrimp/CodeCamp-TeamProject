@@ -11,7 +11,7 @@ import { NovelCategoryEntity } from './entities/novelCategory.entity';
 import { NovelCategoryAdminRepository } from './entities/novelCategory.admin.repository';
 
 @ApiTags('관리자/소설/카테고리')
-@Controller('admin/novel-category')
+@Controller('api/admin/novel-category')
 export class NovelCategoryAdminController {
     constructor(
         private readonly novelCategoryRepository: NovelCategoryAdminRepository, //

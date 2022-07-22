@@ -5,8 +5,8 @@ import { DummyEmailColumn, IEmailColumn } from './interface';
 export const EmailIndex = EntityFactory.getEntity<IEmailColumn>({
     name: '이메일 인증',
     dummyData: DummyEmailColumn,
+    beURL: '/api/admin/email',
     baseURL: '/admin/entity/authEmail',
-    beURL: '/admin/email',
 
     list: {
         column: [

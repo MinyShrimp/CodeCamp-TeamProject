@@ -5,7 +5,7 @@ import { INovelCategoryColumn, DummyNovelCategoryColumn } from './interface';
 export const NovelCategoryIndex = EntityFactory.getEntity<INovelCategoryColumn>({
     name: '소설 카테고리',
     dummyData: DummyNovelCategoryColumn,
-    beURL: '/admin/novel-category',
+    beURL: '/api/admin/novel-category',
     baseURL: '/admin/entity/novelCategory',
     list: {
         column: [ 'id', 'name' ],

@@ -5,7 +5,7 @@ import { INovelReviewColumn, DummyNovelReviewColumn } from './interface';
 export const NovelReviewIndex = EntityFactory.getEntity<INovelReviewColumn>({
     name: '소설 리뷰',
     dummyData: DummyNovelReviewColumn,
-    beURL: '/admin/novel-review',
+    beURL: '/api/admin/novel-review',
     baseURL: '/admin/entity/novel-review',
     list: {
         column: [

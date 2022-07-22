@@ -5,7 +5,7 @@ import { IBoardColumn, DummyBoardColumn } from './interface';
 export const BoardIndex = EntityFactory.getEntity<IBoardColumn>({
     name: '게시판',
     dummyData: DummyBoardColumn,
-    beURL: '/admin/board',
+    beURL: '/api/admin/board',
     baseURL: '/admin/entity/board',
     list: {
         column: [

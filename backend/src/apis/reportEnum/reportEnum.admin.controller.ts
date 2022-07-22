@@ -9,7 +9,7 @@ import { ReportEnumEntity } from './entities/reportEnum.entity';
 import { ReportEnumAdminRepository } from './entities/reportEnum.admin.repository';
 
 @ApiTags('관리자/신고/Enum')
-@Controller('admin/report-enum')
+@Controller('api/admin/report-enum')
 export class ReportEnumAdminController {
     constructor(
         private readonly reportEnumAdminRepository: ReportEnumAdminRepository, //

@@ -5,7 +5,7 @@ import { INovelDonateColumn, DummyNovelDonateColumn } from './interface';
 export const NovelDonateIndex = EntityFactory.getEntity<INovelDonateColumn>({
     name: '후원작',
     dummyData: DummyNovelDonateColumn,
-    beURL: '/admin/novel-donate',
+    beURL: '/api/admin/novel-donate',
     baseURL: '/admin/entity/novelDonate',
     list: {
         column: [
