@@ -1,7 +1,5 @@
 import { useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { getType } from '../../functions/functions';
-import { sendGraphQL } from '../logics/sendGraphQL';
+import { useNavigate } from 'react-router-dom';
 
 /**
  * Restore Token
@@ -12,7 +10,7 @@ export function OAuthRestore() {
 
     useEffect(() => {
         (async () => {
-            navi('/auth/token', { state: '/auth/login' });
+            navi('/admin/auth/token', { state: '/auth/login' });
         })();
 
         return () => {};

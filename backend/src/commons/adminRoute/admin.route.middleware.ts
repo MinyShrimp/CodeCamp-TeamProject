@@ -15,7 +15,9 @@ export class AdminRouteMiddleware implements NestMiddleware {
                 '..',
                 '..',
                 'admin',
-                urlSplit[2] === 'static' ? urlSplit[3] : 'index.html',
+                urlSplit[2] === 'static'
+                    ? '/' + urlSplit.slice(3).join('/')
+                    : 'index.html',
             );
             res.sendFile(_path);
         } else {
