@@ -22,11 +22,11 @@ export class QuestionEntity {
     id: string;
 
     @Column()
-    @Field(() => String, { description: '제목', nullable: true })
+    @Field(() => String, { description: '제목' })
     title: string;
 
     @Column({ type: 'text' })
-    @Field(() => String, { description: '내용', nullable: true })
+    @Field(() => String, { description: '내용' })
     contents: string;
 
     @CreateDateColumn()
