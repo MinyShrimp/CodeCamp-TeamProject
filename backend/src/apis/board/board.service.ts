@@ -6,6 +6,7 @@ import { IPayload } from 'src/commons/interfaces/Payload.interface';
 import { UserRepository } from '../user/entities/user.repository';
 import { UserCheckService } from '../user/userCheck.service';
 
+import { BoardDto } from './dto/board.dto';
 import { BoardEntity } from './entities/board.entity';
 import { FileRepository } from '../file/entities/file.repository';
 import { BoardRepository } from './entities/board.repository';
@@ -20,6 +21,21 @@ export class BoardService {
         private readonly boardRepository: BoardRepository, //
         private readonly userCheckService: UserCheckService,
     ) {}
+
+    async setLikeCount(
+        dto: BoardDto & { isUp: boolean },
+    ): Promise<BoardEntity> {
+        const board = await this.boardRepository.getOneWithDeleted(dto.boardID);
+        if (dto.userID === board.user.id) {
+            throw new ConflictException(
+                '본인의 글에 좋아요를 누를 수 없습니다.',
+            );
+        }
+        return await this.boardRepository.update({
+            ...board,
+            likeCount: board.likeCount + 1 * (dto.isUp ? 1 : -1),
+        });
+    }
 
     ///////////////////////////////////////////////////////////////////
     // 조회 //
