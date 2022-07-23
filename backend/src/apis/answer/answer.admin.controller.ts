@@ -8,7 +8,7 @@ import { AnswerEntity } from './entities/answer.entity';
 import { AnswerAdminRepository } from './entities/answer.admin.repository';
 
 @ApiTags('관리자/답변')
-@Controller('admin/answer')
+@Controller('api/admin/answer')
 export class AnswerAdminController {
     constructor(
         private readonly answerAdminRepository: AnswerAdminRepository, //

@@ -64,7 +64,7 @@ export function ResponseLoggerIndex() {
         setPending(true);
 
         getAxios()
-            .get(`${process.env.BE_URL}/admin/response/1`)
+            .get(`${process.env.BE_URL}/api/admin/response/1`)
             .then((res) => {
                 setDatas(res.data.logs);
                 setCount(res.data.count);
@@ -80,7 +80,7 @@ export function ResponseLoggerIndex() {
     const nextPage = (_page: number) => {
         if (_page * 25 >= nowLoadingCount.current) {
             getAxios()
-                .get(`${process.env.BE_URL}/admin/response/${page + 1}`)
+                .get(`${process.env.BE_URL}/api/admin/response/${page + 1}`)
                 .then((res) => {
                     setPage(page + 1);
                     setDatas([...datas, ...res.data.logs]);

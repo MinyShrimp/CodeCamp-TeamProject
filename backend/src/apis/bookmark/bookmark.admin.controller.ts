@@ -6,7 +6,7 @@ import { BookmarkEntity } from './entities/bookmark.entity';
 import { BookmarkAdminRepository } from './entities/bookmark.admin.repository';
 
 @ApiTags('관리자/북마크')
-@Controller('admin/bookmark')
+@Controller('api/admin/bookmark')
 export class BookmarkAdminController {
     constructor(
         private readonly bookmarkAdminRepository: BookmarkAdminRepository, //

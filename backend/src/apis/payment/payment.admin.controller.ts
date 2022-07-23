@@ -6,7 +6,7 @@ import { PaymentEntity } from './entities/payment.entity';
 
 @ApiBearerAuth()
 @ApiTags('관리자/결제')
-@Controller('admin/payment')
+@Controller('api/admin/payment')
 export class PaymentAdminController {
     constructor(
         private readonly paymentAdminRepository: PaymentAdminRepository,

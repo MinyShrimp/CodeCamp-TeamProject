@@ -8,7 +8,7 @@ import { QuestionEntity } from './entities/question.entity';
 import { QuestionAdminRepository } from './entities/question.admin.repository';
 
 @ApiTags('관리자/문의')
-@Controller('admin/question')
+@Controller('api/admin/question')
 export class QuestionAdminController {
     constructor(
         private readonly questionAdminRepository: QuestionAdminRepository, //

@@ -20,7 +20,7 @@ module.exports = {
                     {
                         loader: 'file-loader',
                         options: {
-                            name: 'assets/img/[name].[hash:8].[ext]',
+                            name: '/assets/img/[name].[hash:8].[ext]',
                         },
                     },
                 ],
@@ -31,7 +31,7 @@ module.exports = {
                     {
                         loader: 'file-loader',
                         options: {
-                            name: 'assets/fonts/[name].[hash:8].[ext]',
+                            name: '/assets/fonts/[name].[hash:8].[ext]',
                         },
                     },
                 ],

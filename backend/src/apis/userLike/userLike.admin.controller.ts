@@ -6,7 +6,7 @@ import { UserLikeAdminRepository } from './entities/userLike.admin.repository';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('관리자/회원/선호 작가')
-@Controller('admin/userLike')
+@Controller('api/admin/userLike')
 export class UserLikeAdminController {
     constructor(
         private readonly userLikeAdminRepository: UserLikeAdminRepository, //

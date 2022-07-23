@@ -9,7 +9,7 @@ import { PaymentPointStatusEntity } from './entities/paymentPointStatus.entity';
 import { PaymentPointStatusAdminRepository } from './entities/paymentPointStatus.admin.repository';
 
 @ApiTags('관리자/결제/포인트/상태')
-@Controller('admin/payment-point-status')
+@Controller('api/admin/payment-point-status')
 export class PaymentPointStatusAdminController {
     constructor(
         private readonly paymentPointStatusAdminRepository: PaymentPointStatusAdminRepository, //

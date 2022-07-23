@@ -9,7 +9,7 @@ import { NoticeEntity } from './entities/notice.entity';
 import { NoticeAdminRepository } from './entities/notice.admin.repository';
 
 @ApiTags('관리자/공지')
-@Controller('admin/notice')
+@Controller('api/admin/notice')
 export class NoticeAdminController {
     constructor(
         private readonly noticeAdminRepository: NoticeAdminRepository, //

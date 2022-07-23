@@ -5,7 +5,7 @@ import { IReportEnumColumn, DummyReportEnumColumn } from './interface';
 export const ReportEnumIndex = EntityFactory.getEntity<IReportEnumColumn>({
     name: '신고 ENUM',
     dummyData: DummyReportEnumColumn,
-    beURL: '/admin/report-enum',
+    beURL: '/api/admin/report-enum',
     baseURL: '/admin/entity/reportEnum',
     list: {
         column: [

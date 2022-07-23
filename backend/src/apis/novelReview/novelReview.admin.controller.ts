@@ -6,7 +6,7 @@ import { NovelReviewEntity } from './entities/novelReview.entity';
 import { NovelReviewAdminRepository } from './entities/novelReview.admin.repository';
 
 @ApiTags('관리자/소설/리뷰')
-@Controller('admin/novel-review')
+@Controller('api/admin/novel-review')
 export class NovelReviewAdminController {
     constructor(
         private readonly novelReviewAdminRepository: NovelReviewAdminRepository, //

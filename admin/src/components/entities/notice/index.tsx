@@ -5,7 +5,7 @@ import { INoticeColumn, DummyNoticeColumn } from './interface';
 export const NoticeIndex = EntityFactory.getEntity<INoticeColumn>({
     name: '공지',
     dummyData: DummyNoticeColumn,
-    beURL: '/admin/notice',
+    beURL: '/api/admin/notice',
     baseURL: '/admin/entity/notice',
     list: {
         column: [

@@ -6,7 +6,7 @@ import { ReportEntity } from './entities/report.entity';
 import { ReportAdminRepository } from './entities/report.admin.repository';
 
 @ApiTags('관리자/신고')
-@Controller('admin/report')
+@Controller('api/admin/report')
 export class ReportAdminController {
     constructor(
         private readonly reportAdminRepository: ReportAdminRepository, //

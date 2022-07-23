@@ -2,10 +2,10 @@
 // NestJS //
 import {
     Module,
-    CacheModule,
     NestModule,
-    MiddlewareConsumer,
+    CacheModule,
     RequestMethod,
+    MiddlewareConsumer,
 } from '@nestjs/common';
 
 // GraphQL //
@@ -22,6 +22,7 @@ import * as redisStore from 'cache-manager-redis-store';
 // Config //
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
+import { AdminRouteMiddleware } from './commons/adminRoute/admin.route.middleware';
 
 // Modules //
 import { AuthModule } from './apis/auth/auth.module';
@@ -176,4 +177,11 @@ import { CommentLikeModule } from './apis/commentLike/commentLike.module';
     controllers: [AppController],
     providers: [],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+    configure(consumer: MiddlewareConsumer) {
+        consumer.apply(AdminRouteMiddleware).forRoutes({
+            path: '/**',
+            method: RequestMethod.ALL,
+        });
+    }
+}

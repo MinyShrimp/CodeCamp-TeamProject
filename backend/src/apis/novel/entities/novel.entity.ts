@@ -1,5 +1,5 @@
-import { IsInt, Min } from 'class-validator';
-import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
+import { IsInt, Max, Min } from 'class-validator';
+import { Field, Float, ID, Int, ObjectType } from '@nestjs/graphql';
 import {
     Entity,
     Column,
@@ -60,6 +60,18 @@ export class NovelEntity {
     @Column({ default: false })
     @Field(() => Boolean, { description: '비공개 여부' })
     isPrivate: boolean;
+
+    @Min(0)
+    @Max(5)
+    @Column({
+        type: 'decimal',
+        default: 0,
+        unsigned: true,
+        precision: 2,
+        scale: 1,
+    })
+    @Field(() => Float, { description: '평균 리뷰 점수' })
+    star: number;
 
     @CreateDateColumn()
     @Field(() => Date, { description: '시작 시간' })

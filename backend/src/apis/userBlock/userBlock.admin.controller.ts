@@ -6,7 +6,7 @@ import { UserBlockEntity } from './entities/userBlock.entity';
 import { UserBlockAdminRepository } from './entities/userBlock.admin.repository';
 
 @ApiTags('관리자/회원/차단 회원')
-@Controller('admin/userBlock')
+@Controller('api/admin/userBlock')
 export class UserBlockAdminController {
     constructor(
         private readonly userBlockAdminRepository: UserBlockAdminRepository, //

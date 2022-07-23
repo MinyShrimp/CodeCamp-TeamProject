@@ -8,6 +8,6 @@ export class CreateBoardInput extends PickType(
     ['title', 'contents'], //
     InputType,
 ) {
-    @Field(() => [String], { description: '파일 URLs' })
+    @Field(() => [String], { description: '파일 URLs', nullable: true })
     fileURLs: Array<string>;
 }

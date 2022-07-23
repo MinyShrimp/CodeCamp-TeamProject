@@ -8,7 +8,7 @@ import {
 export const PointPaymentStatusIndex = EntityFactory.getEntity<IPointPaymentStatusColumn>({
     name: '포인트 결제 상태',
     dummyData: DummyPointPaymentStatusColumn,
-    beURL: '/admin/payment-point-status',
+    beURL: '/api/admin/payment-point-status',
     baseURL: '/admin/entity/pointPaymentStatus',
     list: {
         column: [ 'id', 'description' ],

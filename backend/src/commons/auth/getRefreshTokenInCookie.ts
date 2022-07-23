@@ -1,6 +1,5 @@
 import { UnauthorizedException } from '@nestjs/common';
 import { Request } from 'express';
-import { MESSAGES } from '../message/Message.enum';
 
 /**
  * Cookie에서 RefreshToken을 가져오는 함수
@@ -9,7 +8,7 @@ import { MESSAGES } from '../message/Message.enum';
  */
 export const getRefreshTokenInCookie = (req: Request): string | undefined => {
     if (req.headers.cookie === undefined) {
-        throw new UnauthorizedException(MESSAGES.UNVLIAD_ACCESS);
+        throw new UnauthorizedException();
     }
 
     const cookies = req.headers.cookie.split('; ');

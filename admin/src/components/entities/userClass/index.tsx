@@ -5,8 +5,8 @@ import { IUserClassColumn, DummyUserClassColumn } from './interface';
 export const UserClassIndex = EntityFactory.getEntity<IUserClassColumn>({
     name: '회원 등급',
     dummyData: DummyUserClassColumn,
+    beURL: '/api/admin/user-class',
     baseURL: '/admin/entity/userClass',
-    beURL: '/admin/user-class',
     list: {
         column: [
             'id', 'description',
