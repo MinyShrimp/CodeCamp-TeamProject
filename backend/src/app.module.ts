@@ -65,6 +65,8 @@ import { ReportEnumModule } from './apis/reportEnum/reportEnum.module';
 import { FileModule } from './apis/file/file.module';
 import { LoggerModule } from './apis/logger/logger.module';
 import { TempStorageModule } from './apis/tempStorage/tempStorage.module';
+import { BoardLikeModule } from './apis/boardLike/boardLike.module';
+import { CommentLikeModule } from './apis/commentLike/commentLike.module';
 
 ///////////////////////////////////////////////////////////////////////////
 @Module({
@@ -146,7 +148,9 @@ import { TempStorageModule } from './apis/tempStorage/tempStorage.module';
         EventModule,
         NoticeModule,
         BoardModule,
+        BoardLikeModule,
         CommentModule,
+        CommentLikeModule,
 
         NovelModule,
         NovelTagModule,

@@ -33,7 +33,6 @@ export class CommentResolver {
         return this.commentService.findAll();
     }
 
-    ////////////////////////////////////////////////////////////////////////
     /** 보드ID로 해당 게시글의 댓글 조회  */
     @Query(
         () => FetchCommentOutput, //
@@ -45,8 +44,6 @@ export class CommentResolver {
     ): Promise<FetchCommentOutput> {
         return this.commentRepository.findByBoardIDFromComment(page, boardID);
     }
-
-    ////////////////////////////////////////////////////////////////////////
 
     /* 유저가 쓴 댓글 조회 */
     @UseGuards(GqlJwtAccessGuard)
