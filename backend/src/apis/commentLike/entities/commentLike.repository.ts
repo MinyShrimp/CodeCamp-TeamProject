@@ -3,8 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository } from 'typeorm';
 
 import { CommentLikeEntity } from './commentLike.entity';
-import { CreateCommentLikeDto } from '../dto/createCommentLike.input';
-import { DeleteCommentLikeDto } from '../dto/deleteCommentLike.input';
+import { CreateCommentLikeDto } from '../dto/createCommentLike.dto';
+import { DeleteCommentLikeDto } from '../dto/deleteCommentLike.dto';
 
 @Injectable()
 export class CommentLikeRepository {
@@ -19,11 +19,9 @@ export class CommentLikeRepository {
     ): Promise<CommentLikeEntity[]> {
         return await this.commentLikeRepository
             .createQueryBuilder('cl')
-            .withDeleted()
-            .andWhere('cl.deletedAt IS NULL')
             .leftJoinAndSelect('cl.comment', 'CommentEntity')
             .leftJoinAndSelect('cl.user', 'UserEntity')
-            .leftJoinAndSelect('cl.userClass', 'UserEntity.userClass')
+            .leftJoinAndSelect('UserEntity.userClass', 'UserClassEntity')
             .where('cl.userID=:userID', { userID })
             .orderBy('cl.createAt')
             .getMany();

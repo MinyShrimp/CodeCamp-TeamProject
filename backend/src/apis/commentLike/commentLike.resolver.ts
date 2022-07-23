@@ -6,8 +6,8 @@ import { CurrentUser } from 'src/commons/auth/gql-user.param';
 import { ResultMessage } from 'src/commons/message/ResultMessage.dto';
 import { GqlJwtAccessGuard } from 'src/commons/auth/gql-auth.guard';
 
-import { CommentLikeService } from './commentLike.service';
 import { CommentLikeEntity } from './entities/commentLike.entity';
+import { CommentLikeService } from './commentLike.service';
 import { CommentLikeRepository } from './entities/commentLike.repository';
 
 @Resolver()
