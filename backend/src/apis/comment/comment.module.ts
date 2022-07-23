@@ -6,7 +6,9 @@ import { BoardModule } from '../board/board.module';
 import { BoardEntity } from '../board/entities/board.entity';
 import { BoardRepository } from '../board/entities/board.repository';
 
+import { UserEntity } from '../user/entities/user.entity';
 import { CommentEntity } from './entities/comment.entity';
+import { UserRepository } from '../user/entities/user.repository';
 import { CommentAdminRepository } from './entities/comment.admin.repository';
 
 import { CommentService } from './comment.service';
@@ -19,6 +21,7 @@ import { CommentAdminController } from './comment.admin.controller';
         TypeOrmModule.forFeature([
             CommentEntity, //
             BoardEntity,
+            UserEntity,
         ]),
         UserModule,
         BoardModule,
@@ -32,6 +35,7 @@ import { CommentAdminController } from './comment.admin.controller';
         CommentResolver,
         BoardRepository,
         CommentService,
+        UserRepository,
     ],
 })
 export class CommentModule {}
