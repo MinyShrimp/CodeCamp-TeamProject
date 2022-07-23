@@ -6,6 +6,7 @@ import { IPayload } from 'src/commons/interfaces/Payload.interface';
 import { UserRepository } from '../user/entities/user.repository';
 import { BoardRepository } from '../board/entities/board.repository';
 
+import { CommentDto } from './dto/comment.dto';
 import { CommentEntity } from './entities/comment.entity';
 import { CommentRepository } from './entities/comment.repository';
 import { CreateCommentInput } from './dto/createComment.input';
@@ -19,6 +20,23 @@ export class CommentService {
         private readonly userRepository: UserRepository,
     ) {}
 
+    async setLikeCount(
+        dto: CommentDto & { isUp: boolean },
+    ): Promise<CommentEntity> {
+        const comment = await this.commentRepository.getOneWithDeleted(
+            dto.commentID,
+        );
+        if (dto.userID === comment.user.id) {
+            throw new ConflictException(
+                '본인의 글에 좋아요를 누를 수 없습니다.',
+            );
+        }
+        return await this.commentRepository.update({
+            ...comment,
+            likeCount: comment.likeCount + 1 * (dto.isUp ? 1 : -1),
+        });
+    }
+
     ///////////////////////////////////////////////////////////////////
     // 조회 //
 
@@ -28,15 +46,6 @@ export class CommentService {
     async findAll(): Promise<CommentEntity[]> {
         return await this.commentRepository.findAll();
     }
-
-    /**
-     *  해당 게시글의 모든 댓글 조회
-     */
-    // async findCommentsFromBoard(
-    //     boardID: string, //
-    // ): Promise<CommentEntity[]> {
-    //     return await this.commentRepository.findByBoardIDFromComment(boardID);
-    // }
 
     /**
      * 특정 댓글 조회

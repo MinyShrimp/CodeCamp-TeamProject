@@ -50,6 +50,23 @@ export class BoardRepository {
     // 조회 //
 
     /**
+     * ID 기반 조회
+     */
+    async getOneWithDeleted(
+        boardID: string, //
+    ): Promise<BoardEntity> {
+        return await this.boardRepository
+            .createQueryBuilder('board')
+            .withDeleted()
+            .leftJoinAndSelect('board.user', 'UserEntity')
+            .leftJoinAndSelect('board.files', 'files')
+            .where('board.user IS NOT NULL')
+            .where('board.id=:boardID', { boardID })
+            .orderBy('board.createAt', 'DESC')
+            .getOne();
+    }
+
+    /**
      * 전체 갯수 조회
      */
     async getCount(): Promise<number> {
@@ -135,6 +152,15 @@ export class BoardRepository {
         entity: Partial<BoardEntity>, //
     ): Promise<BoardEntity> {
         return await this.boardRepository.save(entity);
+    }
+
+    ///////////////////////////////////////////////////////////////////
+    // 수정 //
+
+    async update(
+        board: Partial<BoardEntity>, //
+    ): Promise<BoardEntity> {
+        return await this.boardRepository.save(board);
     }
 
     ///////////////////////////////////////////////////////////////////

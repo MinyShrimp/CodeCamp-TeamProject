@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, UpdateResult } from 'typeorm';
-import { FetchCommentOutput } from '../dto/fetchComment.output';
+
 import { CommentEntity } from './comment.entity';
+import { FetchCommentOutput } from '../dto/fetchComment.output';
 
 @Injectable()
 export class CommentRepository {
@@ -13,6 +14,24 @@ export class CommentRepository {
 
     ///////////////////////////////////////////////////////////////////
     // 조회 //
+
+    /**
+     * ID 기반 조회
+     */
+    async getOneWithDeleted(
+        commentID: string, //
+    ): Promise<CommentEntity> {
+        return await this.commentRepository
+            .createQueryBuilder('comment')
+            .withDeleted()
+            .leftJoinAndSelect('comment.user', 'UserEntity')
+            .leftJoinAndSelect('comment.board', 'BoardEntity')
+            .leftJoinAndSelect('comment.parent', 'CommentEntity')
+            .where('comment.user IS NOT NULL')
+            .where('comment.id=:commentID', { commentID })
+            .orderBy('comment.createAt', 'DESC')
+            .getOne();
+    }
 
     /**
      * 모든 댓글 조회
@@ -117,6 +136,15 @@ export class CommentRepository {
         entity: Partial<CommentEntity>, //
     ): Promise<CommentEntity> {
         return await this.commentRepository.save(entity);
+    }
+
+    ///////////////////////////////////////////////////////////////////
+    // 수정 //
+
+    async update(
+        comment: Partial<CommentEntity>, //
+    ): Promise<CommentEntity> {
+        return await this.commentRepository.save(comment);
     }
 
     ///////////////////////////////////////////////////////////////////
