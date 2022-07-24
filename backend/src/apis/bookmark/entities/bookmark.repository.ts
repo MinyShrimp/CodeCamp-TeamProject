@@ -70,18 +70,6 @@ export class BookmarkRepository {
     async checkOverlap(
         dto: CreateBookmarkDto, //
     ): Promise<BookmarkEntity> {
-        console.log(
-            await this.bookmarkRepository
-                .createQueryBuilder('bm')
-                .select(['bm.id', 'bm.user', 'bm.novelIndex', 'bm.page'])
-                .leftJoinAndSelect('bm.user', 'UserEntity')
-                .leftJoinAndSelect('bm.novelIndex', 'NovelIndexEntity')
-                .where('bm.user=:userID', { userID: dto.userID })
-                .andWhere('bm.novelIndex=:novelIndexID', {
-                    novelIndexID: dto.novelIndexID,
-                })
-                .getOne(),
-        );
         return await this.bookmarkRepository
             .createQueryBuilder('bm')
             .select(['bm.id', 'bm.user', 'bm.novelIndex', 'bm.page'])
