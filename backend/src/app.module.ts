@@ -20,6 +20,7 @@ import type { RedisClientOptions } from 'redis';
 import * as redisStore from 'cache-manager-redis-store';
 
 // Config //
+import { origins } from './main';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AdminRouteMiddleware } from './commons/adminRoute/admin.route.middleware';
@@ -67,7 +68,6 @@ import { LoggerModule } from './apis/logger/logger.module';
 import { TempStorageModule } from './apis/tempStorage/tempStorage.module';
 import { BoardLikeModule } from './apis/boardLike/boardLike.module';
 import { CommentLikeModule } from './apis/commentLike/commentLike.module';
-import { origins } from './main';
 
 ///////////////////////////////////////////////////////////////////////////
 @Module({
