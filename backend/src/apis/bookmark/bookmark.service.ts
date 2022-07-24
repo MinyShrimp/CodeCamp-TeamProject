@@ -72,15 +72,13 @@ export class BookmarkService {
     ): Promise<ResultMessage> {
         const check = await this.bookmarkRepository.checkOverlap(dto);
 
-        console.log('여기 체크', check);
-
         if (check !== undefined) {
             // 있으면, 삭제
             const result = await this.delete({
                 userID: dto.userID,
                 bookmarkID: check.id,
             });
-            console.log(result);
+
             return new ResultMessage({
                 isSuccess: result ? true : false,
                 contents: result ? '북마크 해제' : '북마크 등록',
@@ -88,7 +86,6 @@ export class BookmarkService {
         } else {
             const result = await this.create(dto);
 
-            console.log(result);
             return new ResultMessage({
                 isSuccess: result ? true : false,
                 contents: result ? '북마크 등록' : '북마크 해제',
