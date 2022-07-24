@@ -67,6 +67,7 @@ import { LoggerModule } from './apis/logger/logger.module';
 import { TempStorageModule } from './apis/tempStorage/tempStorage.module';
 import { BoardLikeModule } from './apis/boardLike/boardLike.module';
 import { CommentLikeModule } from './apis/commentLike/commentLike.module';
+import { origins } from './main';
 
 ///////////////////////////////////////////////////////////////////////////
 @Module({
@@ -90,10 +91,7 @@ import { CommentLikeModule } from './apis/commentLike/commentLike.module';
                 return { req, res };
             },
             cors: {
-                origin: [
-                    'http://localhost:8080',
-                    'http://localhost:3000', //
-                ], // FE가 배포하면 FE 주소를 여기에 넣어야함
+                origin: origins,
                 credentials: 'include',
                 exposedHeaders: ['Authorization', 'Set-Cookie', 'Cookie'],
                 methods: ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
