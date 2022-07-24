@@ -22,7 +22,7 @@ steps:
           - set
           - image
           - deployment/backend
-          - api-sha256-1=asia.gcr.io/emerald-diagram-352601/teamproject/api:1.0.0
+          - api-sha256-1=asia.gcr.io/emerald-diagram-352601/teamproject/api:1.0.1
           - -n
           - mainproject
       env:
