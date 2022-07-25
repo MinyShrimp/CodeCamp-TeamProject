@@ -29,10 +29,10 @@ export class BoardResolver {
         () => [BoardEntity], //
         { description: '게시판 목록 조회 ( page )' },
     )
-    fetchBoardsPage(
+    async fetchBoardsPage(
         @Args({ name: 'page', type: () => Int, defaultValue: 1 }) page: number,
     ): Promise<Array<BoardEntity>> {
-        return this.boardRepository.getPage(page);
+        return await this.boardRepository.getPage(page);
     }
 
     // 게시글 전체 갯수 조회
@@ -40,8 +40,8 @@ export class BoardResolver {
         () => Int, //
         { description: '게시글 전체 갯수' },
     )
-    fetchBoardAllCount(): Promise<number> {
-        return this.boardRepository.getCount();
+    async fetchBoardAllCount(): Promise<number> {
+        return await this.boardRepository.getCount();
     }
 
     // 키워드로 조회
@@ -49,10 +49,10 @@ export class BoardResolver {
         () => [BoardEntity], //
         { description: '키워드로 게시글 조회' },
     )
-    fetchTargetBoards(
+    async fetchTargetBoards(
         @Args('keyword') keyword: string,
     ): Promise<BoardEntity[]> {
-        return this.boardService.findTarget(keyword);
+        return await this.boardService.findTarget(keyword);
     }
 
     // 게시글 전체 조회
@@ -60,8 +60,8 @@ export class BoardResolver {
         () => [BoardEntity], //
         { description: '게시글 전체 조회' },
     )
-    fetchBoardsAll(): Promise<BoardEntity[]> {
-        return this.boardService.findAll();
+    async fetchBoardsAll(): Promise<BoardEntity[]> {
+        return await this.boardService.findAll();
     }
 
     // 특정 게시글 조회 (단일)
@@ -70,10 +70,10 @@ export class BoardResolver {
         () => BoardEntity, //
         { description: '특정 게시글 조회' },
     )
-    fetchBoard(
+    async fetchBoard(
         @Args('boardID') boardID: string, //
     ): Promise<BoardEntity> {
-        return this.boardService.findOne(boardID);
+        return await this.boardService.findOne(boardID);
     }
 
     // 유저가 쓴 게시글 조회
@@ -82,10 +82,10 @@ export class BoardResolver {
         () => [BoardEntity], //
         { description: '유저가 쓴 게시글 조회' },
     )
-    fetchBoards(
+    async fetchBoards(
         @CurrentUser() currentUser: IPayload, //
     ): Promise<BoardEntity[]> {
-        return this.boardService.findBoard(currentUser);
+        return await this.boardService.findBoard(currentUser);
     }
 
     ///////////////////////////////////////////////////////////////////q

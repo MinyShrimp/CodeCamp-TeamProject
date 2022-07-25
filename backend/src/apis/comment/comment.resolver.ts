@@ -29,8 +29,8 @@ export class CommentResolver {
         () => [CommentEntity], //
         { description: '모든 댓글 조회 ' },
     )
-    fetchCommentsAll(): Promise<CommentEntity[]> {
-        return this.commentService.findAll();
+    async fetchCommentsAll(): Promise<CommentEntity[]> {
+        return await this.commentService.findAll();
     }
 
     /** 보드ID로 해당 게시글의 댓글 조회  */
@@ -38,11 +38,14 @@ export class CommentResolver {
         () => FetchCommentOutput, //
         { description: '해당 게시글의 모든 댓글 조회' },
     )
-    fetchCommentsFromBoard(
+    async fetchCommentsFromBoard(
         @Args({ name: 'page', defaultValue: 1 }) page: number,
         @Args('boardID') boardID: string, //
     ): Promise<FetchCommentOutput> {
-        return this.commentRepository.findByBoardIDFromComment(page, boardID);
+        return await this.commentRepository.findByBoardIDFromComment(
+            page,
+            boardID,
+        );
     }
 
     /* 유저가 쓴 댓글 조회 */
@@ -51,10 +54,10 @@ export class CommentResolver {
         () => [CommentEntity], //
         { description: '유저가 쓴 댓글 조회' },
     )
-    fetchComments(
+    async fetchComments(
         @CurrentUser() currentUser: IPayload, //
     ): Promise<CommentEntity[]> {
-        return this.commentService.findComments(currentUser);
+        return await this.commentService.findComments(currentUser);
     }
 
     /** 특정 댓글 조회 (단일) */
@@ -63,10 +66,10 @@ export class CommentResolver {
         () => CommentEntity, //
         { description: '특정 댓글 조회' },
     )
-    fetchComment(
+    async fetchComment(
         @Args('commentID') commentID: string, //
     ): Promise<CommentEntity> {
-        return this.commentService.find(commentID);
+        return await this.commentService.find(commentID);
     }
 
     ///////////////////////////////////////////////////////////////////
