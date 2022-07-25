@@ -1,4 +1,5 @@
 import { Field, InputType, PartialType } from '@nestjs/graphql';
+
 import { CreateNoticeInput } from './createNotice.input';
 
 @InputType()

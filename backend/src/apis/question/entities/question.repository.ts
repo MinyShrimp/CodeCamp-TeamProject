@@ -51,8 +51,6 @@ export class QuestionRepository {
             where: { user: userID },
         });
 
-        console.log('질문 레포====', ...aaa);
-
         return await this.questionRepository.find({
             relations: [
                 'user',

@@ -74,10 +74,7 @@ export class NoticeService {
         const { fileURLs, ...rest } = input;
 
         // 관리자 여부 판별
-        // const user = await this.checkAdmin(userID);
-
-        // 권한X 유저 존재 유무 판별
-        const user = await this.userRepository.findOneByID(userID);
+        const user = await this.checkAdmin(userID);
 
         // 이미지 업로드
         const uploadFiles = await this.fileRepository.findBulkByUrl(fileURLs);
@@ -85,7 +82,7 @@ export class NoticeService {
         return await this.noticeRepository.save({
             user,
             files: uploadFiles,
-            ...input,
+            ...rest,
         });
     }
 

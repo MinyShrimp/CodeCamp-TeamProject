@@ -11,17 +11,6 @@ export class EventRepository {
         private readonly eventRepository: Repository<EventEntity>,
     ) {}
 
-    private readonly _selector = [
-        'e.id',
-        'e.contents',
-        'e.title',
-        'e.isEvent',
-        'e.startAt',
-        'e.endAt',
-        'e.createAt',
-        'e.updateAt',
-    ];
-
     ///////////////////////////////////////////////////////////////////
     // 조회 //
 

@@ -2,9 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 
-import { BookmarkEntity } from './bookmark.entity';
 import { CreateBookmarkDto } from '../dto/createBookmark.dto';
 import { DeleteBookmarkDto } from '../dto/deleteBookmark.dto';
+
+import { BookmarkEntity } from './bookmark.entity';
 
 @Injectable()
 export class BookmarkRepository {
@@ -70,18 +71,6 @@ export class BookmarkRepository {
     async checkOverlap(
         dto: CreateBookmarkDto, //
     ): Promise<BookmarkEntity> {
-        console.log(
-            await this.bookmarkRepository
-                .createQueryBuilder('bm')
-                .select(['bm.id', 'bm.user', 'bm.novelIndex', 'bm.page'])
-                .leftJoinAndSelect('bm.user', 'UserEntity')
-                .leftJoinAndSelect('bm.novelIndex', 'NovelIndexEntity')
-                .where('bm.user=:userID', { userID: dto.userID })
-                .andWhere('bm.novelIndex=:novelIndexID', {
-                    novelIndexID: dto.novelIndexID,
-                })
-                .getOne(),
-        );
         return await this.bookmarkRepository
             .createQueryBuilder('bm')
             .select(['bm.id', 'bm.user', 'bm.novelIndex', 'bm.page'])

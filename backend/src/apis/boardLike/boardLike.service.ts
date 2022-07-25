@@ -50,8 +50,6 @@ export class BoardLikeService {
         // 중복체크
         const check = await this.boardLikeRepository.checkOverlap(dto);
 
-        console.log('여기는 스위치=====', check);
-
         if (check) {
             // 체크 되어 있을 시 해제
             const result = await this.delete({

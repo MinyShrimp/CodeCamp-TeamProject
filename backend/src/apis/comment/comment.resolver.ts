@@ -9,9 +9,9 @@ import { GqlJwtAccessGuard } from 'src/commons/auth/gql-auth.guard';
 
 import { CommentEntity } from './entities/comment.entity';
 import { CommentService } from './comment.service';
+import { CommentRepository } from './entities/comment.repository';
 import { CreateCommentInput } from './dto/createComment.input';
 import { UpdateCommentInput } from './dto/updateComment.input';
-import { CommentRepository } from './entities/comment.repository';
 import { FetchCommentOutput } from './dto/fetchComment.output';
 
 @Resolver()

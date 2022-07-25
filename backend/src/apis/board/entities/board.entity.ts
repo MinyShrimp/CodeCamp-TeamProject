@@ -13,8 +13,8 @@ import {
 } from 'typeorm';
 
 import { UserEntity } from 'src/apis/user/entities/user.entity';
-import { CommentEntity } from 'src/apis/comment/entities/comment.entity';
 import { FileEntity } from 'src/apis/file/entities/file.entity';
+import { CommentEntity } from 'src/apis/comment/entities/comment.entity';
 
 /* Board Entity */
 @Entity({ name: 'board' })

@@ -1,13 +1,10 @@
 // prettier-ignore
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 
-import { NameOutput } from 'src/commons/dto/name.admin.output';
-
-import { CreateBoardLikeAdminInput } from './dto/createBoardLike.admin.input';
-import { UpdateBoardLikeAdminInput } from './dto/updateBoardLike.admin.input';
-
 import { BoardLikeEntity } from './entities/boardLike.entity';
 import { BoardLikeAdminRepository } from './entities/boardLike.admin.repository';
+import { CreateBoardLikeAdminInput } from './dto/createBoardLike.admin.input';
+import { UpdateBoardLikeAdminInput } from './dto/updateBoardLike.admin.input';
 
 @Controller('admin/boardLike')
 export class BoardLikeAdminController {

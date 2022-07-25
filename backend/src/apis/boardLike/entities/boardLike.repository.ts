@@ -2,9 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository } from 'typeorm';
 
-import { BoardLikeEntity } from './boardLike.entity';
 import { CreateBoardLikeDto } from '../dto/createBoardLike.dto';
 import { DeleteBoardLikeDto } from '../dto/deleteBoardLike.dto';
+
+import { BoardLikeEntity } from './boardLike.entity';
 
 @Injectable()
 export class BoardLikeRepository {
@@ -41,17 +42,6 @@ export class BoardLikeRepository {
     async checkOverlap(
         dto: CreateBoardLikeDto, //
     ): Promise<BoardLikeEntity> {
-        console.log('레포짓========', dto);
-
-        console.log(
-            await this.boardLikeRepository
-                .createQueryBuilder('bl')
-                .select(['bl.id', 'bl.userID', 'bl.boardID'])
-                .where('bl.userID=:userID', { userID: dto.userID })
-                .andWhere('bl.boardID=:boardID', { boardID: dto.boardID })
-                .getOne(),
-        );
-
         return await this.boardLikeRepository
             .createQueryBuilder('bl')
             .select(['bl.id', 'bl.userID', 'bl.boardID'])

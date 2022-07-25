@@ -30,15 +30,6 @@ export class NoticeRepository {
         });
     }
 
-    /** ID 기반 조회 */
-    // async findOneByID(
-    //     id: string, //
-    // ): Promise<NoticeEntity> {
-    //     return await this.noticeRepository.findOne({
-    //         relations: ['user', 'user.userClass'],
-    //         where: { id },
-    //     });
-    // }
     async findOneByID(
         id: string, //
     ): Promise<NoticeEntity> {

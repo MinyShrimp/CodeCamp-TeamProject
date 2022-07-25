@@ -1,6 +1,4 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { AnswerEntity } from 'src/apis/answer/entities/answer.entity';
-import { UserEntity } from 'src/apis/user/entities/user.entity';
 import {
     Entity,
     Column,
@@ -12,6 +10,9 @@ import {
     PrimaryGeneratedColumn,
     OneToOne,
 } from 'typeorm';
+
+import { AnswerEntity } from 'src/apis/answer/entities/answer.entity';
+import { UserEntity } from 'src/apis/user/entities/user.entity';
 
 /* Question Entity */
 @Entity({ name: 'question' })
