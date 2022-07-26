@@ -64,6 +64,13 @@ export class NoticeService {
         return await this.noticeRepository.findAll();
     }
 
+    /** 해당 공지 조회 */
+    async find(
+        noticeID: string, //
+    ): Promise<NoticeEntity> {
+        return await this.noticeRepository.findOneByID(noticeID);
+    }
+
     ///////////////////////////////////////////////////////////////////
     // 생성
 

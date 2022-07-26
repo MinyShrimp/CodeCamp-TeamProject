@@ -22,6 +22,7 @@ export class NoticeResolver {
     ///////////////////////////////////////////////////////////////////
     // 조회 //
 
+    /** 공지사항 전체 조회 */
     @Query(
         () => [NoticeEntity], //
         { description: '모든 공지사항 조회' },
@@ -30,9 +31,19 @@ export class NoticeResolver {
         return await this.noticeService.findAll();
     }
 
+    /** 공지사항 단일 조회 */
+    @Query(
+        () => NoticeEntity, //
+        { description: 'UUID로 해당 공지사항 조회' },
+    )
+    async fetchNotice(
+        @Args('noticeID') noticeID: string, //
+    ): Promise<NoticeEntity> {
+        return await this.noticeService.find(noticeID);
+    }
+
     ///////////////////////////////////////////////////////////////////
     // 생성 //
-
     @UseGuards(GqlJwtAccessGuard)
     @Mutation(
         () => NoticeEntity, //

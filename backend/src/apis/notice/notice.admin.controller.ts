@@ -2,11 +2,10 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
-import { CreateNoticeAdminInput } from './dto/createNotice.admin.input';
-import { UpdateNoticeAdminInput } from './dto/updateNotice.admin.input';
-
 import { NoticeEntity } from './entities/notice.entity';
 import { NoticeAdminRepository } from './entities/notice.admin.repository';
+import { CreateNoticeAdminInput } from './dto/createNotice.admin.input';
+import { UpdateNoticeAdminInput } from './dto/updateNotice.admin.input';
 
 @ApiTags('관리자/공지')
 @Controller('api/admin/notice')
