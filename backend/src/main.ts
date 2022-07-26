@@ -17,6 +17,11 @@ import {
 } from './commons/logger/winston.config';
 import { AppLoggerService } from './commons/logger/logger.service';
 
+export const origins =
+    process.env.MODE === 'PRODUCTION'
+        ? [process.env.FE_URL]
+        : [process.env.FE_URL, process.env.AD_URL];
+
 async function bootstrap() {
     createLogger();
 
@@ -28,10 +33,7 @@ async function bootstrap() {
 
     // prettier-ignore
     app.enableCors({
-        origin: [
-            'http://localhost:8080',
-            'http://localhost:3000', //
-        ], // FE가 배포하면 FE 주소를 여기에 넣어야함
+        origin: origins,
         credentials: true,
         exposedHeaders: ['Authorization', 'Set-Cookie', 'Cookie'],
         methods: ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],

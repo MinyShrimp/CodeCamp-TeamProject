@@ -20,6 +20,7 @@ import type { RedisClientOptions } from 'redis';
 import * as redisStore from 'cache-manager-redis-store';
 
 // Config //
+import { origins } from './main';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AdminRouteMiddleware } from './commons/adminRoute/admin.route.middleware';
@@ -90,10 +91,7 @@ import { CommentLikeModule } from './apis/commentLike/commentLike.module';
                 return { req, res };
             },
             cors: {
-                origin: [
-                    'http://localhost:8080',
-                    'http://localhost:3000', //
-                ], // FE가 배포하면 FE 주소를 여기에 넣어야함
+                origin: origins,
                 credentials: 'include',
                 exposedHeaders: ['Authorization', 'Set-Cookie', 'Cookie'],
                 methods: ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],

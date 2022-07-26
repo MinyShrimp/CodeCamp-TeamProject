@@ -78,6 +78,7 @@ export class BookmarkService {
                 userID: dto.userID,
                 bookmarkID: check.id,
             });
+
             return new ResultMessage({
                 isSuccess: result ? true : false,
                 contents: result ? '북마크 해제' : '북마크 등록',

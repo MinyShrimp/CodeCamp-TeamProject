@@ -1,5 +1,4 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const Dotenv = require('dotenv-webpack');
 const path = require('path');
 const webpack = require('webpack');
 // const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
@@ -44,9 +43,6 @@ module.exports = {
         }),
         new webpack.ProvidePlugin({
             React: 'react',
-        }),
-        new Dotenv({
-            path: `.env`,
         }),
     ],
     resolve: {
