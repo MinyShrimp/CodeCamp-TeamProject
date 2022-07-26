@@ -11,8 +11,8 @@ import {
     OneToOne,
 } from 'typeorm';
 
-import { AnswerEntity } from 'src/apis/answer/entities/answer.entity';
 import { UserEntity } from 'src/apis/user/entities/user.entity';
+import { AnswerEntity } from 'src/apis/answer/entities/answer.entity';
 
 /* Question Entity */
 @Entity({ name: 'question' })
