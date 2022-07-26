@@ -53,6 +53,7 @@ export class AnswerEntity {
         () => QuestionEntity, //
         (question) => question.answer,
     )
+    @JoinColumn()
     @Field(() => QuestionEntity, { nullable: true })
     question: QuestionEntity;
 
