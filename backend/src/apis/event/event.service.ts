@@ -59,9 +59,16 @@ export class EventService {
     ///////////////////////////////////////////////////////////////////
     // 조회 //
 
-    /** 모든 공지 조회 */
+    /** 모든 이벤트 조회 */
     async findAll(): Promise<EventEntity[]> {
         return await this.eventRepository.findAll();
+    }
+
+    /** UUID로 이벤트 조회 */
+    async find(
+        eventID: string, //
+    ): Promise<EventEntity> {
+        return await this.eventRepository.findOneByID(eventID);
     }
 
     ///////////////////////////////////////////////////////////////////
