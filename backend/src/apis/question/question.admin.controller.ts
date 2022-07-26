@@ -1,6 +1,5 @@
-// prettier-ignore
-import { Body, Controller, Delete, Get, Param } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Delete, Get, Param } from '@nestjs/common';
 
 import { NameOutput } from '../../commons/dto/name.admin.output';
 

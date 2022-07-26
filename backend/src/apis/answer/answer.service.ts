@@ -113,13 +113,18 @@ export class AnswerService {
             status: true,
         });
 
-        console.log(isStatus);
-
-        return await this.answerRepository.save({
+        const result = await this.answerRepository.save({
             user,
             question: isStatus,
             ...input,
         });
+
+        await this.questionRepository.save({
+            ...rest,
+            answer: result,
+        });
+
+        return result;
     }
 
     ///////////////////////////////////////////////////////////////////
@@ -156,7 +161,22 @@ export class AnswerService {
         // 본인이 작성했는지 여부
         await this.checkMyself(userID.id, answerID);
 
+        // 해당 답변을 달은 문의 글 찾기
+        const answerId = await this.answerRepository.findOneByID(answerID);
+        // prettier-ignore
+        const question = await this.questionRepository.findOneByQID(answerId.question.id);
+        const { answer, ...rest } = question;
+
+        // 답변 삭제
         const result = await this.answerRepository.softDelete(answerID);
+
+        // 문의 글 Status 변경
+        await this.questionRepository.save({
+            ...question,
+            answer: null,
+            status: false,
+        });
+
         const isSuccess = result.affected ? true : false;
 
         return isSuccess;
@@ -175,7 +195,23 @@ export class AnswerService {
         // 삭제 여부 판별
         await this.checkValidWithDeleted(userID.id, answerID);
 
+        // 답변 삭제 취소
         const result = await this.answerRepository.restore(answerID);
+
+        // 해당 답변을 달았던 문의의 Status 변경
+        const answerData = await this.answerRepository.findOneByID(answerID);
+        const questionData = await this.questionRepository.findOneByQID(
+            answerData.question.id,
+        );
+        const { answer, status, ...rest } = questionData;
+
+        await this.questionRepository.save({
+            ...rest,
+            status: true,
+            answer: answerData,
+        });
+
+        // -
         const isSuccess = result.affected ? true : false;
 
         return isSuccess;

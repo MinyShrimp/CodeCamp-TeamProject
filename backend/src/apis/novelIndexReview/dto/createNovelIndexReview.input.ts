@@ -1,4 +1,5 @@
 import { Field, InputType, PickType } from '@nestjs/graphql';
+
 import { NovelIndexReviewEntity } from '../entities/novelIndexReview.entity';
 
 @InputType()

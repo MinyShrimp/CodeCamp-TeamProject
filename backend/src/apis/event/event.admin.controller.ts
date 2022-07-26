@@ -2,11 +2,10 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
-import { CreateEventAdminInput } from './dto/createEvent.admin.input';
-import { UpdateEventAdminInput } from './dto/updateEvent.admin.input';
-
 import { EventEntity } from './entities/event.entity';
 import { EventAdminRepository } from './entities/event.admin.repository';
+import { CreateEventAdminInput } from './dto/createEvent.admin.input';
+import { UpdateEventAdminInput } from './dto/updateEvent.admin.input';
 
 @ApiTags('관리자/이벤트')
 @Controller('api/admin/event')

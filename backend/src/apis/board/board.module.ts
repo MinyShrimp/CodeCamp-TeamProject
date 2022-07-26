@@ -2,18 +2,17 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { UserModule } from '../user/user.module';
+import { FileModule } from '../file/file.module';
+import { FileEntity } from '../file/entities/file.entity';
+import { FileRepository } from '../file/entities/file.repository';
+import { UserCheckService } from '../user/userCheck.service';
 
 import { BoardEntity } from './entities/board.entity';
-import { BoardAdminRepository } from './entities/board.admin.repository';
-
 import { BoardService } from './board.service';
 import { BoardResolver } from './board.resolver';
 import { BoardRepository } from './entities/board.repository';
 import { BoardAdminController } from './board.admin.controller';
-import { FileModule } from '../file/file.module';
-import { FileRepository } from '../file/entities/file.repository';
-import { FileEntity } from '../file/entities/file.entity';
-import { UserCheckService } from '../user/userCheck.service';
+import { BoardAdminRepository } from './entities/board.admin.repository';
 
 @Module({
     imports: [

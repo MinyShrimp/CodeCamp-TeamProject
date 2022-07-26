@@ -1,5 +1,5 @@
-import { Field, Float, ID, Int, ObjectType } from '@nestjs/graphql';
 import { IsInt, Max, Min } from 'class-validator';
+import { Field, Float, ID, Int, ObjectType } from '@nestjs/graphql';
 import {
     Entity,
     Column,
@@ -11,8 +11,8 @@ import {
     PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import { NovelIndexEntity } from 'src/apis/novelIndex/entities/novelIndex.entity';
 import { UserEntity } from 'src/apis/user/entities/user.entity';
+import { NovelIndexEntity } from 'src/apis/novelIndex/entities/novelIndex.entity';
 
 /* NovelIndexReview Entity */
 @Entity({ name: 'novel_index_review' })

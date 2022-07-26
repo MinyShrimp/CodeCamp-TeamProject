@@ -1,6 +1,4 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { FileEntity } from 'src/apis/file/entities/file.entity';
-import { UserEntity } from 'src/apis/user/entities/user.entity';
 import {
     Entity,
     Column,
@@ -12,6 +10,9 @@ import {
     PrimaryGeneratedColumn,
     OneToMany,
 } from 'typeorm';
+
+import { FileEntity } from 'src/apis/file/entities/file.entity';
+import { UserEntity } from 'src/apis/user/entities/user.entity';
 
 /* Notice Entity */
 @Entity({ name: 'notice' })

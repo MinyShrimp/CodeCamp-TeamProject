@@ -1,4 +1,5 @@
 import { Field, InputType, PickType } from '@nestjs/graphql';
+
 import { EventEntity } from '../entities/event.entity';
 
 @InputType()

@@ -29,6 +29,16 @@ export class EventResolver {
         return await this.eventService.findAll();
     }
 
+    @Query(
+        () => EventEntity, //
+        { description: 'UUID로 이벤트 조회' },
+    )
+    async fetchEvent(
+        @Args('eventID') eventID: string, //
+    ): Promise<EventEntity> {
+        return await this.eventService.find(eventID);
+    }
+
     ///////////////////////////////////////////////////////////////////
     // 생성 //
 

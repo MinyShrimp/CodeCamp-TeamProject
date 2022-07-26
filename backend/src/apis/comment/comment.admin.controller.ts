@@ -1,6 +1,6 @@
 // prettier-ignore
-import { Body, Controller, Delete, Get, Param } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Delete, Get, Param } from '@nestjs/common';
 
 import { CommentEntity } from './entities/comment.entity';
 import { CommentAdminRepository } from './entities/comment.admin.repository';

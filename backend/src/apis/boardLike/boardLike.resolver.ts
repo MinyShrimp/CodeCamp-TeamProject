@@ -23,10 +23,10 @@ export class BoardLikeResolver {
         () => [BoardLikeEntity], //
         { description: '게시글 좋아요 조회' },
     )
-    fetchBoardLikeUser(
+    async fetchBoardLikeUser(
         @CurrentUser() currentUser: IPayload, //
     ): Promise<BoardLikeEntity[]> {
-        return this.boardLikeRepository.findList(currentUser.id);
+        return await this.boardLikeRepository.findList(currentUser.id);
     }
 
     // 게시글 좋아요 등록 및 해제

@@ -1,5 +1,5 @@
-import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
 import { IsInt, Min } from 'class-validator';
+import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
 import {
     Entity,
     Column,

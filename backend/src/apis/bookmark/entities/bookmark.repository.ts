@@ -2,9 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 
-import { BookmarkEntity } from './bookmark.entity';
 import { CreateBookmarkDto } from '../dto/createBookmark.dto';
 import { DeleteBookmarkDto } from '../dto/deleteBookmark.dto';
+
+import { BookmarkEntity } from './bookmark.entity';
 
 @Injectable()
 export class BookmarkRepository {

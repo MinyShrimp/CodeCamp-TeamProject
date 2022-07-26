@@ -2,10 +2,9 @@
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Body, Controller, Delete, Get, Param, Patch } from '@nestjs/common';
 
-import { UpdateAnswerAdminInput } from './dto/updateAnswer.admin.input';
-
 import { AnswerEntity } from './entities/answer.entity';
 import { AnswerAdminRepository } from './entities/answer.admin.repository';
+import { UpdateAnswerAdminInput } from './dto/updateAnswer.admin.input';
 
 @ApiTags('관리자/답변')
 @Controller('api/admin/answer')

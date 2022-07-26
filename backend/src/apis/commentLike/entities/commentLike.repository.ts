@@ -2,9 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository } from 'typeorm';
 
-import { CommentLikeEntity } from './commentLike.entity';
 import { CreateCommentLikeDto } from '../dto/createCommentLike.dto';
 import { DeleteCommentLikeDto } from '../dto/deleteCommentLike.dto';
+
+import { CommentLikeEntity } from './commentLike.entity';
 
 @Injectable()
 export class CommentLikeRepository {

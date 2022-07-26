@@ -1,13 +1,10 @@
 // prettier-ignore
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 
-import { NameOutput } from 'src/commons/dto/name.admin.output';
-
-import { CreateCommentLikeAdminInput } from './dto/createCommentLike.admin.input';
-import { UpdateCommentLikeAdminInput } from './dto/updateCommentLike.admin.input';
-
 import { CommentLikeEntity } from './entities/commentLike.entity';
 import { CommentLikeAdminRepository } from './entities/commentLike.admin.repository';
+import { CreateCommentLikeAdminInput } from './dto/createCommentLike.admin.input';
+import { UpdateCommentLikeAdminInput } from './dto/updateCommentLike.admin.input';
 
 @Controller('admin/commentLike')
 export class CommentLikeAdminController {

@@ -23,10 +23,10 @@ export class CommentLikeResolver {
         () => [CommentLikeEntity], //
         { description: '댓글 좋아요 조회' },
     )
-    fetchCommentLikeUser(
+    async fetchCommentLikeUser(
         @CurrentUser() currentUser: IPayload, //
     ): Promise<CommentLikeEntity[]> {
-        return this.commentLikeRepository.findList(currentUser.id);
+        return await this.commentLikeRepository.findList(currentUser.id);
     }
 
     // 댓글 좋아요 등록 및 해제

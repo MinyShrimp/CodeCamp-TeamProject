@@ -1,13 +1,14 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { UserEntity } from 'src/apis/user/entities/user.entity';
-import { CommentEntity } from 'src/apis/comment/entities/comment.entity';
 import {
-    Column,
-    CreateDateColumn,
     Entity,
+    Column,
     ManyToOne,
+    CreateDateColumn,
     PrimaryGeneratedColumn,
 } from 'typeorm';
+
+import { UserEntity } from 'src/apis/user/entities/user.entity';
+import { CommentEntity } from 'src/apis/comment/entities/comment.entity';
 
 /* CommentLike Entity */
 @Entity({ name: 'comment_like' })
