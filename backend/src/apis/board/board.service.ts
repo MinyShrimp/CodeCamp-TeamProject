@@ -4,11 +4,11 @@ import { MESSAGES } from 'src/commons/message/Message.enum';
 import { IPayload } from 'src/commons/interfaces/Payload.interface';
 
 import { UserRepository } from '../user/entities/user.repository';
+import { FileRepository } from '../file/entities/file.repository';
 import { UserCheckService } from '../user/userCheck.service';
 
 import { BoardDto } from './dto/board.dto';
 import { BoardEntity } from './entities/board.entity';
-import { FileRepository } from '../file/entities/file.repository';
 import { BoardRepository } from './entities/board.repository';
 import { CreateBoardInput } from './dto/createBoard.input';
 import { UpdateBoardInput } from './dto/updateBoard.input';

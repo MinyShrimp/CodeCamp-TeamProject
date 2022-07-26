@@ -32,12 +32,6 @@ export class AnswerEntity {
     @Field(() => String, { description: '내용' })
     contents: string;
 
-    @Min(0)
-    @Max(5)
-    @Column({ type: 'decimal', precision: 2, scale: 1, default: 0 })
-    @Field(() => Float, { description: '내용' })
-    star: number;
-
     @CreateDateColumn()
     @Field(() => Date, { description: '생성 시간' })
     createAt: Date;
@@ -53,6 +47,7 @@ export class AnswerEntity {
         () => QuestionEntity, //
         (question) => question.answer,
     )
+    @JoinColumn()
     @Field(() => QuestionEntity, { nullable: true })
     question: QuestionEntity;
 

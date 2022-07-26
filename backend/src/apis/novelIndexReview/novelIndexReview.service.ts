@@ -1,14 +1,13 @@
 import { ConflictException, Injectable } from '@nestjs/common';
-import { MESSAGES } from 'src/commons/message/Message.enum';
 
+import { MESSAGES } from 'src/commons/message/Message.enum';
 import { UserRepository } from '../user/entities/user.repository';
 import { NovelIndexRepository } from '../novelIndex/entities/novelIndex.repository';
 
-import { CreateNovelIndexReviewInput } from './dto/createNovelIndexReview.input';
-import { UpdateNovelIndexReviewInput } from './dto/updateNovelIndexReview.input';
-
 import { NovelIndexReviewEntity } from './entities/novelIndexReview.entity';
 import { NovelIndexReviewRepository } from './entities/novelIndexReview.repository';
+import { CreateNovelIndexReviewInput } from './dto/createNovelIndexReview.input';
+import { UpdateNovelIndexReviewInput } from './dto/updateNovelIndexReview.input';
 
 @Injectable()
 export class NovelIndexReviewService {

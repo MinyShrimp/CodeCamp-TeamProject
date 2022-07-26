@@ -1,6 +1,4 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { FileEntity } from 'src/apis/file/entities/file.entity';
-import { UserEntity } from 'src/apis/user/entities/user.entity';
 import {
     Column,
     Entity,
@@ -12,6 +10,9 @@ import {
     DeleteDateColumn,
     OneToMany,
 } from 'typeorm';
+
+import { FileEntity } from 'src/apis/file/entities/file.entity';
+import { UserEntity } from 'src/apis/user/entities/user.entity';
 
 /* Event Entity */
 @Entity({ name: 'event' })

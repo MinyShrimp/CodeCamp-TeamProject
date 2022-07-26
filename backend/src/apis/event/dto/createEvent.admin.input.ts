@@ -1,4 +1,5 @@
 import { EventEntity } from '../entities/event.entity';
+
 export interface CreateEventAdminInput
     extends Pick<
         EventEntity,

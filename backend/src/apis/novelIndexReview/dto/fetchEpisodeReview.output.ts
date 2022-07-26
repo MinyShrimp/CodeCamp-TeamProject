@@ -1,4 +1,5 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
+
 import { NovelIndexReviewEntity } from '../entities/novelIndexReview.entity';
 
 @ObjectType()

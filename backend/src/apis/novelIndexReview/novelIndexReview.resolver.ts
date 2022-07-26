@@ -8,13 +8,11 @@ import { ResultMessage } from 'src/commons/message/ResultMessage.dto';
 import { GqlJwtAccessGuard } from 'src/commons/auth/gql-auth.guard';
 
 import { NovelIndexReviewEntity } from './entities/novelIndexReview.entity';
-import { NovelIndexReviewRepository } from './entities/novelIndexReview.repository';
-
+import { NovelIndexReviewService } from './novelIndexReview.service';
 import { FetchEpisodeReviewOutput } from './dto/fetchEpisodeReview.output';
+import { NovelIndexReviewRepository } from './entities/novelIndexReview.repository';
 import { CreateNovelIndexReviewInput } from './dto/createNovelIndexReview.input';
 import { UpdateNovelIndexReviewInput } from './dto/updateNovelIndexReview.input';
-
-import { NovelIndexReviewService } from './novelIndexReview.service';
 
 /* 편당 리뷰 API */
 @Resolver()

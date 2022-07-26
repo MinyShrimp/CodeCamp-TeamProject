@@ -1,10 +1,10 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 
 import { MESSAGES } from 'src/commons/message/Message.enum';
+import { FileRepository } from '../file/entities/file.repository';
 import { UserRepository } from '../user/entities/user.repository';
 
 import { EventEntity } from './entities/event.entity';
-import { FileRepository } from '../file/entities/file.repository';
 import { EventRepository } from './entities/event.repository';
 import { CreateEventInput } from './dto/createEvent.input';
 import { UpdateEventInput } from './dto/updateEvent.input';
@@ -12,9 +12,9 @@ import { UpdateEventInput } from './dto/updateEvent.input';
 @Injectable()
 export class EventService {
     constructor(
-        private readonly eventRepository: EventRepository, //
         private readonly userRepository: UserRepository,
         private readonly fileRepository: FileRepository,
+        private readonly eventRepository: EventRepository, //
     ) {}
 
     /** 관리자 여부 판별 */
@@ -59,9 +59,16 @@ export class EventService {
     ///////////////////////////////////////////////////////////////////
     // 조회 //
 
-    /** 모든 공지 조회 */
+    /** 모든 이벤트 조회 */
     async findAll(): Promise<EventEntity[]> {
         return await this.eventRepository.findAll();
+    }
+
+    /** UUID로 이벤트 조회 */
+    async find(
+        eventID: string, //
+    ): Promise<EventEntity> {
+        return await this.eventRepository.findOneByID(eventID);
     }
 
     ///////////////////////////////////////////////////////////////////
@@ -74,10 +81,7 @@ export class EventService {
         const { fileURLs, ...rest } = input;
 
         // 관리자 여부 판별
-        // const user = await this.checkAdmin(userID);
-
-        // 권한X 유저 존재 유무 판별
-        const user = await this.userRepository.findOneByID(userID);
+        const user = await this.checkAdmin(userID);
 
         // 이미지 업로드
         const uploadFiles = await this.fileRepository.findBulkByUrl(fileURLs);
