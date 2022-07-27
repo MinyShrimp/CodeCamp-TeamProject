@@ -86,9 +86,9 @@ export class AnswerService {
 
     /** 답변 단일 조회 */
     async findOne(
-        questionID: string, //
+        answerID: string, //
     ): Promise<AnswerEntity> {
-        return await this.answerRepository.findOneByQID(questionID);
+        return await this.answerRepository.findOneByID(answerID);
     }
 
     ///////////////////////////////////////////////////////////////////

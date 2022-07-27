@@ -17,7 +17,7 @@ export class QuestionRepository {
     /** 전체 조회 */
     async findAll(): Promise<QuestionEntity[]> {
         return await this.questionRepository.find({
-            relations: ['user', 'user.userClass', 'answer'],
+            relations: ['user', 'user.userClass', 'answer', 'answer.user'],
         });
     }
 
@@ -46,11 +46,6 @@ export class QuestionRepository {
     async findOneByID(
         userID: string, //
     ): Promise<QuestionEntity[]> {
-        const aaa = await this.questionRepository.find({
-            relations: ['user', 'user.userClass', 'answer'],
-            where: { user: userID },
-        });
-
         return await this.questionRepository.find({
             relations: [
                 'user',
