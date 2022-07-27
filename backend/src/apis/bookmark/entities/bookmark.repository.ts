@@ -17,7 +17,13 @@ export class BookmarkRepository {
     /** 전체 조회(삭제 데이터X) */
     async findAll(): Promise<BookmarkEntity[]> {
         return await this.bookmarkRepository.find({
-            relations: ['user', 'novelIndex'],
+            relations: [
+                'user',
+                'user.userClass',
+                'novelIndex',
+                'novelIndex.user',
+                'novelIndex.user.userClass',
+            ],
         });
     }
 
