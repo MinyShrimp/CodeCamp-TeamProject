@@ -23,6 +23,7 @@ export class AnswerRepository {
                 'question',
                 'question.answer',
                 'question.user',
+                'question.user.userClass',
             ],
         });
     }
@@ -71,6 +72,7 @@ export class AnswerRepository {
                 'question',
                 'question.answer',
                 'question.user',
+                'question.user.userClass',
             ],
             where: { id },
         });

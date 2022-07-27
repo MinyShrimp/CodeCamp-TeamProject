@@ -94,16 +94,20 @@ export class QuestionService {
         input: UpdateQuestionInput,
     ): Promise<QuestionEntity> {
         const { id, ...rest } = input;
-        const question = await this.questionRepository.findOneByID(id);
+
+        // 작성 권한 확인
+        const user = await this.checkUser(userID);
+        // 본인이 작성했는지 여부
+        await this.checkMyself(user.id, id);
 
         // 문의 존재 여부 확인
+        const question = await this.questionRepository.findOneByQID(id);
         if (!question) throw new ConflictException(MESSAGES.QUESTION_UNVALID);
 
-        // 본인이 작성했는지 여부
-        await this.checkMyself(userID, id);
-
         return await this.questionRepository.save({
+            user,
             ...question,
+            id,
             ...rest,
         });
     }
@@ -118,12 +122,15 @@ export class QuestionService {
         // 본인이 작성했는지 여부
         await this.checkMyself(userID, questionID);
 
-        // 문의에 달린 답변도 삭제
-        const answer = await this.questionRepository.findOneByQID(questionID);
-        await this.answerRepository.softDelete(answer.answer.id);
-
         // 문의 삭제
         const result = await this.questionRepository.softDelete(questionID);
+        console.log(result);
+
+        // 문의에 달린 답변도 삭제
+        const answer = await this.questionRepository.findOneByQID(questionID);
+        if (answer) {
+            await this.answerRepository.softDelete(answer.answer.id);
+        }
 
         return result.affected
             ? MESSAGES.QUESTION_SOFT_DELETE_SUCCESSED
