@@ -16,7 +16,10 @@ interface IOAuthRequest extends Request {
 @ApiTags('인증')
 @Controller()
 export class AuthController {
-    private readonly REDIRECT = process.env.FE_URL;
+    private readonly REDIRECT =
+        process.env.MODE === 'PRODUCTION'
+            ? `${process.env.FE_URL}/socialLogin`
+            : process.env.FE_URL;
 
     constructor(
         private readonly userRepository: UserRepository,
