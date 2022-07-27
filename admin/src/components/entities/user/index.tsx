@@ -43,7 +43,7 @@ export const UserIndex = EntityFactory.getEntity<IUserColumn>({
             'point', 'isLogin', 'userClassID'
         ],
         url: { 
-            'userClassID': '/admin/user-class/names'
+            'userClassID': '/api/admin/user-class/names'
         },
         default: {
             name: '', email: '', 
