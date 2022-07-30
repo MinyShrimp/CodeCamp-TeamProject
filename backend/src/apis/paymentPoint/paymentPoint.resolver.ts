@@ -69,6 +69,26 @@ export class PaymentPointResolver {
         });
     }
 
+    // 일반 결제
+    @Mutation(
+        () => [PaymentPointEntity],
+        { description: '에피소드 결제' }, //
+    )
+    paidPoints(
+        @CurrentUser() payload: IPayload, //
+        @Args({
+            name: 'novelIndexIDs', //
+            type: () => [String],
+            description: '에피소드 UUID',
+        })
+        novelIndexIDs: string[], //
+    ): Promise<PaymentPointEntity[]> {
+        return this.paymentPointService.payments({
+            userID: payload.id,
+            novelIndexIDs: novelIndexIDs, //
+        });
+    }
+
     // 후원 결제
     @Mutation(
         () => PaymentPointEntity,

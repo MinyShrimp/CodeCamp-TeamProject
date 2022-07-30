@@ -57,6 +57,23 @@ export class PaymentPointService {
         return await this.paymentPointRepository.paid(dto);
     }
 
+    // 일반 결제
+    async payments(
+        dto: {
+            userID: string;
+            novelIndexIDs: string[];
+        }, //
+    ): Promise<PaymentPointEntity[]> {
+        return await Promise.all(
+            dto.novelIndexIDs.map((novelIndexID) => {
+                return this.payment({
+                    userID: dto.userID,
+                    novelIndexID: novelIndexID,
+                });
+            }),
+        );
+    }
+
     // 후원 결제
     async donate(
         dto: DonateDto, //
