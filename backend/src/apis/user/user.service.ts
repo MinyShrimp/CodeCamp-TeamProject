@@ -1,6 +1,6 @@
+import { v4 } from 'uuid';
 import * as bcrypt from 'bcryptjs';
 import { ConflictException, Injectable } from '@nestjs/common';
-import { randomUUID } from 'crypto';
 
 import { IUser } from '../../commons/interfaces/User.interface';
 import { MESSAGES } from '../../commons/message/Message.enum';
@@ -142,9 +142,9 @@ export class UserService {
 
         const newUser = this.userRepository.create({
             ...userInfo,
-            nickName: userInfo.name,
+            nickName: v4(),
             phone: null,
-            pwd: this.createPassword(randomUUID()),
+            pwd: this.createPassword(v4()),
         });
 
         // 핸드폰 인증 체크
