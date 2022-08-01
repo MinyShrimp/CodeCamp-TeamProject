@@ -19,6 +19,8 @@ import { UpdateUserInput } from './dto/updateUser.input';
 import { CreateUserOutput } from './dto/createUser.output';
 
 import { UserService } from './user.service';
+import { OAuthInput } from './dto/auth.input';
+import { UserEntity } from './entities/user.entity';
 
 /* 유저 API */
 @Resolver()
@@ -84,6 +86,21 @@ export class UserResolver {
         @Args('createUserInput') input: CreateUserInput, //
     ): Promise<CreateUserOutput> {
         return this.userService.createUser(input);
+    }
+
+    @Mutation(
+        () => UserEntity, //
+        { description: '소셜로그인 인증' },
+    )
+    socialAuth(
+        @CurrentUser() payload: IPayload,
+        @Args('authInput') input: OAuthInput,
+    ): Promise<UserEntity> {
+        return this.userService.socialAuth({
+            userID: payload.id,
+            nickName: input.nickName,
+            phone: input.phone,
+        });
     }
 
     ///////////////////////////////////////////////////////////////////

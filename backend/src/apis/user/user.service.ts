@@ -170,6 +170,29 @@ export class UserService {
         return result;
     }
 
+    async socialAuth(dto: {
+        userID: string;
+        nickName: string;
+        phone: string;
+    }): Promise<UserEntity> {
+        // 이메일, 닉네임 중복 체크
+        await this.checkOverlapNickName(dto.nickName);
+
+        // 회원 찾기
+        const user = await this.userRepository.findOneByID(dto.userID);
+
+        // 핸드폰 인증 체크
+        const authPhone = await this.phoneService.create(dto.phone, user);
+
+        // 닉네임 변경
+        return await this.userRepository.save({
+            ...user,
+            nickName: dto.nickName,
+            phone: dto.phone,
+            authPhone: authPhone,
+        });
+    }
+
     ///////////////////////////////////////////////////////////////////
     // 수정 //
 
