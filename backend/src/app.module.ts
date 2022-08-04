@@ -96,7 +96,7 @@ import { CommentLikeModule } from './apis/commentLike/commentLike.module';
                 exposedHeaders: ['Authorization', 'Set-Cookie', 'Cookie'],
                 methods: ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
             },
-            playground: process.env.MODE !== 'PRODUCTION',
+            playground: true,
         }),
 
         ///////////////////////////////////////////////////////////////////////////

@@ -19,7 +19,7 @@ import { AppLoggerService } from './commons/logger/logger.service';
 
 export const origins =
     process.env.MODE === 'PRODUCTION'
-        ? [process.env.FE_URL]
+        ? [process.env.FE_URL, 'http://localhost:3000']
         : [process.env.FE_URL, process.env.AD_URL];
 
 async function bootstrap() {
